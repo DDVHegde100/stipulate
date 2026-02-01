@@ -1,0 +1,47 @@
+/**
+ * Stipulate font loading
+ * Uses Inter from Google Fonts as primary; Geist via npm in consuming apps
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@font-face {
+  font-family: 'Geist';
+  src: local('Geist'), local('Geist Sans');
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist Mono';
+  src: local('Geist Mono');
+  font-weight: 400 600;
+  font-display: swap;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-sans, 'Geist', 'Inter', system-ui, sans-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-bg-primary, #0A0A0B);
+  color: var(--color-text-primary, #FAFAFA);
+  line-height: 1.5;
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--font-mono, 'Geist Mono', monospace);
+}

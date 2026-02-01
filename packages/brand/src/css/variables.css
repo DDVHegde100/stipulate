@@ -1,0 +1,165 @@
+/**
+ * Stipulate CSS custom properties
+ * Import after fonts.css in your app entry
+ */
+
+:root {
+  /* Core palette */
+  --color-ink: #0A0A0B;
+  --color-ink-50: #FAFAFA;
+  --color-ink-100: #F4F4F5;
+  --color-ink-800: #27272A;
+  --color-ink-900: #18181B;
+  --color-ink-950: #0A0A0B;
+
+  --color-accent: #6366F1;
+  --color-accent-400: #818CF8;
+  --color-accent-500: #6366F1;
+  --color-accent-600: #4F46E5;
+
+  /* Glass surfaces */
+  --color-glass-surface: rgba(255, 255, 255, 0.06);
+  --color-glass-surface-hover: rgba(255, 255, 255, 0.09);
+  --color-glass-surface-active: rgba(255, 255, 255, 0.12);
+  --color-glass-border: rgba(255, 255, 255, 0.08);
+  --color-glass-border-strong: rgba(255, 255, 255, 0.14);
+  --color-glass-highlight: rgba(255, 255, 255, 0.04);
+  --color-glass-backdrop: rgba(10, 10, 11, 0.72);
+  --glass-blur: 12px;
+  --glass-blur-lg: 24px;
+  --glass-saturate: 180%;
+
+  /* Typography */
+  --font-sans: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Geist Mono', 'SF Mono', Monaco, Consolas, monospace;
+  --font-display: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Spacing (4px grid) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-3xl: 24px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.24);
+  --shadow-md: 0 8px 16px rgba(0, 0, 0, 0.28);
+  --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.32);
+  --shadow-accent: 0 8px 32px rgba(99, 102, 241, 0.24);
+  --shadow-glass-card:
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 4px 24px rgba(0, 0, 0, 0.24);
+
+  /* Motion */
+  --duration-fast: 100ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Layout */
+  --content-max-width: 1200px;
+  --hero-max-width: 960px;
+  --nav-height: 64px;
+}
+
+[data-theme='dark'],
+:root {
+  --color-text-primary: #FAFAFA;
+  --color-text-secondary: rgba(250, 250, 250, 0.72);
+  --color-text-tertiary: rgba(250, 250, 250, 0.48);
+  --color-text-accent: #A5B4FC;
+  --color-bg-primary: #0A0A0B;
+  --color-bg-secondary: #111113;
+  --color-bg-elevated: #1C1C1F;
+  --gradient-hero: linear-gradient(180deg, #0A0A0B 0%, #111113 50%, #0A0A0B 100%);
+  --gradient-mesh:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.18), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 60%, rgba(129, 140, 248, 0.08), transparent),
+    #0A0A0B;
+}
+
+[data-theme='light'] {
+  --color-glass-surface: rgba(255, 255, 255, 0.72);
+  --color-glass-surface-hover: rgba(255, 255, 255, 0.85);
+  --color-glass-border: rgba(10, 10, 11, 0.06);
+  --color-text-primary: #0A0A0B;
+  --color-text-secondary: rgba(10, 10, 11, 0.72);
+  --color-text-tertiary: rgba(10, 10, 11, 0.48);
+  --color-text-accent: #4F46E5;
+  --color-bg-primary: #FAFAFA;
+  --color-bg-secondary: #F4F4F5;
+  --color-bg-elevated: #FFFFFF;
+}
+
+/* Utility classes */
+.stipulate-glass {
+  background: var(--color-glass-surface);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border: 1px solid var(--color-glass-border);
+  box-shadow: var(--shadow-glass-card), inset 0 1px 0 var(--color-glass-highlight);
+}
+
+.stipulate-glass:hover {
+  background: var(--color-glass-surface-hover);
+  border-color: var(--color-glass-border-strong);
+}
+
+.stipulate-gradient-mesh {
+  background: var(--gradient-mesh);
+}
+
+.stipulate-text-gradient {
+  background: linear-gradient(135deg, #FFFFFF 0%, #A5B4FC 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes stipulate-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes stipulate-shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+
+@keyframes stipulate-glow {
+  0%, 100% { box-shadow: 0 0 24px rgba(99, 102, 241, 0.24); }
+  50% { box-shadow: 0 0 32px rgba(99, 102, 241, 0.48); }
+}
+
+.stipulate-animate-in {
+  animation: stipulate-fade-in-up 400ms cubic-bezier(0.2, 0, 0, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stipulate-animate-in {
+    animation: none;
+  }
+}

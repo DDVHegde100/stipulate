@@ -1,0 +1,38 @@
+{
+  "name": "@stipulate/brand",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Stipulate design system — logos, tokens, and Tailwind preset",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./css/variables.css": "./src/css/variables.css",
+    "./css/fonts.css": "./src/css/fonts.css",
+    "./tailwind": {
+      "types": "./dist/tailwind/preset.d.ts",
+      "import": "./dist/tailwind/preset.js"
+    },
+    "./assets/*": "./assets/*"
+  },
+  "files": [
+    "dist",
+    "src/css",
+    "assets"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --max-warnings 0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.3"
+  }
+}

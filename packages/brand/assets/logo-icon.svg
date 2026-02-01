@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" aria-label="Stipulate icon">
+  <defs>
+    <linearGradient id="stipulate-accent" x1="8" y1="8" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#818CF8"/>
+      <stop offset="100%" stop-color="#6366F1"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="#0A0A0B"/>
+  <rect x="1" y="1" width="62" height="62" rx="15" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <!-- Stylized § stipulation mark -->
+  <path
+    d="M32 14c-6.2 0-11 3.4-11 8.5 0 3.8 2.4 6.6 7.2 8.4l3.3 1.2c3.1 1.1 4.5 2.2 4.5 4.2 0 2.5-2.4 4.1-6.2 4.1-3.4 0-6.2-1.4-8-3.8l-4.8 4.2c2.8 3.6 7.4 5.6 12.8 5.6 7.2 0 12.4-3.8 12.4-9.5 0-4.4-2.8-7.4-8.4-9.4l-3.2-1.1c-3.4-1.2-4.8-2.3-4.8-4.4 0-2.3 2.1-3.8 5.4-3.8 2.8 0 5.2 1.1 6.8 3l4.6-3.8C42.2 15.6 37.6 14 32 14z"
+    fill="url(#stipulate-accent)"
+    filter="url(#glow)"
+  />
+  <circle cx="32" cy="46" r="3.5" fill="url(#stipulate-accent)" opacity="0.9"/>
+</svg>
