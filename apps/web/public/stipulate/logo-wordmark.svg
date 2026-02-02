@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 48" fill="none" aria-label="Stipulate wordmark">
+  <defs>
+    <linearGradient id="wm-accent" x1="0" y1="0" x2="240" y2="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#A5B4FC"/>
+    </linearGradient>
+  </defs>
+  <text
+    x="0"
+    y="36"
+    font-family="Inter, Geist, system-ui, sans-serif"
+    font-size="32"
+    font-weight="600"
+    letter-spacing="-0.03em"
+    fill="url(#wm-accent)"
+  >stipulate</text>
+</svg>

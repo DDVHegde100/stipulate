@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "Stipulate",
+    "slug": "stipulate",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "stipulate",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "io.stipulate.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0A0A0B"
+      },
+      "package": "io.stipulate.app"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

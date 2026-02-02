@@ -1,0 +1,25 @@
+@import '@stipulate/brand/css/fonts.css';
+@import '@stipulate/brand/css/variables.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  ::selection {
+    background-color: rgba(99, 102, 241, 0.32);
+    color: #fafafa;
+  }
+}
+
+@layer utilities {
+  .hero-glow {
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.22), transparent),
+      radial-gradient(ellipse 50% 40% at 90% 20%, rgba(129, 140, 248, 0.1), transparent);
+  }
+}
