@@ -1,0 +1,43 @@
+name: Deploy Production
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: deploy production
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+        env:
+          NODE_ENV: production
+          NEXT_PUBLIC_API_URL: https://api.stipulate.io
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+
+      - name: Deploy placeholder
+        run: echo "Configure production deploy targets here"

@@ -1,0 +1,56 @@
+name: Deploy Staging
+
+on:
+  push:
+    branches: [staging]
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: false
+
+jobs:
+  deploy-api:
+    name: deploy api (staging)
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build --filter=@stipulate/api
+
+      - name: Deploy placeholder
+        run: echo "Configure Fly.io/Railway deploy here"
+
+  deploy-web:
+    name: deploy web (staging)
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build --filter=@stipulate/web
+        env:
+          NEXT_PUBLIC_API_URL: https://api.staging.stipulate.io
+
+      - name: Deploy placeholder
+        run: echo "Configure Vercel deploy here"
