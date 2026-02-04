@@ -1,0 +1,1939 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://stipulate.io/schemas/v1/index.json",
+  "title": "Stipulate API Schemas",
+  "definitions": {
+    "BenefitRule": {
+      "$ref": "https://stipulate.io/schemas/v1/BenefitRule/definitions/BenefitRule",
+      "definitions": {
+        "BenefitRule": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "cardId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string",
+              "enum": [
+                "dining",
+                "groceries",
+                "travel",
+                "airfare",
+                "hotels",
+                "transit",
+                "gas",
+                "streaming",
+                "entertainment",
+                "retail",
+                "healthcare",
+                "utilities",
+                "insurance",
+                "education",
+                "charity",
+                "government",
+                "cash_equivalent",
+                "other"
+              ]
+            },
+            "multiplier": {
+              "type": "number",
+              "minimum": 0
+            },
+            "rewardType": {
+              "type": "string",
+              "enum": [
+                "points",
+                "cashback",
+                "miles"
+              ],
+              "default": "points"
+            },
+            "caps": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "period": {
+                    "type": "string",
+                    "enum": [
+                      "annual",
+                      "quarterly",
+                      "monthly",
+                      "per_transaction",
+                      "lifetime"
+                    ]
+                  },
+                  "limit": {
+                    "type": "object",
+                    "properties": {
+                      "amountMinor": {
+                        "type": "integer"
+                      },
+                      "currency": {
+                        "type": "string",
+                        "minLength": 3,
+                        "maxLength": 3,
+                        "pattern": "^[A-Z]{3}$",
+                        "default": "USD"
+                      }
+                    },
+                    "required": [
+                      "amountMinor"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "resetPolicy": {
+                    "type": "string",
+                    "enum": [
+                      "calendar_year",
+                      "statement_cycle",
+                      "rolling",
+                      "none"
+                    ],
+                    "default": "calendar_year"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "carryForward": {
+                    "type": "boolean",
+                    "default": false
+                  }
+                },
+                "required": [
+                  "id",
+                  "period",
+                  "limit"
+                ],
+                "additionalProperties": false
+              },
+              "default": []
+            },
+            "exclusions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "merchant",
+                      "mcc",
+                      "category",
+                      "channel",
+                      "geography"
+                    ]
+                  },
+                  "matcher": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "isRegex": {
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "sourceNote": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "type",
+                  "matcher"
+                ],
+                "additionalProperties": false
+              },
+              "default": []
+            },
+            "minSpend": {
+              "type": "object",
+              "properties": {
+                "amountMinor": {
+                  "type": "integer"
+                },
+                "currency": {
+                  "type": "string",
+                  "minLength": 3,
+                  "maxLength": 3,
+                  "pattern": "^[A-Z]{3}$",
+                  "default": "USD"
+                }
+              },
+              "required": [
+                "amountMinor"
+              ],
+              "additionalProperties": false
+            },
+            "effectiveFrom": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "effectiveTo": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "requiresActivation": {
+              "type": "boolean",
+              "default": false
+            },
+            "metadata": {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          },
+          "required": [
+            "id",
+            "cardId",
+            "name",
+            "category",
+            "multiplier"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "BenefitCap": {
+      "$ref": "https://stipulate.io/schemas/v1/BenefitCap/definitions/BenefitCap",
+      "definitions": {
+        "BenefitCap": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "period": {
+              "type": "string",
+              "enum": [
+                "annual",
+                "quarterly",
+                "monthly",
+                "per_transaction",
+                "lifetime"
+              ]
+            },
+            "limit": {
+              "type": "object",
+              "properties": {
+                "amountMinor": {
+                  "type": "integer"
+                },
+                "currency": {
+                  "type": "string",
+                  "minLength": 3,
+                  "maxLength": 3,
+                  "pattern": "^[A-Z]{3}$",
+                  "default": "USD"
+                }
+              },
+              "required": [
+                "amountMinor"
+              ],
+              "additionalProperties": false
+            },
+            "resetPolicy": {
+              "type": "string",
+              "enum": [
+                "calendar_year",
+                "statement_cycle",
+                "rolling",
+                "none"
+              ],
+              "default": "calendar_year"
+            },
+            "description": {
+              "type": "string"
+            },
+            "carryForward": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "required": [
+            "id",
+            "period",
+            "limit"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "Exclusion": {
+      "$ref": "https://stipulate.io/schemas/v1/Exclusion/definitions/Exclusion",
+      "definitions": {
+        "Exclusion": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "merchant",
+                "mcc",
+                "category",
+                "channel",
+                "geography"
+              ]
+            },
+            "matcher": {
+              "type": "string",
+              "minLength": 1
+            },
+            "isRegex": {
+              "type": "boolean",
+              "default": false
+            },
+            "reason": {
+              "type": "string"
+            },
+            "sourceNote": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "type",
+            "matcher"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "Card": {
+      "$ref": "https://stipulate.io/schemas/v1/Card/definitions/Card",
+      "definitions": {
+        "Card": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "issuer": {
+              "type": "string",
+              "minLength": 1
+            },
+            "productName": {
+              "type": "string",
+              "minLength": 1
+            },
+            "network": {
+              "type": "string",
+              "enum": [
+                "visa",
+                "mastercard",
+                "amex",
+                "discover"
+              ]
+            },
+            "annualFee": {
+              "type": "object",
+              "properties": {
+                "amountMinor": {
+                  "type": "integer"
+                },
+                "currency": {
+                  "type": "string",
+                  "minLength": 3,
+                  "maxLength": 3,
+                  "pattern": "^[A-Z]{3}$",
+                  "default": "USD"
+                }
+              },
+              "required": [
+                "amountMinor"
+              ],
+              "additionalProperties": false
+            },
+            "foreignTransactionFeeRate": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "benefitRuleIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": []
+            },
+            "benefitRules": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "cardId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "dining",
+                      "groceries",
+                      "travel",
+                      "airfare",
+                      "hotels",
+                      "transit",
+                      "gas",
+                      "streaming",
+                      "entertainment",
+                      "retail",
+                      "healthcare",
+                      "utilities",
+                      "insurance",
+                      "education",
+                      "charity",
+                      "government",
+                      "cash_equivalent",
+                      "other"
+                    ]
+                  },
+                  "multiplier": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "rewardType": {
+                    "type": "string",
+                    "enum": [
+                      "points",
+                      "cashback",
+                      "miles"
+                    ],
+                    "default": "points"
+                  },
+                  "caps": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "period": {
+                          "type": "string",
+                          "enum": [
+                            "annual",
+                            "quarterly",
+                            "monthly",
+                            "per_transaction",
+                            "lifetime"
+                          ]
+                        },
+                        "limit": {
+                          "type": "object",
+                          "properties": {
+                            "amountMinor": {
+                              "type": "integer"
+                            },
+                            "currency": {
+                              "type": "string",
+                              "minLength": 3,
+                              "maxLength": 3,
+                              "pattern": "^[A-Z]{3}$",
+                              "default": "USD"
+                            }
+                          },
+                          "required": [
+                            "amountMinor"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "resetPolicy": {
+                          "type": "string",
+                          "enum": [
+                            "calendar_year",
+                            "statement_cycle",
+                            "rolling",
+                            "none"
+                          ],
+                          "default": "calendar_year"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "carryForward": {
+                          "type": "boolean",
+                          "default": false
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "period",
+                        "limit"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "default": []
+                  },
+                  "exclusions": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "merchant",
+                            "mcc",
+                            "category",
+                            "channel",
+                            "geography"
+                          ]
+                        },
+                        "matcher": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "isRegex": {
+                          "type": "boolean",
+                          "default": false
+                        },
+                        "reason": {
+                          "type": "string"
+                        },
+                        "sourceNote": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "matcher"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "default": []
+                  },
+                  "minSpend": {
+                    "type": "object",
+                    "properties": {
+                      "amountMinor": {
+                        "type": "integer"
+                      },
+                      "currency": {
+                        "type": "string",
+                        "minLength": 3,
+                        "maxLength": 3,
+                        "pattern": "^[A-Z]{3}$",
+                        "default": "USD"
+                      }
+                    },
+                    "required": [
+                      "amountMinor"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "effectiveFrom": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "effectiveTo": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "requiresActivation": {
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "additionalProperties": {}
+                  }
+                },
+                "required": [
+                  "id",
+                  "cardId",
+                  "name",
+                  "category",
+                  "multiplier"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "benefitGuideUrl": {
+              "type": "string",
+              "format": "uri"
+            },
+            "isActive": {
+              "type": "boolean",
+              "default": true
+            },
+            "metadata": {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          },
+          "required": [
+            "id",
+            "issuer",
+            "productName",
+            "network"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "CardCatalog": {
+      "$ref": "https://stipulate.io/schemas/v1/CardCatalog/definitions/CardCatalog",
+      "definitions": {
+        "CardCatalog": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "minLength": 1
+            },
+            "generatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "issuer": {
+              "type": "string"
+            },
+            "cards": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "issuer": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "productName": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "network": {
+                    "type": "string",
+                    "enum": [
+                      "visa",
+                      "mastercard",
+                      "amex",
+                      "discover"
+                    ]
+                  },
+                  "annualFee": {
+                    "type": "object",
+                    "properties": {
+                      "amountMinor": {
+                        "type": "integer"
+                      },
+                      "currency": {
+                        "type": "string",
+                        "minLength": 3,
+                        "maxLength": 3,
+                        "pattern": "^[A-Z]{3}$",
+                        "default": "USD"
+                      }
+                    },
+                    "required": [
+                      "amountMinor"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "foreignTransactionFeeRate": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "benefitRuleIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "default": []
+                  },
+                  "benefitRules": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "cardId": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "category": {
+                          "type": "string",
+                          "enum": [
+                            "dining",
+                            "groceries",
+                            "travel",
+                            "airfare",
+                            "hotels",
+                            "transit",
+                            "gas",
+                            "streaming",
+                            "entertainment",
+                            "retail",
+                            "healthcare",
+                            "utilities",
+                            "insurance",
+                            "education",
+                            "charity",
+                            "government",
+                            "cash_equivalent",
+                            "other"
+                          ]
+                        },
+                        "multiplier": {
+                          "type": "number",
+                          "minimum": 0
+                        },
+                        "rewardType": {
+                          "type": "string",
+                          "enum": [
+                            "points",
+                            "cashback",
+                            "miles"
+                          ],
+                          "default": "points"
+                        },
+                        "caps": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "period": {
+                                "type": "string",
+                                "enum": [
+                                  "annual",
+                                  "quarterly",
+                                  "monthly",
+                                  "per_transaction",
+                                  "lifetime"
+                                ]
+                              },
+                              "limit": {
+                                "type": "object",
+                                "properties": {
+                                  "amountMinor": {
+                                    "type": "integer"
+                                  },
+                                  "currency": {
+                                    "type": "string",
+                                    "minLength": 3,
+                                    "maxLength": 3,
+                                    "pattern": "^[A-Z]{3}$",
+                                    "default": "USD"
+                                  }
+                                },
+                                "required": [
+                                  "amountMinor"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "resetPolicy": {
+                                "type": "string",
+                                "enum": [
+                                  "calendar_year",
+                                  "statement_cycle",
+                                  "rolling",
+                                  "none"
+                                ],
+                                "default": "calendar_year"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "carryForward": {
+                                "type": "boolean",
+                                "default": false
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "period",
+                              "limit"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "default": []
+                        },
+                        "exclusions": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "type": {
+                                "type": "string",
+                                "enum": [
+                                  "merchant",
+                                  "mcc",
+                                  "category",
+                                  "channel",
+                                  "geography"
+                                ]
+                              },
+                              "matcher": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "isRegex": {
+                                "type": "boolean",
+                                "default": false
+                              },
+                              "reason": {
+                                "type": "string"
+                              },
+                              "sourceNote": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "type",
+                              "matcher"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "default": []
+                        },
+                        "minSpend": {
+                          "type": "object",
+                          "properties": {
+                            "amountMinor": {
+                              "type": "integer"
+                            },
+                            "currency": {
+                              "type": "string",
+                              "minLength": 3,
+                              "maxLength": 3,
+                              "pattern": "^[A-Z]{3}$",
+                              "default": "USD"
+                            }
+                          },
+                          "required": [
+                            "amountMinor"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "effectiveFrom": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "effectiveTo": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "requiresActivation": {
+                          "type": "boolean",
+                          "default": false
+                        },
+                        "metadata": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "cardId",
+                        "name",
+                        "category",
+                        "multiplier"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "benefitGuideUrl": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "isActive": {
+                    "type": "boolean",
+                    "default": true
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "additionalProperties": {}
+                  }
+                },
+                "required": [
+                  "id",
+                  "issuer",
+                  "productName",
+                  "network"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            },
+            "metadata": {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          },
+          "required": [
+            "version",
+            "generatedAt",
+            "cards"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "RouteRequest": {
+      "$ref": "https://stipulate.io/schemas/v1/RouteRequest/definitions/RouteRequest",
+      "definitions": {
+        "RouteRequest": {
+          "type": "object",
+          "properties": {
+            "requestId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "merchantName": {
+              "type": "string",
+              "minLength": 1
+            },
+            "mcc": {
+              "type": "string",
+              "pattern": "^\\d{4}$"
+            },
+            "amount": {
+              "type": "object",
+              "properties": {
+                "amountMinor": {
+                  "type": "integer"
+                },
+                "currency": {
+                  "type": "string",
+                  "minLength": 3,
+                  "maxLength": 3,
+                  "pattern": "^[A-Z]{3}$",
+                  "default": "USD"
+                }
+              },
+              "required": [
+                "amountMinor"
+              ],
+              "additionalProperties": false
+            },
+            "userCardIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1
+            },
+            "channel": {
+              "type": "string",
+              "enum": [
+                "in_store",
+                "online",
+                "mobile_wallet",
+                "contactless",
+                "mail_order",
+                "unknown"
+              ],
+              "default": "unknown"
+            },
+            "isInternational": {
+              "type": "boolean",
+              "default": false
+            },
+            "merchantEnrichment": {
+              "type": "object",
+              "properties": {
+                "merchantName": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "normalizedName": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "mcc": {
+                  "type": "string",
+                  "pattern": "^\\d{4}$"
+                },
+                "mccDescription": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string",
+                  "enum": [
+                    "dining",
+                    "groceries",
+                    "travel",
+                    "airfare",
+                    "hotels",
+                    "transit",
+                    "gas",
+                    "streaming",
+                    "entertainment",
+                    "retail",
+                    "healthcare",
+                    "utilities",
+                    "insurance",
+                    "education",
+                    "charity",
+                    "government",
+                    "cash_equivalent",
+                    "other"
+                  ]
+                },
+                "confidence": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "user",
+                    "mcc_db",
+                    "llm",
+                    "override",
+                    "issuer",
+                    "plaid",
+                    "unknown"
+                  ]
+                },
+                "mccCandidates": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "mcc": {
+                        "type": "string",
+                        "pattern": "^\\d{4}$"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "score": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      }
+                    },
+                    "required": [
+                      "mcc",
+                      "score"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "overrideApplied": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "merchantName",
+                "normalizedName",
+                "confidence",
+                "source"
+              ],
+              "additionalProperties": false
+            },
+            "preferences": {
+              "type": "object",
+              "properties": {
+                "optimizeFor": {
+                  "type": "string",
+                  "enum": [
+                    "max_reward",
+                    "min_fees",
+                    "balanced"
+                  ],
+                  "default": "max_reward"
+                },
+                "excludeCardIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "default": []
+                }
+              },
+              "additionalProperties": false,
+              "default": {
+                "optimizeFor": "max_reward",
+                "excludeCardIds": []
+              }
+            },
+            "metadata": {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          },
+          "required": [
+            "amount",
+            "userCardIds"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "RouteResponse": {
+      "$ref": "https://stipulate.io/schemas/v1/RouteResponse/definitions/RouteResponse",
+      "definitions": {
+        "RouteResponse": {
+          "type": "object",
+          "properties": {
+            "requestId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "rankedCards": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "cardId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "rank": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0
+                  },
+                  "score": {
+                    "type": "number"
+                  },
+                  "effectiveMultiplier": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "estimatedReward": {
+                    "type": "object",
+                    "properties": {
+                      "amountMinor": {
+                        "type": "integer"
+                      },
+                      "currency": {
+                        "type": "string",
+                        "minLength": 3,
+                        "maxLength": 3,
+                        "pattern": "^[A-Z]{3}$",
+                        "default": "USD"
+                      }
+                    },
+                    "required": [
+                      "amountMinor"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "applicableRuleIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "excludedBy": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "exclusionId": {
+                          "type": "string"
+                        },
+                        "reason": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "exclusionId"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "fees": {
+                    "type": "object",
+                    "properties": {
+                      "foreignTransactionFee": {
+                        "type": "object",
+                        "properties": {
+                          "amountMinor": {
+                            "type": "integer"
+                          },
+                          "currency": {
+                            "type": "string",
+                            "minLength": 3,
+                            "maxLength": 3,
+                            "pattern": "^[A-Z]{3}$",
+                            "default": "USD"
+                          }
+                        },
+                        "required": [
+                          "amountMinor"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "reasoning": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "cardId",
+                  "rank",
+                  "score",
+                  "effectiveMultiplier",
+                  "estimatedReward",
+                  "applicableRuleIds"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            },
+            "merchantEnrichment": {
+              "type": "object",
+              "properties": {
+                "merchantName": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "normalizedName": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "mcc": {
+                  "type": "string",
+                  "pattern": "^\\d{4}$"
+                },
+                "mccDescription": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string",
+                  "enum": [
+                    "dining",
+                    "groceries",
+                    "travel",
+                    "airfare",
+                    "hotels",
+                    "transit",
+                    "gas",
+                    "streaming",
+                    "entertainment",
+                    "retail",
+                    "healthcare",
+                    "utilities",
+                    "insurance",
+                    "education",
+                    "charity",
+                    "government",
+                    "cash_equivalent",
+                    "other"
+                  ]
+                },
+                "confidence": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "user",
+                    "mcc_db",
+                    "llm",
+                    "override",
+                    "issuer",
+                    "plaid",
+                    "unknown"
+                  ]
+                },
+                "mccCandidates": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "mcc": {
+                        "type": "string",
+                        "pattern": "^\\d{4}$"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "score": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      }
+                    },
+                    "required": [
+                      "mcc",
+                      "score"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "overrideApplied": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "merchantName",
+                "normalizedName",
+                "confidence",
+                "source"
+              ],
+              "additionalProperties": false
+            },
+            "bestCardId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "computedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": []
+            },
+            "metadata": {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          },
+          "required": [
+            "requestId",
+            "rankedCards",
+            "bestCardId",
+            "computedAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "RankedCard": {
+      "$ref": "https://stipulate.io/schemas/v1/RankedCard/definitions/RankedCard",
+      "definitions": {
+        "RankedCard": {
+          "type": "object",
+          "properties": {
+            "cardId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "rank": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "score": {
+              "type": "number"
+            },
+            "effectiveMultiplier": {
+              "type": "number",
+              "minimum": 0
+            },
+            "estimatedReward": {
+              "type": "object",
+              "properties": {
+                "amountMinor": {
+                  "type": "integer"
+                },
+                "currency": {
+                  "type": "string",
+                  "minLength": 3,
+                  "maxLength": 3,
+                  "pattern": "^[A-Z]{3}$",
+                  "default": "USD"
+                }
+              },
+              "required": [
+                "amountMinor"
+              ],
+              "additionalProperties": false
+            },
+            "applicableRuleIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "excludedBy": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "exclusionId": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "exclusionId"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "fees": {
+              "type": "object",
+              "properties": {
+                "foreignTransactionFee": {
+                  "type": "object",
+                  "properties": {
+                    "amountMinor": {
+                      "type": "integer"
+                    },
+                    "currency": {
+                      "type": "string",
+                      "minLength": 3,
+                      "maxLength": 3,
+                      "pattern": "^[A-Z]{3}$",
+                      "default": "USD"
+                    }
+                  },
+                  "required": [
+                    "amountMinor"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
+            },
+            "reasoning": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "cardId",
+            "rank",
+            "score",
+            "effectiveMultiplier",
+            "estimatedReward",
+            "applicableRuleIds"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "MerchantEnrichment": {
+      "$ref": "https://stipulate.io/schemas/v1/MerchantEnrichment/definitions/MerchantEnrichment",
+      "definitions": {
+        "MerchantEnrichment": {
+          "type": "object",
+          "properties": {
+            "merchantName": {
+              "type": "string",
+              "minLength": 1
+            },
+            "normalizedName": {
+              "type": "string",
+              "minLength": 1
+            },
+            "mcc": {
+              "type": "string",
+              "pattern": "^\\d{4}$"
+            },
+            "mccDescription": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string",
+              "enum": [
+                "dining",
+                "groceries",
+                "travel",
+                "airfare",
+                "hotels",
+                "transit",
+                "gas",
+                "streaming",
+                "entertainment",
+                "retail",
+                "healthcare",
+                "utilities",
+                "insurance",
+                "education",
+                "charity",
+                "government",
+                "cash_equivalent",
+                "other"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "user",
+                "mcc_db",
+                "llm",
+                "override",
+                "issuer",
+                "plaid",
+                "unknown"
+              ]
+            },
+            "mccCandidates": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "mcc": {
+                    "type": "string",
+                    "pattern": "^\\d{4}$"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "score": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  }
+                },
+                "required": [
+                  "mcc",
+                  "score"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "overrideApplied": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "merchantName",
+            "normalizedName",
+            "confidence",
+            "source"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "ParsedBenefit": {
+      "$ref": "https://stipulate.io/schemas/v1/ParsedBenefit/definitions/ParsedBenefit",
+      "definitions": {
+        "ParsedBenefit": {
+          "type": "object",
+          "properties": {
+            "card_id": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[a-z0-9_]+$"
+            },
+            "category": {
+              "type": "string",
+              "enum": [
+                "dining",
+                "groceries",
+                "travel",
+                "airfare",
+                "hotels",
+                "transit",
+                "gas",
+                "streaming",
+                "entertainment",
+                "retail",
+                "healthcare",
+                "utilities",
+                "insurance",
+                "education",
+                "charity",
+                "government",
+                "cash_equivalent",
+                "other"
+              ]
+            },
+            "multiplier": {
+              "type": "number",
+              "minimum": 0
+            },
+            "cap": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "cap_period": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": [
+                    "annual",
+                    "quarterly",
+                    "monthly",
+                    "per_transaction",
+                    "lifetime",
+                    "none"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "exclusions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "default": []
+            },
+            "effective_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "source_url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "confidence": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "raw_category_label": {
+              "type": "string"
+            },
+            "requires_activation": {
+              "type": "boolean",
+              "default": false
+            },
+            "reward_type": {
+              "type": "string",
+              "enum": [
+                "points",
+                "cashback",
+                "miles"
+              ],
+              "default": "points"
+            }
+          },
+          "required": [
+            "card_id",
+            "category",
+            "multiplier",
+            "effective_date",
+            "source_url",
+            "confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "ParsedBenefitBundle": {
+      "$ref": "https://stipulate.io/schemas/v1/ParsedBenefitBundle/definitions/ParsedBenefitBundle",
+      "definitions": {
+        "ParsedBenefitBundle": {
+          "type": "object",
+          "properties": {
+            "card_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "version": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "parsed_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "source_url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "content_hash": {
+              "type": "string",
+              "minLength": 8
+            },
+            "benefits": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "card_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^[a-z0-9_]+$"
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "dining",
+                      "groceries",
+                      "travel",
+                      "airfare",
+                      "hotels",
+                      "transit",
+                      "gas",
+                      "streaming",
+                      "entertainment",
+                      "retail",
+                      "healthcare",
+                      "utilities",
+                      "insurance",
+                      "education",
+                      "charity",
+                      "government",
+                      "cash_equivalent",
+                      "other"
+                    ]
+                  },
+                  "multiplier": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "cap": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null
+                  },
+                  "cap_period": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "annual",
+                          "quarterly",
+                          "monthly",
+                          "per_transaction",
+                          "lifetime",
+                          "none"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null
+                  },
+                  "exclusions": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "default": []
+                  },
+                  "effective_date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "source_url": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "confidence": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "raw_category_label": {
+                    "type": "string"
+                  },
+                  "requires_activation": {
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "reward_type": {
+                    "type": "string",
+                    "enum": [
+                      "points",
+                      "cashback",
+                      "miles"
+                    ],
+                    "default": "points"
+                  }
+                },
+                "required": [
+                  "card_id",
+                  "category",
+                  "multiplier",
+                  "effective_date",
+                  "source_url",
+                  "confidence"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            },
+            "parser_model": {
+              "type": "string"
+            },
+            "average_confidence": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "required": [
+            "card_id",
+            "version",
+            "parsed_at",
+            "source_url",
+            "content_hash",
+            "benefits",
+            "average_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "BenefitChange": {
+      "$ref": "https://stipulate.io/schemas/v1/BenefitChange/definitions/BenefitChange",
+      "definitions": {
+        "BenefitChange": {
+          "type": "object",
+          "properties": {
+            "card_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "field": {
+              "type": "string",
+              "minLength": 1
+            },
+            "category": {
+              "type": "string",
+              "enum": [
+                "dining",
+                "groceries",
+                "travel",
+                "airfare",
+                "hotels",
+                "transit",
+                "gas",
+                "streaming",
+                "entertainment",
+                "retail",
+                "healthcare",
+                "utilities",
+                "insurance",
+                "education",
+                "charity",
+                "government",
+                "cash_equivalent",
+                "other"
+              ]
+            },
+            "old_value": {},
+            "new_value": {},
+            "detected_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "severity": {
+              "type": "string",
+              "enum": [
+                "breaking",
+                "material",
+                "minor"
+              ],
+              "default": "material"
+            }
+          },
+          "required": [
+            "card_id",
+            "field",
+            "detected_at"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    }
+  }
+}

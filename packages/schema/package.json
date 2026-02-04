@@ -10,22 +10,29 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    }
+    },
+    "./json-schema/*": "./json-schema/*"
   },
   "files": [
-    "dist"
+    "dist",
+    "json-schema",
+    "data"
   ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "generate:json-schema": "tsx scripts/generate-json-schema.ts",
+    "generate:catalog": "tsx scripts/generate-catalog.ts"
   },
   "dependencies": {
-    "zod": "^3.24.2"
+    "zod": "^3.24.2",
+    "zod-to-json-schema": "^3.24.5"
   },
   "devDependencies": {
+    "tsx": "^4.19.3",
     "typescript": "^5.7.3",
     "vitest": "^3.0.5"
   }

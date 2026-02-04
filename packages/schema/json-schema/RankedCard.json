@@ -1,0 +1,106 @@
+{
+  "$ref": "https://stipulate.io/schemas/v1/RankedCard/definitions/RankedCard",
+  "definitions": {
+    "RankedCard": {
+      "type": "object",
+      "properties": {
+        "cardId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rank": {
+          "type": "integer",
+          "exclusiveMinimum": 0
+        },
+        "score": {
+          "type": "number"
+        },
+        "effectiveMultiplier": {
+          "type": "number",
+          "minimum": 0
+        },
+        "estimatedReward": {
+          "type": "object",
+          "properties": {
+            "amountMinor": {
+              "type": "integer"
+            },
+            "currency": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 3,
+              "pattern": "^[A-Z]{3}$",
+              "default": "USD"
+            }
+          },
+          "required": [
+            "amountMinor"
+          ],
+          "additionalProperties": false
+        },
+        "applicableRuleIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "excludedBy": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "exclusionId": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "exclusionId"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "fees": {
+          "type": "object",
+          "properties": {
+            "foreignTransactionFee": {
+              "type": "object",
+              "properties": {
+                "amountMinor": {
+                  "type": "integer"
+                },
+                "currency": {
+                  "type": "string",
+                  "minLength": 3,
+                  "maxLength": 3,
+                  "pattern": "^[A-Z]{3}$",
+                  "default": "USD"
+                }
+              },
+              "required": [
+                "amountMinor"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "reasoning": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "cardId",
+        "rank",
+        "score",
+        "effectiveMultiplier",
+        "estimatedReward",
+        "applicableRuleIds"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

@@ -66,3 +66,23 @@ export {
   type RankedCard,
   type RouteResponse,
 } from "./routing.js";
+
+export {
+  ParsedBenefitSchema,
+  ParsedBenefitBundleSchema,
+  BenefitChangeSchema,
+  parsedBenefitToRuleFields,
+  computeBundleConfidence,
+  diffBenefitBundles,
+  type ParsedBenefit,
+  type ParsedBenefitBundle,
+  type BenefitChange,
+} from "./parsed-benefit.js";
+
+export {
+  SCHEMA_REGISTRY,
+  toJsonSchema,
+  exportAllJsonSchemas,
+  validateAgainstSchema,
+  type SchemaName,
+} from "./json-schema.js";

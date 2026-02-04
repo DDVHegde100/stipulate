@@ -1,0 +1,45 @@
+{
+  "$ref": "https://stipulate.io/schemas/v1/Exclusion/definitions/Exclusion",
+  "definitions": {
+    "Exclusion": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "merchant",
+            "mcc",
+            "category",
+            "channel",
+            "geography"
+          ]
+        },
+        "matcher": {
+          "type": "string",
+          "minLength": 1
+        },
+        "isRegex": {
+          "type": "boolean",
+          "default": false
+        },
+        "reason": {
+          "type": "string"
+        },
+        "sourceNote": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "matcher"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

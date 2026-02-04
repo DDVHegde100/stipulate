@@ -1,0 +1,120 @@
+{
+  "$ref": "https://stipulate.io/schemas/v1/ParsedBenefit/definitions/ParsedBenefit",
+  "definitions": {
+    "ParsedBenefit": {
+      "type": "object",
+      "properties": {
+        "card_id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[a-z0-9_]+$"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "dining",
+            "groceries",
+            "travel",
+            "airfare",
+            "hotels",
+            "transit",
+            "gas",
+            "streaming",
+            "entertainment",
+            "retail",
+            "healthcare",
+            "utilities",
+            "insurance",
+            "education",
+            "charity",
+            "government",
+            "cash_equivalent",
+            "other"
+          ]
+        },
+        "multiplier": {
+          "type": "number",
+          "minimum": 0
+        },
+        "cap": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "cap_period": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "annual",
+                "quarterly",
+                "monthly",
+                "per_transaction",
+                "lifetime",
+                "none"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "exclusions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "default": []
+        },
+        "effective_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "source_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "raw_category_label": {
+          "type": "string"
+        },
+        "requires_activation": {
+          "type": "boolean",
+          "default": false
+        },
+        "reward_type": {
+          "type": "string",
+          "enum": [
+            "points",
+            "cashback",
+            "miles"
+          ],
+          "default": "points"
+        }
+      },
+      "required": [
+        "card_id",
+        "category",
+        "multiplier",
+        "effective_date",
+        "source_url",
+        "confidence"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}
