@@ -1,0 +1,757 @@
+{
+  "version": "2026.02.05-core50",
+  "generatedAt": "2026-06-18T19:51:00.028Z",
+  "cards": [
+    {
+      "id": "chase_sapphire_preferred",
+      "issuer": "Chase",
+      "productName": "Sapphire Preferred",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "benefitGuideUrl": "https://creditcards.chase.com/rewards-credit-cards/sapphire/preferred",
+      "isActive": true,
+      "metadata": {
+        "productTier": "premium"
+      }
+    },
+    {
+      "id": "chase_sapphire_reserve",
+      "issuer": "Chase",
+      "productName": "Sapphire Reserve",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 55000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "luxury"
+      }
+    },
+    {
+      "id": "chase_freedom_unlimited",
+      "issuer": "Chase",
+      "productName": "Freedom Unlimited",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "chase_freedom_flex",
+      "issuer": "Chase",
+      "productName": "Freedom Flex",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "chase_ink_business_preferred",
+      "issuer": "Chase",
+      "productName": "Ink Business Preferred",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "business"
+      }
+    },
+    {
+      "id": "chase_ink_business_cash",
+      "issuer": "Chase",
+      "productName": "Ink Business Cash",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "business"
+      }
+    },
+    {
+      "id": "chase_united_explorer",
+      "issuer": "Chase",
+      "productName": "United Explorer",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_southwest_priority",
+      "issuer": "Chase",
+      "productName": "Southwest Priority",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 14900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_gold",
+      "issuer": "American Express",
+      "productName": "Gold Card",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 25000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "premium"
+      }
+    },
+    {
+      "id": "amex_platinum",
+      "issuer": "American Express",
+      "productName": "Platinum Card",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 69500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "luxury"
+      }
+    },
+    {
+      "id": "amex_green",
+      "issuer": "American Express",
+      "productName": "Green Card",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 15000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "premium"
+      }
+    },
+    {
+      "id": "amex_blue_cash_preferred",
+      "issuer": "American Express",
+      "productName": "Blue Cash Preferred",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "amex_blue_cash_everyday",
+      "issuer": "American Express",
+      "productName": "Blue Cash Everyday",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "amex_delta_skymiles_gold",
+      "issuer": "American Express",
+      "productName": "Delta SkyMiles Gold",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 15000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_hilton_honors",
+      "issuer": "American Express",
+      "productName": "Hilton Honors",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_marriott_bonvoy",
+      "issuer": "American Express",
+      "productName": "Marriott Bonvoy",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "capital_one_venture",
+      "issuer": "Capital One",
+      "productName": "Venture",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "premium"
+      }
+    },
+    {
+      "id": "capital_one_venture_x",
+      "issuer": "Capital One",
+      "productName": "Venture X",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 39500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "luxury"
+      }
+    },
+    {
+      "id": "capital_one_savor",
+      "issuer": "Capital One",
+      "productName": "Savor",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "capital_one_quicksilver",
+      "issuer": "Capital One",
+      "productName": "Quicksilver",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "capital_one_spark_cash_plus",
+      "issuer": "Capital One",
+      "productName": "Spark Cash Plus",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 15000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "business"
+      }
+    },
+    {
+      "id": "citi_double_cash",
+      "issuer": "Citi",
+      "productName": "Double Cash",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "citi_custom_cash",
+      "issuer": "Citi",
+      "productName": "Custom Cash",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "citi_premier",
+      "issuer": "Citi",
+      "productName": "Premier",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "premium"
+      }
+    },
+    {
+      "id": "citi_strata_premier",
+      "issuer": "Citi",
+      "productName": "Strata Premier",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "premium"
+      }
+    },
+    {
+      "id": "citi_aadvantage_platinum",
+      "issuer": "Citi",
+      "productName": "AAdvantage Platinum Select",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 9900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "discover_it_cash_back",
+      "issuer": "Discover",
+      "productName": "it Cash Back",
+      "network": "discover",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "discover_it_miles",
+      "issuer": "Discover",
+      "productName": "it Miles",
+      "network": "discover",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "travel"
+      }
+    },
+    {
+      "id": "discover_it_chrome",
+      "issuer": "Discover",
+      "productName": "it Chrome",
+      "network": "discover",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "bofa_customized_cash",
+      "issuer": "Bank of America",
+      "productName": "Customized Cash Rewards",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "bofa_travel_rewards",
+      "issuer": "Bank of America",
+      "productName": "Travel Rewards",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "travel"
+      }
+    },
+    {
+      "id": "bofa_premium_rewards",
+      "issuer": "Bank of America",
+      "productName": "Premium Rewards",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "premium"
+      }
+    },
+    {
+      "id": "bofa_unlimited_cash",
+      "issuer": "Bank of America",
+      "productName": "Unlimited Cash Rewards",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "wells_fargo_active_cash",
+      "issuer": "Wells Fargo",
+      "productName": "Active Cash",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "wells_fargo_autograph",
+      "issuer": "Wells Fargo",
+      "productName": "Autograph",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "travel"
+      }
+    },
+    {
+      "id": "wells_fargo_reflect",
+      "issuer": "Wells Fargo",
+      "productName": "Reflect",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "standard"
+      }
+    },
+    {
+      "id": "us_bank_altitude_go",
+      "issuer": "U.S. Bank",
+      "productName": "Altitude Go",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "us_bank_altitude_reserve",
+      "issuer": "U.S. Bank",
+      "productName": "Altitude Reserve",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 40000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "luxury"
+      }
+    },
+    {
+      "id": "us_bank_cash_plus",
+      "issuer": "U.S. Bank",
+      "productName": "Cash+",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "barclays_aadvantage_aviator",
+      "issuer": "Barclays",
+      "productName": "AAdvantage Aviator Red",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 9900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "barclays_jetblue_plus",
+      "issuer": "Barclays",
+      "productName": "JetBlue Plus",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 9900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "apple_card",
+      "issuer": "Apple",
+      "productName": "Apple Card",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "amazon_prime_rewards",
+      "issuer": "Amazon",
+      "productName": "Prime Rewards Visa",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_amazon_prime",
+      "issuer": "Chase",
+      "productName": "Amazon Prime Visa",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_everyday_preferred",
+      "issuer": "American Express",
+      "productName": "EveryDay Preferred",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "standard"
+      }
+    },
+    {
+      "id": "amex_business_gold",
+      "issuer": "American Express",
+      "productName": "Business Gold",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 37500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "business"
+      }
+    },
+    {
+      "id": "amex_business_platinum",
+      "issuer": "American Express",
+      "productName": "Business Platinum",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 69500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "business"
+      }
+    },
+    {
+      "id": "chase_amazon_visa",
+      "issuer": "Chase",
+      "productName": "Amazon Visa",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "capital_one_quicksilverone",
+      "issuer": "Capital One",
+      "productName": "QuicksilverOne",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 3900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "standard"
+      }
+    },
+    {
+      "id": "citi_simplicity",
+      "issuer": "Citi",
+      "productName": "Simplicity",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "standard"
+      }
+    }
+  ]
+}

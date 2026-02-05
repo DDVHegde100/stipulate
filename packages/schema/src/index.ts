@@ -86,3 +86,12 @@ export {
   validateAgainstSchema,
   type SchemaName,
 } from "./json-schema.js";
+export {
+  seedEntryToCard,
+  buildCatalog,
+  expandCatalogEntries,
+  ISSUER_SLUG_MAP,
+  PRODUCT_TIER_SUFFIXES,
+  COBRAND_PARTNERS,
+  type CardSeedEntry,
+} from "./catalog-seed.js";
