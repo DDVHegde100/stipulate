@@ -1,0 +1,3157 @@
+{
+  "version": "2026.02.06-full",
+  "generatedAt": "2026-06-18T19:51:00.020Z",
+  "cards": [
+    {
+      "id": "chase_sapphire_preferred",
+      "issuer": "Chase",
+      "productName": "Sapphire Preferred",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "benefitGuideUrl": "https://creditcards.chase.com/rewards-credit-cards/sapphire/preferred",
+      "isActive": true,
+      "metadata": {
+        "productTier": "premium"
+      }
+    },
+    {
+      "id": "chase_sapphire_reserve",
+      "issuer": "Chase",
+      "productName": "Sapphire Reserve",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 55000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "luxury"
+      }
+    },
+    {
+      "id": "chase_freedom_unlimited",
+      "issuer": "Chase",
+      "productName": "Freedom Unlimited",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "chase_freedom_flex",
+      "issuer": "Chase",
+      "productName": "Freedom Flex",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "chase_ink_business_preferred",
+      "issuer": "Chase",
+      "productName": "Ink Business Preferred",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "business"
+      }
+    },
+    {
+      "id": "chase_ink_business_cash",
+      "issuer": "Chase",
+      "productName": "Ink Business Cash",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "business"
+      }
+    },
+    {
+      "id": "chase_united_explorer",
+      "issuer": "Chase",
+      "productName": "United Explorer",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_southwest_priority",
+      "issuer": "Chase",
+      "productName": "Southwest Priority",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 14900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_gold",
+      "issuer": "American Express",
+      "productName": "Gold Card",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 25000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "premium"
+      }
+    },
+    {
+      "id": "amex_platinum",
+      "issuer": "American Express",
+      "productName": "Platinum Card",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 69500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "luxury"
+      }
+    },
+    {
+      "id": "amex_green",
+      "issuer": "American Express",
+      "productName": "Green Card",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 15000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "premium"
+      }
+    },
+    {
+      "id": "amex_blue_cash_preferred",
+      "issuer": "American Express",
+      "productName": "Blue Cash Preferred",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "amex_blue_cash_everyday",
+      "issuer": "American Express",
+      "productName": "Blue Cash Everyday",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "amex_delta_skymiles_gold",
+      "issuer": "American Express",
+      "productName": "Delta SkyMiles Gold",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 15000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_hilton_honors",
+      "issuer": "American Express",
+      "productName": "Hilton Honors",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_marriott_bonvoy",
+      "issuer": "American Express",
+      "productName": "Marriott Bonvoy",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "capital_one_venture",
+      "issuer": "Capital One",
+      "productName": "Venture",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "premium"
+      }
+    },
+    {
+      "id": "capital_one_venture_x",
+      "issuer": "Capital One",
+      "productName": "Venture X",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 39500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "luxury"
+      }
+    },
+    {
+      "id": "capital_one_savor",
+      "issuer": "Capital One",
+      "productName": "Savor",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "capital_one_quicksilver",
+      "issuer": "Capital One",
+      "productName": "Quicksilver",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "capital_one_spark_cash_plus",
+      "issuer": "Capital One",
+      "productName": "Spark Cash Plus",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 15000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "business"
+      }
+    },
+    {
+      "id": "citi_double_cash",
+      "issuer": "Citi",
+      "productName": "Double Cash",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "citi_custom_cash",
+      "issuer": "Citi",
+      "productName": "Custom Cash",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "citi_premier",
+      "issuer": "Citi",
+      "productName": "Premier",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "premium"
+      }
+    },
+    {
+      "id": "citi_strata_premier",
+      "issuer": "Citi",
+      "productName": "Strata Premier",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "premium"
+      }
+    },
+    {
+      "id": "citi_aadvantage_platinum",
+      "issuer": "Citi",
+      "productName": "AAdvantage Platinum Select",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 9900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "discover_it_cash_back",
+      "issuer": "Discover",
+      "productName": "it Cash Back",
+      "network": "discover",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "discover_it_miles",
+      "issuer": "Discover",
+      "productName": "it Miles",
+      "network": "discover",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "travel"
+      }
+    },
+    {
+      "id": "discover_it_chrome",
+      "issuer": "Discover",
+      "productName": "it Chrome",
+      "network": "discover",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "bofa_customized_cash",
+      "issuer": "Bank of America",
+      "productName": "Customized Cash Rewards",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "bofa_travel_rewards",
+      "issuer": "Bank of America",
+      "productName": "Travel Rewards",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "travel"
+      }
+    },
+    {
+      "id": "bofa_premium_rewards",
+      "issuer": "Bank of America",
+      "productName": "Premium Rewards",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "premium"
+      }
+    },
+    {
+      "id": "bofa_unlimited_cash",
+      "issuer": "Bank of America",
+      "productName": "Unlimited Cash Rewards",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "wells_fargo_active_cash",
+      "issuer": "Wells Fargo",
+      "productName": "Active Cash",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "wells_fargo_autograph",
+      "issuer": "Wells Fargo",
+      "productName": "Autograph",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "travel"
+      }
+    },
+    {
+      "id": "wells_fargo_reflect",
+      "issuer": "Wells Fargo",
+      "productName": "Reflect",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "standard"
+      }
+    },
+    {
+      "id": "us_bank_altitude_go",
+      "issuer": "U.S. Bank",
+      "productName": "Altitude Go",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "us_bank_altitude_reserve",
+      "issuer": "U.S. Bank",
+      "productName": "Altitude Reserve",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 40000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "luxury"
+      }
+    },
+    {
+      "id": "us_bank_cash_plus",
+      "issuer": "U.S. Bank",
+      "productName": "Cash+",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "barclays_aadvantage_aviator",
+      "issuer": "Barclays",
+      "productName": "AAdvantage Aviator Red",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 9900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "barclays_jetblue_plus",
+      "issuer": "Barclays",
+      "productName": "JetBlue Plus",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 9900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "apple_card",
+      "issuer": "Apple",
+      "productName": "Apple Card",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "cashback"
+      }
+    },
+    {
+      "id": "amazon_prime_rewards",
+      "issuer": "Amazon",
+      "productName": "Prime Rewards Visa",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_amazon_prime",
+      "issuer": "Chase",
+      "productName": "Amazon Prime Visa",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_everyday_preferred",
+      "issuer": "American Express",
+      "productName": "EveryDay Preferred",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "standard"
+      }
+    },
+    {
+      "id": "amex_business_gold",
+      "issuer": "American Express",
+      "productName": "Business Gold",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 37500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "business"
+      }
+    },
+    {
+      "id": "amex_business_platinum",
+      "issuer": "American Express",
+      "productName": "Business Platinum",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 69500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "business"
+      }
+    },
+    {
+      "id": "chase_amazon_visa",
+      "issuer": "Chase",
+      "productName": "Amazon Visa",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "capital_one_quicksilverone",
+      "issuer": "Capital One",
+      "productName": "QuicksilverOne",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 3900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "standard"
+      }
+    },
+    {
+      "id": "citi_simplicity",
+      "issuer": "Citi",
+      "productName": "Simplicity",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "standard"
+      }
+    },
+    {
+      "id": "discover_it_secured",
+      "issuer": "Discover",
+      "productName": "it Secured",
+      "network": "discover",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "secured"
+      }
+    },
+    {
+      "id": "chase_united_sapphire_preferred",
+      "issuer": "Chase",
+      "productName": "Sapphire Preferred United",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_delta_sapphire_preferred",
+      "issuer": "Chase",
+      "productName": "Sapphire Preferred Delta",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_southwest_sapphire_preferred",
+      "issuer": "Chase",
+      "productName": "Sapphire Preferred Southwest",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_marriott_sapphire_preferred",
+      "issuer": "Chase",
+      "productName": "Sapphire Preferred Marriott",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_hilton_sapphire_preferred",
+      "issuer": "Chase",
+      "productName": "Sapphire Preferred Hilton",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_hyatt_sapphire_preferred",
+      "issuer": "Chase",
+      "productName": "Sapphire Preferred Hyatt",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_ihg_sapphire_preferred",
+      "issuer": "Chase",
+      "productName": "Sapphire Preferred IHG",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_jetblue_sapphire_preferred",
+      "issuer": "Chase",
+      "productName": "Sapphire Preferred JetBlue",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_alaska_sapphire_preferred",
+      "issuer": "Chase",
+      "productName": "Sapphire Preferred Alaska",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_avianca_sapphire_preferred",
+      "issuer": "Chase",
+      "productName": "Sapphire Preferred Avianca",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_aeroplan_sapphire_preferred",
+      "issuer": "Chase",
+      "productName": "Sapphire Preferred Aeroplan",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_british_airways_sapphire_preferred",
+      "issuer": "Chase",
+      "productName": "Sapphire Preferred British Airways",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_amazon_sapphire_preferred",
+      "issuer": "Chase",
+      "productName": "Sapphire Preferred Amazon",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_apple_sapphire_preferred",
+      "issuer": "Chase",
+      "productName": "Sapphire Preferred Apple",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_costco_sapphire_preferred",
+      "issuer": "Chase",
+      "productName": "Sapphire Preferred Costco",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_united_sapphire_reserve",
+      "issuer": "Chase",
+      "productName": "Sapphire Reserve United",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 55000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_delta_sapphire_reserve",
+      "issuer": "Chase",
+      "productName": "Sapphire Reserve Delta",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 55000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_southwest_sapphire_reserve",
+      "issuer": "Chase",
+      "productName": "Sapphire Reserve Southwest",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 55000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_marriott_sapphire_reserve",
+      "issuer": "Chase",
+      "productName": "Sapphire Reserve Marriott",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 55000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_hilton_sapphire_reserve",
+      "issuer": "Chase",
+      "productName": "Sapphire Reserve Hilton",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 55000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_hyatt_sapphire_reserve",
+      "issuer": "Chase",
+      "productName": "Sapphire Reserve Hyatt",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 55000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_ihg_sapphire_reserve",
+      "issuer": "Chase",
+      "productName": "Sapphire Reserve IHG",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 55000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_jetblue_sapphire_reserve",
+      "issuer": "Chase",
+      "productName": "Sapphire Reserve JetBlue",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 55000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_alaska_sapphire_reserve",
+      "issuer": "Chase",
+      "productName": "Sapphire Reserve Alaska",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 55000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_avianca_sapphire_reserve",
+      "issuer": "Chase",
+      "productName": "Sapphire Reserve Avianca",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 55000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_aeroplan_sapphire_reserve",
+      "issuer": "Chase",
+      "productName": "Sapphire Reserve Aeroplan",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 55000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_british_airways_sapphire_reserve",
+      "issuer": "Chase",
+      "productName": "Sapphire Reserve British Airways",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 55000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_amazon_sapphire_reserve",
+      "issuer": "Chase",
+      "productName": "Sapphire Reserve Amazon",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 55000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_apple_sapphire_reserve",
+      "issuer": "Chase",
+      "productName": "Sapphire Reserve Apple",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 55000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_costco_sapphire_reserve",
+      "issuer": "Chase",
+      "productName": "Sapphire Reserve Costco",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 55000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_united_freedom_unlimited",
+      "issuer": "Chase",
+      "productName": "Freedom Unlimited United",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_delta_freedom_unlimited",
+      "issuer": "Chase",
+      "productName": "Freedom Unlimited Delta",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_southwest_freedom_unlimited",
+      "issuer": "Chase",
+      "productName": "Freedom Unlimited Southwest",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_marriott_freedom_unlimited",
+      "issuer": "Chase",
+      "productName": "Freedom Unlimited Marriott",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_hilton_freedom_unlimited",
+      "issuer": "Chase",
+      "productName": "Freedom Unlimited Hilton",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_hyatt_freedom_unlimited",
+      "issuer": "Chase",
+      "productName": "Freedom Unlimited Hyatt",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_ihg_freedom_unlimited",
+      "issuer": "Chase",
+      "productName": "Freedom Unlimited IHG",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_jetblue_freedom_unlimited",
+      "issuer": "Chase",
+      "productName": "Freedom Unlimited JetBlue",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_alaska_freedom_unlimited",
+      "issuer": "Chase",
+      "productName": "Freedom Unlimited Alaska",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_avianca_freedom_unlimited",
+      "issuer": "Chase",
+      "productName": "Freedom Unlimited Avianca",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_aeroplan_freedom_unlimited",
+      "issuer": "Chase",
+      "productName": "Freedom Unlimited Aeroplan",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_british_airways_freedom_unlimited",
+      "issuer": "Chase",
+      "productName": "Freedom Unlimited British Airways",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_amazon_freedom_unlimited",
+      "issuer": "Chase",
+      "productName": "Freedom Unlimited Amazon",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_apple_freedom_unlimited",
+      "issuer": "Chase",
+      "productName": "Freedom Unlimited Apple",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_costco_freedom_unlimited",
+      "issuer": "Chase",
+      "productName": "Freedom Unlimited Costco",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_united_freedom_flex",
+      "issuer": "Chase",
+      "productName": "Freedom Flex United",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_delta_freedom_flex",
+      "issuer": "Chase",
+      "productName": "Freedom Flex Delta",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_southwest_freedom_flex",
+      "issuer": "Chase",
+      "productName": "Freedom Flex Southwest",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_marriott_freedom_flex",
+      "issuer": "Chase",
+      "productName": "Freedom Flex Marriott",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_hilton_freedom_flex",
+      "issuer": "Chase",
+      "productName": "Freedom Flex Hilton",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_hyatt_freedom_flex",
+      "issuer": "Chase",
+      "productName": "Freedom Flex Hyatt",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_ihg_freedom_flex",
+      "issuer": "Chase",
+      "productName": "Freedom Flex IHG",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_jetblue_freedom_flex",
+      "issuer": "Chase",
+      "productName": "Freedom Flex JetBlue",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_alaska_freedom_flex",
+      "issuer": "Chase",
+      "productName": "Freedom Flex Alaska",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_avianca_freedom_flex",
+      "issuer": "Chase",
+      "productName": "Freedom Flex Avianca",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_aeroplan_freedom_flex",
+      "issuer": "Chase",
+      "productName": "Freedom Flex Aeroplan",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_british_airways_freedom_flex",
+      "issuer": "Chase",
+      "productName": "Freedom Flex British Airways",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_amazon_freedom_flex",
+      "issuer": "Chase",
+      "productName": "Freedom Flex Amazon",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_apple_freedom_flex",
+      "issuer": "Chase",
+      "productName": "Freedom Flex Apple",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_costco_freedom_flex",
+      "issuer": "Chase",
+      "productName": "Freedom Flex Costco",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_united_ink_business_preferred",
+      "issuer": "Chase",
+      "productName": "Ink Business Preferred United",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_delta_ink_business_preferred",
+      "issuer": "Chase",
+      "productName": "Ink Business Preferred Delta",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_southwest_ink_business_preferred",
+      "issuer": "Chase",
+      "productName": "Ink Business Preferred Southwest",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_marriott_ink_business_preferred",
+      "issuer": "Chase",
+      "productName": "Ink Business Preferred Marriott",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_hilton_ink_business_preferred",
+      "issuer": "Chase",
+      "productName": "Ink Business Preferred Hilton",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_hyatt_ink_business_preferred",
+      "issuer": "Chase",
+      "productName": "Ink Business Preferred Hyatt",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_ihg_ink_business_preferred",
+      "issuer": "Chase",
+      "productName": "Ink Business Preferred IHG",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_jetblue_ink_business_preferred",
+      "issuer": "Chase",
+      "productName": "Ink Business Preferred JetBlue",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_alaska_ink_business_preferred",
+      "issuer": "Chase",
+      "productName": "Ink Business Preferred Alaska",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_avianca_ink_business_preferred",
+      "issuer": "Chase",
+      "productName": "Ink Business Preferred Avianca",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_aeroplan_ink_business_preferred",
+      "issuer": "Chase",
+      "productName": "Ink Business Preferred Aeroplan",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_british_airways_ink_business_preferred",
+      "issuer": "Chase",
+      "productName": "Ink Business Preferred British Airways",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_amazon_ink_business_preferred",
+      "issuer": "Chase",
+      "productName": "Ink Business Preferred Amazon",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_apple_ink_business_preferred",
+      "issuer": "Chase",
+      "productName": "Ink Business Preferred Apple",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_costco_ink_business_preferred",
+      "issuer": "Chase",
+      "productName": "Ink Business Preferred Costco",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_united_ink_business_cash",
+      "issuer": "Chase",
+      "productName": "Ink Business Cash United",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_delta_ink_business_cash",
+      "issuer": "Chase",
+      "productName": "Ink Business Cash Delta",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_southwest_ink_business_cash",
+      "issuer": "Chase",
+      "productName": "Ink Business Cash Southwest",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_marriott_ink_business_cash",
+      "issuer": "Chase",
+      "productName": "Ink Business Cash Marriott",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_hilton_ink_business_cash",
+      "issuer": "Chase",
+      "productName": "Ink Business Cash Hilton",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_hyatt_ink_business_cash",
+      "issuer": "Chase",
+      "productName": "Ink Business Cash Hyatt",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_ihg_ink_business_cash",
+      "issuer": "Chase",
+      "productName": "Ink Business Cash IHG",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_jetblue_ink_business_cash",
+      "issuer": "Chase",
+      "productName": "Ink Business Cash JetBlue",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_alaska_ink_business_cash",
+      "issuer": "Chase",
+      "productName": "Ink Business Cash Alaska",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_avianca_ink_business_cash",
+      "issuer": "Chase",
+      "productName": "Ink Business Cash Avianca",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_aeroplan_ink_business_cash",
+      "issuer": "Chase",
+      "productName": "Ink Business Cash Aeroplan",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_british_airways_ink_business_cash",
+      "issuer": "Chase",
+      "productName": "Ink Business Cash British Airways",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_amazon_ink_business_cash",
+      "issuer": "Chase",
+      "productName": "Ink Business Cash Amazon",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_apple_ink_business_cash",
+      "issuer": "Chase",
+      "productName": "Ink Business Cash Apple",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_costco_ink_business_cash",
+      "issuer": "Chase",
+      "productName": "Ink Business Cash Costco",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 0,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_united_united_explorer",
+      "issuer": "Chase",
+      "productName": "United Explorer United",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_delta_united_explorer",
+      "issuer": "Chase",
+      "productName": "United Explorer Delta",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_southwest_united_explorer",
+      "issuer": "Chase",
+      "productName": "United Explorer Southwest",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_marriott_united_explorer",
+      "issuer": "Chase",
+      "productName": "United Explorer Marriott",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_hilton_united_explorer",
+      "issuer": "Chase",
+      "productName": "United Explorer Hilton",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_hyatt_united_explorer",
+      "issuer": "Chase",
+      "productName": "United Explorer Hyatt",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_ihg_united_explorer",
+      "issuer": "Chase",
+      "productName": "United Explorer IHG",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_jetblue_united_explorer",
+      "issuer": "Chase",
+      "productName": "United Explorer JetBlue",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_alaska_united_explorer",
+      "issuer": "Chase",
+      "productName": "United Explorer Alaska",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_avianca_united_explorer",
+      "issuer": "Chase",
+      "productName": "United Explorer Avianca",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_aeroplan_united_explorer",
+      "issuer": "Chase",
+      "productName": "United Explorer Aeroplan",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_british_airways_united_explorer",
+      "issuer": "Chase",
+      "productName": "United Explorer British Airways",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_amazon_united_explorer",
+      "issuer": "Chase",
+      "productName": "United Explorer Amazon",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_apple_united_explorer",
+      "issuer": "Chase",
+      "productName": "United Explorer Apple",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_costco_united_explorer",
+      "issuer": "Chase",
+      "productName": "United Explorer Costco",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 9500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_united_southwest_priority",
+      "issuer": "Chase",
+      "productName": "Southwest Priority United",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 14900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_delta_southwest_priority",
+      "issuer": "Chase",
+      "productName": "Southwest Priority Delta",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 14900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_southwest_southwest_priority",
+      "issuer": "Chase",
+      "productName": "Southwest Priority Southwest",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 14900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_marriott_southwest_priority",
+      "issuer": "Chase",
+      "productName": "Southwest Priority Marriott",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 14900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_hilton_southwest_priority",
+      "issuer": "Chase",
+      "productName": "Southwest Priority Hilton",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 14900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_hyatt_southwest_priority",
+      "issuer": "Chase",
+      "productName": "Southwest Priority Hyatt",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 14900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_ihg_southwest_priority",
+      "issuer": "Chase",
+      "productName": "Southwest Priority IHG",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 14900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_jetblue_southwest_priority",
+      "issuer": "Chase",
+      "productName": "Southwest Priority JetBlue",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 14900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_alaska_southwest_priority",
+      "issuer": "Chase",
+      "productName": "Southwest Priority Alaska",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 14900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_avianca_southwest_priority",
+      "issuer": "Chase",
+      "productName": "Southwest Priority Avianca",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 14900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_aeroplan_southwest_priority",
+      "issuer": "Chase",
+      "productName": "Southwest Priority Aeroplan",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 14900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_british_airways_southwest_priority",
+      "issuer": "Chase",
+      "productName": "Southwest Priority British Airways",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 14900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_amazon_southwest_priority",
+      "issuer": "Chase",
+      "productName": "Southwest Priority Amazon",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 14900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_apple_southwest_priority",
+      "issuer": "Chase",
+      "productName": "Southwest Priority Apple",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 14900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "chase_costco_southwest_priority",
+      "issuer": "Chase",
+      "productName": "Southwest Priority Costco",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 14900,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_united_gold",
+      "issuer": "American Express",
+      "productName": "Gold Card United",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 25000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_delta_gold",
+      "issuer": "American Express",
+      "productName": "Gold Card Delta",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 25000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_southwest_gold",
+      "issuer": "American Express",
+      "productName": "Gold Card Southwest",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 25000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_marriott_gold",
+      "issuer": "American Express",
+      "productName": "Gold Card Marriott",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 25000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_hilton_gold",
+      "issuer": "American Express",
+      "productName": "Gold Card Hilton",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 25000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_hyatt_gold",
+      "issuer": "American Express",
+      "productName": "Gold Card Hyatt",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 25000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_ihg_gold",
+      "issuer": "American Express",
+      "productName": "Gold Card IHG",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 25000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_jetblue_gold",
+      "issuer": "American Express",
+      "productName": "Gold Card JetBlue",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 25000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_alaska_gold",
+      "issuer": "American Express",
+      "productName": "Gold Card Alaska",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 25000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_avianca_gold",
+      "issuer": "American Express",
+      "productName": "Gold Card Avianca",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 25000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_aeroplan_gold",
+      "issuer": "American Express",
+      "productName": "Gold Card Aeroplan",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 25000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_british_airways_gold",
+      "issuer": "American Express",
+      "productName": "Gold Card British Airways",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 25000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_amazon_gold",
+      "issuer": "American Express",
+      "productName": "Gold Card Amazon",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 25000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_apple_gold",
+      "issuer": "American Express",
+      "productName": "Gold Card Apple",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 25000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_costco_gold",
+      "issuer": "American Express",
+      "productName": "Gold Card Costco",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 25000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_united_platinum",
+      "issuer": "American Express",
+      "productName": "Platinum Card United",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 69500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_delta_platinum",
+      "issuer": "American Express",
+      "productName": "Platinum Card Delta",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 69500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_southwest_platinum",
+      "issuer": "American Express",
+      "productName": "Platinum Card Southwest",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 69500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_marriott_platinum",
+      "issuer": "American Express",
+      "productName": "Platinum Card Marriott",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 69500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_hilton_platinum",
+      "issuer": "American Express",
+      "productName": "Platinum Card Hilton",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 69500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_hyatt_platinum",
+      "issuer": "American Express",
+      "productName": "Platinum Card Hyatt",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 69500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_ihg_platinum",
+      "issuer": "American Express",
+      "productName": "Platinum Card IHG",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 69500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_jetblue_platinum",
+      "issuer": "American Express",
+      "productName": "Platinum Card JetBlue",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 69500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_alaska_platinum",
+      "issuer": "American Express",
+      "productName": "Platinum Card Alaska",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 69500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_avianca_platinum",
+      "issuer": "American Express",
+      "productName": "Platinum Card Avianca",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 69500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_aeroplan_platinum",
+      "issuer": "American Express",
+      "productName": "Platinum Card Aeroplan",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 69500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_british_airways_platinum",
+      "issuer": "American Express",
+      "productName": "Platinum Card British Airways",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 69500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_amazon_platinum",
+      "issuer": "American Express",
+      "productName": "Platinum Card Amazon",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 69500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_apple_platinum",
+      "issuer": "American Express",
+      "productName": "Platinum Card Apple",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 69500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_costco_platinum",
+      "issuer": "American Express",
+      "productName": "Platinum Card Costco",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 69500,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_united_green",
+      "issuer": "American Express",
+      "productName": "Green Card United",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 15000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_delta_green",
+      "issuer": "American Express",
+      "productName": "Green Card Delta",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 15000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_southwest_green",
+      "issuer": "American Express",
+      "productName": "Green Card Southwest",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 15000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_marriott_green",
+      "issuer": "American Express",
+      "productName": "Green Card Marriott",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 15000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_hilton_green",
+      "issuer": "American Express",
+      "productName": "Green Card Hilton",
+      "network": "amex",
+      "annualFee": {
+        "amountMinor": 15000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_hyatt_green",
+      "issuer": "American Express",
+      "productName": "Green Card Hyatt",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 15000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_ihg_green",
+      "issuer": "American Express",
+      "productName": "Green Card IHG",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 15000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_jetblue_green",
+      "issuer": "American Express",
+      "productName": "Green Card JetBlue",
+      "network": "mastercard",
+      "annualFee": {
+        "amountMinor": 15000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    },
+    {
+      "id": "amex_alaska_green",
+      "issuer": "American Express",
+      "productName": "Green Card Alaska",
+      "network": "visa",
+      "annualFee": {
+        "amountMinor": 15000,
+        "currency": "USD"
+      },
+      "benefitRuleIds": [],
+      "isActive": true,
+      "metadata": {
+        "productTier": "co-brand"
+      }
+    }
+  ]
+}
