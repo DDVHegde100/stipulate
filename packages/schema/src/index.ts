@@ -95,3 +95,15 @@ export {
   COBRAND_PARTNERS,
   type CardSeedEntry,
 } from "./catalog-seed.js";
+export {
+  PointsProgramSchema,
+  PointsValuationTableSchema,
+  ValuationOverrideSchema,
+  getCentsPerPoint,
+  pointsToCashMinor,
+  inferProgramFromCardId,
+  computeCashEquivalent,
+  type PointsProgram,
+  type PointsValuationTable,
+  type ValuationOverride,
+} from "./valuation.js";

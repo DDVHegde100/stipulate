@@ -1,0 +1,27 @@
+{
+  "version": "2026.02.07",
+  "updatedAt": "2026-02-07T00:00:00.000Z",
+  "defaultCpp": 1.0,
+  "programs": [
+    { "id": "chase_ur", "name": "Chase Ultimate Rewards", "issuer": "Chase", "centsPerPoint": 1.5, "floorCpp": 1.0, "ceilingCpp": 2.0, "transferPartners": ["united", "hyatt", "southwest", "british_airways", "air_france", "virgin_atlantic"] },
+    { "id": "amex_mr", "name": "Amex Membership Rewards", "issuer": "American Express", "centsPerPoint": 1.7, "floorCpp": 1.0, "ceilingCpp": 2.2, "transferPartners": ["delta", "british_airways", "hilton", "marriott", "jetblue", "ana"] },
+    { "id": "citi_thankyou", "name": "Citi ThankYou Points", "issuer": "Citi", "centsPerPoint": 1.4, "floorCpp": 1.0, "ceilingCpp": 1.8, "transferPartners": ["american_airlines", "jetblue", "singapore", "virgin_atlantic", "wyndham"] },
+    { "id": "capital_one_miles", "name": "Capital One Miles", "issuer": "Capital One", "centsPerPoint": 1.0, "floorCpp": 0.8, "ceilingCpp": 1.85, "transferPartners": ["turkish", "air_canada", "british_airways", "emirates", "jetblue", "wyndham"] },
+    { "id": "discover_cashback", "name": "Discover Cashback", "issuer": "Discover", "centsPerPoint": 1.0, "floorCpp": 1.0, "ceilingCpp": 1.0, "transferPartners": [] },
+    { "id": "bofa_points", "name": "Bank of America Points", "issuer": "Bank of America", "centsPerPoint": 1.0, "floorCpp": 0.75, "ceilingCpp": 1.25, "transferPartners": [] },
+    { "id": "wells_go_far", "name": "Wells Fargo Go Far Rewards", "issuer": "Wells Fargo", "centsPerPoint": 1.0, "floorCpp": 1.0, "ceilingCpp": 1.5, "transferPartners": [] },
+    { "id": "us_bank_altitude", "name": "U.S. Bank Altitude Points", "issuer": "U.S. Bank", "centsPerPoint": 1.5, "floorCpp": 1.0, "ceilingCpp": 1.8, "transferPartners": ["air_canada", "turkish", "hyatt"] },
+    { "id": "delta_skymiles", "name": "Delta SkyMiles", "issuer": "Delta", "centsPerPoint": 1.2, "floorCpp": 0.8, "ceilingCpp": 1.5, "transferPartners": [] },
+    { "id": "united_mileageplus", "name": "United MileagePlus", "issuer": "United", "centsPerPoint": 1.3, "floorCpp": 0.9, "ceilingCpp": 1.6, "transferPartners": [] },
+    { "id": "southwest_rr", "name": "Southwest Rapid Rewards", "issuer": "Southwest", "centsPerPoint": 1.4, "floorCpp": 1.0, "ceilingCpp": 1.6, "transferPartners": [] },
+    { "id": "marriott_bonvoy", "name": "Marriott Bonvoy", "issuer": "Marriott", "centsPerPoint": 0.8, "floorCpp": 0.6, "ceilingCpp": 1.0, "transferPartners": [] },
+    { "id": "hilton_honors", "name": "Hilton Honors", "issuer": "Hilton", "centsPerPoint": 0.5, "floorCpp": 0.4, "ceilingCpp": 0.7, "transferPartners": [] },
+    { "id": "hyatt_world", "name": "World of Hyatt", "issuer": "Hyatt", "centsPerPoint": 1.7, "floorCpp": 1.4, "ceilingCpp": 2.0, "transferPartners": [] },
+    { "id": "ihg_rewards", "name": "IHG One Rewards", "issuer": "IHG", "centsPerPoint": 0.5, "floorCpp": 0.4, "ceilingCpp": 0.7, "transferPartners": [] },
+    { "id": "aa_aadvantage", "name": "American AAdvantage", "issuer": "American Airlines", "centsPerPoint": 1.3, "floorCpp": 0.9, "ceilingCpp": 1.6, "transferPartners": [] },
+    { "id": "jetblue_trueblue", "name": "JetBlue TrueBlue", "issuer": "JetBlue", "centsPerPoint": 1.3, "floorCpp": 1.0, "ceilingCpp": 1.5, "transferPartners": [] },
+    { "id": "alaska_mileage", "name": "Alaska Mileage Plan", "issuer": "Alaska", "centsPerPoint": 1.5, "floorCpp": 1.2, "ceilingCpp": 1.8, "transferPartners": [] },
+    { "id": "apple_cashback", "name": "Apple Card Daily Cash", "issuer": "Apple", "centsPerPoint": 1.0, "floorCpp": 1.0, "ceilingCpp": 1.0, "transferPartners": [] },
+    { "id": "amazon_rewards", "name": "Amazon Rewards", "issuer": "Amazon", "centsPerPoint": 1.0, "floorCpp": 1.0, "ceilingCpp": 1.0, "transferPartners": [] }
+  ]
+}
