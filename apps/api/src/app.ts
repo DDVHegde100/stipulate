@@ -11,6 +11,7 @@ import { requestId } from './middleware/request-id.js';
 import { timing } from './middleware/timing.js';
 import { healthRoutes } from './routes/health.js';
 import { v1Routes } from './routes/v1/index.js';
+import { adminRoutes } from './routes/admin/index.js';
 import type { RoutingService } from './services/routing.service.js';
 import { routingService as defaultRoutingService } from './services/routing.service.js';
 
@@ -68,6 +69,7 @@ export function createApp(options: CreateAppOptions = {}): Hono<AppBindings> {
 
   app.route('/health', healthRoutes);
   app.route(`/${env.API_VERSION}`, v1Routes);
+  app.route('/admin', adminRoutes);
 
   app.notFound((c) => {
     return c.json(
