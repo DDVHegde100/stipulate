@@ -107,3 +107,19 @@ export {
   type PointsValuationTable,
   type ValuationOverride,
 } from "./valuation.js";
+
+export {
+  BenefitWebhookEventTypeSchema,
+  BenefitWebhookPayloadSchema,
+  BenefitChangelogEntrySchema,
+  BenefitChangelogResponseSchema,
+  BenefitLookupQuerySchema,
+  CardBenefitsResponseSchema,
+  buildWebhookPayload,
+  type BenefitWebhookEventType,
+  type BenefitWebhookPayload,
+  type BenefitChangelogEntry,
+  type BenefitChangelogResponse,
+  type BenefitLookupQuery,
+  type CardBenefitsResponse,
+} from "./changelog.js";
