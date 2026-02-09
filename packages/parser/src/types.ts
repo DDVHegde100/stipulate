@@ -101,8 +101,11 @@ export interface ParseResult {
   rawBenefits: RawParsedBenefit[];
   unparsedSections: string[];
   llmModel: string;
-  tokenUsage?: CompletionResponse["usage"];
+  tokenUsage?: CompletionResponse['usage'];
   durationMs: number;
+  averageConfidence?: number;
+  requiresHumanReview?: boolean;
+  reviewReasons?: string[];
 }
 
 /** Output from a normalization stage. */

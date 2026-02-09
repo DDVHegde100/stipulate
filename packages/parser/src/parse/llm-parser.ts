@@ -10,6 +10,7 @@ import type {
   ParseResult,
   RawParsedBenefit,
 } from "../types.js";
+import { scoreParseResult, buildReviewReasons } from "./confidence.js";
 
 const SYSTEM_PROMPT = `You are a credit card benefit guide parser. Extract structured earning rules from issuer benefit text.
 
@@ -162,14 +163,20 @@ export async function parseBenefitsWithLLM(
     unparsedSections?: string[];
   };
 
+  const rawBenefits = parsed.benefits ?? [];
+  const scoring = scoreParseResult(rawBenefits, text);
+
   return {
     documentId: options.documentId,
     cardId: options.cardId,
-    rawBenefits: parsed.benefits ?? [],
+    rawBenefits: scoring.scoredBenefits,
     unparsedSections: parsed.unparsedSections ?? [],
     llmModel: model,
     tokenUsage: response.usage,
     durationMs: Date.now() - start,
+    averageConfidence: scoring.averageConfidence,
+    requiresHumanReview: scoring.requiresHumanReview,
+    reviewReasons: buildReviewReasons(scoring.scoredBenefits),
   };
 }
 
