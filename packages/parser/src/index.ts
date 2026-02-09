@@ -30,6 +30,26 @@ export {
 } from "./extract/pdf.js";
 
 export {
+  parsePdfBuffer,
+  pdfTextToBlocks,
+  extractPdfContent,
+} from "./extract/pdf-parser.js";
+
+export {
+  runExtractionPipeline,
+  scoreExtractionQuality,
+  type ExtractSource,
+  type ExtractPipelineOptions,
+} from "./extract/pipeline.js";
+
+export {
+  normalizeMarkdown,
+  markdownToBlocks,
+  markdownToPlainText,
+  extractMarkdownFrontmatter,
+} from "./extract/markdown.js";
+
+export {
   extractFromWeb,
   extractFromHtmlString,
 } from "./extract/web.js";
@@ -41,6 +61,15 @@ export {
   inferCategoryFromDescription,
   validateBenefitCategories,
 } from "./normalize/categories.js";
+
+export {
+  MCC_CATEGORY_RANGES,
+  categoryFromMcc,
+  ISSUER_CATEGORY_OVERRIDES,
+  applyIssuerCategoryOverride,
+  validateCategoryMccConsistency,
+  getMccRangesByCategory,
+} from "./normalize/mcc-categories.js";
 
 export {
   normalizeCapPeriod,
@@ -69,6 +98,14 @@ export {
   rawBenefitsToRules,
   createOpenAICompatibleClient,
 } from "./parse/llm-parser.js";
+
+export {
+  CONFIDENCE_REVIEW_THRESHOLD,
+  scoreBenefitConfidence,
+  scoreParseResult,
+  buildReviewReasons,
+  type ConfidenceFactors,
+} from "./parse/confidence.js";
 
 export {
   BenefitParserPipeline,
