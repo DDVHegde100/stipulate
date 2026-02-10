@@ -1,5 +1,10 @@
 import type { SpendingCategory } from "@stipulate/schema";
 import type { CategoryMapping, RawParsedBenefit } from "../types.js";
+import {
+  applyIssuerCategoryOverride,
+  categoryFromMcc,
+  validateCategoryMccConsistency,
+} from "./mcc-categories.js";
 
 /** Canonical mappings from issuer verbiage to Stipulate spending categories. */
 export const CATEGORY_MAPPINGS: CategoryMapping[] = [
@@ -195,10 +200,23 @@ function normalizeCategoryKey(input: string): string {
 }
 
 /** Resolve a raw category string to a canonical SpendingCategory. */
-export function normalizeCategory(raw: string): SpendingCategory {
+export function normalizeCategory(raw: string, issuer?: string, mcc?: string): SpendingCategory {
+  if (issuer) {
+    const override = applyIssuerCategoryOverride(issuer, raw);
+    if (override) return override;
+  }
+
   const key = normalizeCategoryKey(raw);
   const direct = aliasIndex.get(key);
-  if (direct) return direct;
+  if (direct) {
+    if (mcc) {
+      const check = validateCategoryMccConsistency(direct, mcc);
+      if (!check.consistent && check.expectedCategory) {
+        return check.expectedCategory;
+      }
+    }
+    return direct;
+  }
 
   for (const [alias, category] of aliasIndex.entries()) {
     if (key.includes(alias) || alias.includes(key)) {
@@ -206,17 +224,20 @@ export function normalizeCategory(raw: string): SpendingCategory {
     }
   }
 
+  if (mcc) return categoryFromMcc(mcc);
+
   return "other";
 }
 
-/** Normalize categories on all raw parsed benefits. */
+/** Normalize categories on all raw parsed benefits with optional issuer context. */
 export function normalizeBenefitCategories(
   benefits: RawParsedBenefit[],
+  options: { issuer?: string; mcc?: string } = {},
 ): { benefits: RawParsedBenefit[]; notes: string[] } {
   const notes: string[] = [];
 
   const normalized = benefits.map((benefit) => {
-    const canonical = normalizeCategory(benefit.category);
+    const canonical = normalizeCategory(benefit.category, options.issuer, options.mcc);
     if (canonical !== benefit.category) {
       notes.push(
         `Mapped category "${benefit.category}" → "${canonical}" for benefit "${benefit.name}"`,
