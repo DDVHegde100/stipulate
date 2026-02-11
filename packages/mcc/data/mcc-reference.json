@@ -1,98 +1,3857 @@
 {
-  "version": "2026.06",
+  "version": "2026.06-full",
   "entries": [
-    { "mcc": "0742", "description": "Veterinary Services", "category": "healthcare", "keywords": ["vet", "veterinary", "animal hospital"] },
-    { "mcc": "1520", "description": "General Contractors", "category": "other", "keywords": ["contractor", "construction"] },
-    { "mcc": "4111", "description": "Local/Suburban Commuter Passenger Transportation", "category": "transit", "keywords": ["commuter", "subway", "metro", "transit"] },
-    { "mcc": "4112", "description": "Passenger Railways", "category": "transit", "keywords": ["railway", "train", "amtrak"] },
-    { "mcc": "4121", "description": "Taxicabs and Limousines", "category": "transit", "keywords": ["taxi", "cab", "limousine", "uber", "lyft"] },
-    { "mcc": "4131", "description": "Bus Lines", "category": "transit", "keywords": ["bus", "greyhound"] },
-    { "mcc": "4411", "description": "Cruise Lines", "category": "travel", "keywords": ["cruise", "carnival", "royal caribbean"] },
-    { "mcc": "4511", "description": "Airlines, Air Carriers", "category": "airfare", "keywords": ["airline", "delta", "united", "american airlines", "southwest", "jetblue"] },
-    { "mcc": "4582", "description": "Airports, Flying Fields, Airport Terminals", "category": "travel", "keywords": ["airport", "terminal"] },
-    { "mcc": "4722", "description": "Travel Agencies and Tour Operators", "category": "travel", "keywords": ["travel agency", "tour operator", "expedia"] },
-    { "mcc": "4784", "description": "Tolls and Bridge Fees", "category": "transit", "keywords": ["toll", "bridge fee"] },
-    { "mcc": "4812", "description": "Telecommunication Equipment and Telephone Sales", "category": "utilities", "keywords": ["telecom", "phone sales"] },
-    { "mcc": "4814", "description": "Telecommunication Services", "category": "utilities", "keywords": ["telecom", "phone bill", "wireless"] },
-    { "mcc": "4816", "description": "Computer Network/Information Services", "category": "utilities", "keywords": ["internet", "network services"] },
-    { "mcc": "4899", "description": "Cable, Satellite, and Other Pay Television Services", "category": "utilities", "keywords": ["cable", "satellite", "directv", "spectrum"] },
-    { "mcc": "4900", "description": "Utilities - Electric, Gas, Water, Sanitary", "category": "utilities", "keywords": ["utility", "electric", "gas bill", "water bill"] },
-    { "mcc": "5013", "description": "Motor Vehicle Supplies and New Parts", "category": "retail", "keywords": ["auto parts", "motor vehicle"] },
-    { "mcc": "5172", "description": "Petroleum and Petroleum Products", "category": "gas", "keywords": ["petroleum", "oil"] },
-    { "mcc": "5192", "description": "Books, Periodicals, and Newspapers", "category": "retail", "keywords": ["bookstore", "newspaper", "magazine"] },
-    { "mcc": "5200", "description": "Home Supply Warehouse Stores", "category": "retail", "keywords": ["home depot", "lowes", "home supply"] },
-    { "mcc": "5211", "description": "Lumber and Building Materials Stores", "category": "retail", "keywords": ["lumber", "building materials"] },
-    { "mcc": "5251", "description": "Hardware Stores", "category": "retail", "keywords": ["hardware"] },
-    { "mcc": "5261", "description": "Nurseries, Lawn and Garden Supply Stores", "category": "retail", "keywords": ["nursery", "garden", "lawn"] },
-    { "mcc": "5300", "description": "Wholesale Clubs", "category": "retail", "keywords": ["costco", "sams club", "wholesale club"] },
-    { "mcc": "5310", "description": "Discount Stores", "category": "retail", "keywords": ["discount store", "walmart", "target"] },
-    { "mcc": "5311", "description": "Department Stores", "category": "retail", "keywords": ["department store", "macy", "nordstrom"] },
-    { "mcc": "5331", "description": "Variety Stores", "category": "retail", "keywords": ["variety store"] },
-    { "mcc": "5399", "description": "Miscellaneous General Merchandise", "category": "retail", "keywords": ["general merchandise", "amazon"] },
-    { "mcc": "5411", "description": "Grocery Stores, Supermarkets", "category": "groceries", "keywords": ["grocery", "supermarket", "whole foods", "kroger", "safeway", "trader joe"] },
-    { "mcc": "5422", "description": "Freezer and Locker Meat Provisioners", "category": "groceries", "keywords": ["meat market", "butcher"] },
-    { "mcc": "5441", "description": "Candy, Nut, and Confectionery Stores", "category": "retail", "keywords": ["candy", "confectionery"] },
-    { "mcc": "5451", "description": "Dairy Products Stores", "category": "groceries", "keywords": ["dairy", "milk store"] },
-    { "mcc": "5462", "description": "Bakeries", "category": "dining", "keywords": ["bakery", "bake shop"] },
-    { "mcc": "5499", "description": "Miscellaneous Food Stores", "category": "groceries", "keywords": ["food store", "specialty food"] },
-    { "mcc": "5511", "description": "Car and Truck Dealers (New and Used)", "category": "retail", "keywords": ["car dealer", "auto dealer", "ford", "toyota"] },
-    { "mcc": "5531", "description": "Auto and Home Supply Stores", "category": "retail", "keywords": ["auto supply"] },
-    { "mcc": "5541", "description": "Service Stations (with or without ancillary services)", "category": "gas", "keywords": ["gas station", "service station", "shell", "chevron", "exxon"] },
-    { "mcc": "5542", "description": "Automated Fuel Dispensers", "category": "gas", "keywords": ["fuel dispenser", "gas pump", "petrol"] },
-    { "mcc": "5552", "description": "Electric Vehicle Charging", "category": "gas", "keywords": ["ev charging", "chargepoint", "tesla supercharger"] },
-    { "mcc": "5811", "description": "Caterers", "category": "dining", "keywords": ["caterer", "catering"] },
-    { "mcc": "5812", "description": "Eating Places, Restaurants", "category": "dining", "keywords": ["restaurant", "dining", "eatery", "bistro"] },
-    { "mcc": "5813", "description": "Drinking Places (Alcoholic Beverages), Bars, Taverns", "category": "dining", "keywords": ["bar", "tavern", "pub", "nightclub"] },
-    { "mcc": "5814", "description": "Fast Food Restaurants", "category": "dining", "keywords": ["fast food", "mcdonalds", "burger king", "wendys", "chipotle", "starbucks", "dunkin", "subway", "taco bell", "pizza hut", "dominos"] },
-    { "mcc": "5912", "description": "Drug Stores and Pharmacies", "category": "healthcare", "keywords": ["pharmacy", "drug store", "cvs", "walgreens", "rite aid"] },
-    { "mcc": "5921", "description": "Package Stores - Beer, Wine, and Liquor", "category": "retail", "keywords": ["liquor store", "wine shop", "beer store"] },
-    { "mcc": "5941", "description": "Sporting Goods Stores", "category": "retail", "keywords": ["sporting goods", "rei", "dicks"] },
-    { "mcc": "5942", "description": "Book Stores", "category": "retail", "keywords": ["book store", "barnes noble"] },
-    { "mcc": "5943", "description": "Stationery Stores, Office and School Supply Stores", "category": "retail", "keywords": ["stationery", "office supply", "staples"] },
-    { "mcc": "5944", "description": "Jewelry Stores, Watches, Clocks, and Silverware Stores", "category": "retail", "keywords": ["jewelry", "jeweler"] },
-    { "mcc": "5945", "description": "Hobby, Toy, and Game Shops", "category": "retail", "keywords": ["toy store", "hobby shop"] },
-    { "mcc": "5947", "description": "Gift, Card, Novelty, and Souvenir Shops", "category": "retail", "keywords": ["gift shop", "souvenir"] },
-    { "mcc": "5970", "description": "Artist Supply and Craft Shops", "category": "retail", "keywords": ["craft store", "art supply"] },
-    { "mcc": "5977", "description": "Cosmetic Stores", "category": "retail", "keywords": ["cosmetics", "sephora", "ulta"] },
-    { "mcc": "5993", "description": "Cigar Stores and Stands", "category": "retail", "keywords": ["cigar", "tobacco"] },
-    { "mcc": "5995", "description": "Pet Shops, Pet Food, and Supply Stores", "category": "retail", "keywords": ["pet shop", "petco", "petsmart"] },
-    { "mcc": "6010", "description": "Financial Institutions - Manual Cash Disbursements", "category": "cash_equivalent", "keywords": ["cash disbursement", "bank teller"] },
-    { "mcc": "6011", "description": "Financial Institutions - Automated Cash Disbursements", "category": "cash_equivalent", "keywords": ["atm", "cash advance"] },
-    { "mcc": "6012", "description": "Financial Institutions - Merchandise and Services", "category": "cash_equivalent", "keywords": ["financial institution"] },
-    { "mcc": "6051", "description": "Non-Financial Institutions - Foreign Currency, Money Orders", "category": "cash_equivalent", "keywords": ["money order", "foreign currency", "wire transfer"] },
-    { "mcc": "6300", "description": "Insurance Sales, Underwriting, and Premiums", "category": "insurance", "keywords": ["insurance", "premium"] },
-    { "mcc": "7011", "description": "Lodging - Hotels, Motels, Resorts", "category": "hotels", "keywords": ["hotel", "motel", "resort", "marriott", "hilton", "hyatt", "airbnb"] },
-    { "mcc": "7032", "description": "Sporting and Recreational Camps", "category": "entertainment", "keywords": ["camp", "recreation camp"] },
-    { "mcc": "7033", "description": "Recreational Vehicle Parks and Campgrounds", "category": "travel", "keywords": ["campground", "rv park"] },
-    { "mcc": "7210", "description": "Laundry, Cleaning, and Garment Services", "category": "other", "keywords": ["laundry", "dry clean"] },
-    { "mcc": "7230", "description": "Beauty and Barber Shops", "category": "other", "keywords": ["salon", "barber", "beauty shop"] },
-    { "mcc": "7298", "description": "Health and Beauty Spas", "category": "healthcare", "keywords": ["spa", "massage"] },
-    { "mcc": "7311", "description": "Advertising Services", "category": "other", "keywords": ["advertising", "marketing"] },
-    { "mcc": "7523", "description": "Parking Lots, Parking Meters, and Garages", "category": "transit", "keywords": ["parking", "garage", "parkmobile"] },
-    { "mcc": "7531", "description": "Automotive Body Repair Shops", "category": "other", "keywords": ["auto body", "car repair"] },
-    { "mcc": "7538", "description": "Automotive Service Shops (Non-Dealer)", "category": "other", "keywords": ["auto service", "mechanic", "jiffy lube"] },
-    { "mcc": "7832", "description": "Motion Picture Theaters", "category": "entertainment", "keywords": ["movie theater", "cinema", "amc", "regal"] },
-    { "mcc": "7911", "description": "Dance Halls, Studios, and Schools", "category": "entertainment", "keywords": ["dance studio", "dance hall"] },
-    { "mcc": "7922", "description": "Theatrical Producers and Ticket Agencies", "category": "entertainment", "keywords": ["ticket agency", "theater tickets", "ticketmaster"] },
-    { "mcc": "7929", "description": "Bands, Orchestras, and Miscellaneous Entertainers", "category": "entertainment", "keywords": ["concert", "orchestra", "band"] },
-    { "mcc": "7941", "description": "Commercial Sports, Athletic Fields, Professional Sports Clubs", "category": "entertainment", "keywords": ["stadium", "sports club", "arena"] },
-    { "mcc": "7991", "description": "Tourist Attractions and Exhibits", "category": "entertainment", "keywords": ["museum", "zoo", "theme park", "disney"] },
-    { "mcc": "7994", "description": "Video Game Arcades/Establishments", "category": "entertainment", "keywords": ["arcade", "video game"] },
-    { "mcc": "7995", "description": "Betting, including Lottery Tickets, Casino Gaming Chips", "category": "entertainment", "keywords": ["casino", "lottery", "gambling"] },
-    { "mcc": "7996", "description": "Amusement Parks, Circuses, Carnivals", "category": "entertainment", "keywords": ["amusement park", "carnival", "circus"] },
-    { "mcc": "7997", "description": "Membership Clubs (Sports, Recreation, Athletic), Country Clubs", "category": "entertainment", "keywords": ["country club", "golf club", "gym membership"] },
-    { "mcc": "7999", "description": "Recreation Services (Not Elsewhere Classified)", "category": "entertainment", "keywords": ["recreation", "recreational"] },
-    { "mcc": "8011", "description": "Doctors and Physicians (Not Elsewhere Classified)", "category": "healthcare", "keywords": ["doctor", "physician", "medical"] },
-    { "mcc": "8021", "description": "Dentists and Orthodontists", "category": "healthcare", "keywords": ["dentist", "orthodontist", "dental"] },
-    { "mcc": "8062", "description": "Hospitals", "category": "healthcare", "keywords": ["hospital", "medical center"] },
-    { "mcc": "8211", "description": "Elementary and Secondary Schools", "category": "education", "keywords": ["school", "elementary", "high school"] },
-    { "mcc": "8220", "description": "Colleges, Universities, Professional Schools", "category": "education", "keywords": ["college", "university", "tuition"] },
-    { "mcc": "8398", "description": "Charitable and Social Service Organizations", "category": "charity", "keywords": ["charity", "donation", "nonprofit", "non-profit"] },
-    { "mcc": "9211", "description": "Court Costs, Including Alimony and Child Support", "category": "government", "keywords": ["court", "alimony", "child support"] },
-    { "mcc": "9222", "description": "Fines", "category": "government", "keywords": ["fine", "penalty"] },
-    { "mcc": "9311", "description": "Tax Payments", "category": "government", "keywords": ["tax payment", "irs", "state tax"] },
-    { "mcc": "9399", "description": "Government Services (Not Elsewhere Classified)", "category": "government", "keywords": ["government", "govt services"] },
-    { "mcc": "9402", "description": "Postal Services - Government Only", "category": "government", "keywords": ["post office", "postal", "usps"] },
-    { "mcc": "9752", "description": "Electric, Gas, Sanitary, and Water Utilities", "category": "utilities", "keywords": ["utility payment", "electric bill", "gas utility"] }
+    {
+      "mcc": "0742",
+      "description": "Veterinary Services",
+      "category": "healthcare",
+      "keywords": [
+        "vet",
+        "veterinary",
+        "animal hospital"
+      ]
+    },
+    {
+      "mcc": "1520",
+      "description": "General Contractors",
+      "category": "other",
+      "keywords": [
+        "contractor",
+        "construction"
+      ]
+    },
+    {
+      "mcc": "3000",
+      "description": "United Airlines",
+      "category": "airfare",
+      "keywords": [
+        "united airlines",
+        "ual"
+      ]
+    },
+    {
+      "mcc": "3001",
+      "description": "American Airlines",
+      "category": "airfare",
+      "keywords": [
+        "american airlines",
+        "aa"
+      ]
+    },
+    {
+      "mcc": "3002",
+      "description": "Pan American",
+      "category": "airfare",
+      "keywords": [
+        "pan am"
+      ]
+    },
+    {
+      "mcc": "3003",
+      "description": "Eurofly Airlines",
+      "category": "airfare",
+      "keywords": [
+        "eurofly"
+      ]
+    },
+    {
+      "mcc": "3004",
+      "description": "Dragonair",
+      "category": "airfare",
+      "keywords": [
+        "dragonair"
+      ]
+    },
+    {
+      "mcc": "3005",
+      "description": "British Airways",
+      "category": "airfare",
+      "keywords": [
+        "british airways",
+        "ba"
+      ]
+    },
+    {
+      "mcc": "3006",
+      "description": "Japan Air Lines",
+      "category": "airfare",
+      "keywords": [
+        "jal",
+        "japan airlines"
+      ]
+    },
+    {
+      "mcc": "3007",
+      "description": "Air France",
+      "category": "airfare",
+      "keywords": [
+        "air france"
+      ]
+    },
+    {
+      "mcc": "3008",
+      "description": "Lufthansa",
+      "category": "airfare",
+      "keywords": [
+        "lufthansa"
+      ]
+    },
+    {
+      "mcc": "3009",
+      "description": "Air Canada",
+      "category": "airfare",
+      "keywords": [
+        "air canada"
+      ]
+    },
+    {
+      "mcc": "3010",
+      "description": "KLM Royal Dutch Airlines",
+      "category": "airfare",
+      "keywords": [
+        "klm"
+      ]
+    },
+    {
+      "mcc": "3011",
+      "description": "Aeroflot",
+      "category": "airfare",
+      "keywords": [
+        "aeroflot"
+      ]
+    },
+    {
+      "mcc": "3012",
+      "description": "Qantas",
+      "category": "airfare",
+      "keywords": [
+        "qantas"
+      ]
+    },
+    {
+      "mcc": "3013",
+      "description": "Alitalia",
+      "category": "airfare",
+      "keywords": [
+        "alitalia"
+      ]
+    },
+    {
+      "mcc": "3014",
+      "description": "Saudi Arabian Airlines",
+      "category": "airfare",
+      "keywords": [
+        "saudia"
+      ]
+    },
+    {
+      "mcc": "3015",
+      "description": "Swiss International Air Lines",
+      "category": "airfare",
+      "keywords": [
+        "swiss air"
+      ]
+    },
+    {
+      "mcc": "3016",
+      "description": "SAS",
+      "category": "airfare",
+      "keywords": [
+        "sas",
+        "scandinavian"
+      ]
+    },
+    {
+      "mcc": "3017",
+      "description": "South African Airways",
+      "category": "airfare",
+      "keywords": [
+        "south african"
+      ]
+    },
+    {
+      "mcc": "3018",
+      "description": "Varig Airlines",
+      "category": "airfare",
+      "keywords": [
+        "varig"
+      ]
+    },
+    {
+      "mcc": "3020",
+      "description": "Air India",
+      "category": "airfare",
+      "keywords": [
+        "air india"
+      ]
+    },
+    {
+      "mcc": "3021",
+      "description": "Air Algerie",
+      "category": "airfare",
+      "keywords": [
+        "air algerie"
+      ]
+    },
+    {
+      "mcc": "3022",
+      "description": "Philippine Airlines",
+      "category": "airfare",
+      "keywords": [
+        "philippine airlines"
+      ]
+    },
+    {
+      "mcc": "3023",
+      "description": "Mexicana",
+      "category": "airfare",
+      "keywords": [
+        "mexicana"
+      ]
+    },
+    {
+      "mcc": "3024",
+      "description": "Pakistan International",
+      "category": "airfare",
+      "keywords": [
+        "pia"
+      ]
+    },
+    {
+      "mcc": "3025",
+      "description": "Air New Zealand",
+      "category": "airfare",
+      "keywords": [
+        "air new zealand"
+      ]
+    },
+    {
+      "mcc": "3026",
+      "description": "Emirates Airlines",
+      "category": "airfare",
+      "keywords": [
+        "emirates"
+      ]
+    },
+    {
+      "mcc": "3027",
+      "description": "UTA/InterAir",
+      "category": "airfare",
+      "keywords": [
+        "uta"
+      ]
+    },
+    {
+      "mcc": "3028",
+      "description": "Air Malta",
+      "category": "airfare",
+      "keywords": [
+        "air malta"
+      ]
+    },
+    {
+      "mcc": "3029",
+      "description": "SN Brussels Airlines",
+      "category": "airfare",
+      "keywords": [
+        "brussels airlines"
+      ]
+    },
+    {
+      "mcc": "3030",
+      "description": "Aerolineas Argentinas",
+      "category": "airfare",
+      "keywords": [
+        "aerolineas"
+      ]
+    },
+    {
+      "mcc": "3031",
+      "description": "Olympic Airways",
+      "category": "airfare",
+      "keywords": [
+        "olympic"
+      ]
+    },
+    {
+      "mcc": "3032",
+      "description": "El Al",
+      "category": "airfare",
+      "keywords": [
+        "el al"
+      ]
+    },
+    {
+      "mcc": "3033",
+      "description": "Ansett Airlines",
+      "category": "airfare",
+      "keywords": [
+        "ansett"
+      ]
+    },
+    {
+      "mcc": "3034",
+      "description": "Etihad Airways",
+      "category": "airfare",
+      "keywords": [
+        "etihad"
+      ]
+    },
+    {
+      "mcc": "3035",
+      "description": "TAP Portugal",
+      "category": "airfare",
+      "keywords": [
+        "tap portugal"
+      ]
+    },
+    {
+      "mcc": "3036",
+      "description": "VASP Brazil",
+      "category": "airfare",
+      "keywords": [
+        "vasp"
+      ]
+    },
+    {
+      "mcc": "3037",
+      "description": "EgyptAir",
+      "category": "airfare",
+      "keywords": [
+        "egyptair"
+      ]
+    },
+    {
+      "mcc": "3038",
+      "description": "Kuwait Airways",
+      "category": "airfare",
+      "keywords": [
+        "kuwait air"
+      ]
+    },
+    {
+      "mcc": "3039",
+      "description": "Avianca",
+      "category": "airfare",
+      "keywords": [
+        "avianca"
+      ]
+    },
+    {
+      "mcc": "3040",
+      "description": "Gulf Air",
+      "category": "airfare",
+      "keywords": [
+        "gulf air"
+      ]
+    },
+    {
+      "mcc": "3041",
+      "description": "Balkan Bulgarian Airlines",
+      "category": "airfare",
+      "keywords": [
+        "balkan"
+      ]
+    },
+    {
+      "mcc": "3042",
+      "description": "Finnair",
+      "category": "airfare",
+      "keywords": [
+        "finnair"
+      ]
+    },
+    {
+      "mcc": "3043",
+      "description": "Aer Lingus",
+      "category": "airfare",
+      "keywords": [
+        "aer lingus"
+      ]
+    },
+    {
+      "mcc": "3044",
+      "description": "Air Lanka",
+      "category": "airfare",
+      "keywords": [
+        "air lanka",
+        "srilankan"
+      ]
+    },
+    {
+      "mcc": "3045",
+      "description": "Nigeria Airways",
+      "category": "airfare",
+      "keywords": [
+        "nigeria airways"
+      ]
+    },
+    {
+      "mcc": "3046",
+      "description": "Cruzeiro do Sul",
+      "category": "airfare",
+      "keywords": [
+        "cruzeiro"
+      ]
+    },
+    {
+      "mcc": "3047",
+      "description": "Turkish Airlines",
+      "category": "airfare",
+      "keywords": [
+        "turkish airlines"
+      ]
+    },
+    {
+      "mcc": "3048",
+      "description": "Royal Air Maroc",
+      "category": "airfare",
+      "keywords": [
+        "royal air maroc"
+      ]
+    },
+    {
+      "mcc": "3049",
+      "description": "Tunis Air",
+      "category": "airfare",
+      "keywords": [
+        "tunis air"
+      ]
+    },
+    {
+      "mcc": "3050",
+      "description": "Icelandair",
+      "category": "airfare",
+      "keywords": [
+        "icelandair"
+      ]
+    },
+    {
+      "mcc": "3051",
+      "description": "Austrian Airlines",
+      "category": "airfare",
+      "keywords": [
+        "austrian airlines"
+      ]
+    },
+    {
+      "mcc": "3052",
+      "description": "LAN Airlines",
+      "category": "airfare",
+      "keywords": [
+        "lan chile",
+        "latam"
+      ]
+    },
+    {
+      "mcc": "3053",
+      "description": "Aviaco",
+      "category": "airfare",
+      "keywords": [
+        "aviaco"
+      ]
+    },
+    {
+      "mcc": "3054",
+      "description": "LADECO",
+      "category": "airfare",
+      "keywords": [
+        "ladeco"
+      ]
+    },
+    {
+      "mcc": "3055",
+      "description": "LAB Bolivia",
+      "category": "airfare",
+      "keywords": [
+        "lab bolivia"
+      ]
+    },
+    {
+      "mcc": "3056",
+      "description": "JetBlue Airways",
+      "category": "airfare",
+      "keywords": [
+        "jetblue"
+      ]
+    },
+    {
+      "mcc": "3057",
+      "description": "Virgin America",
+      "category": "airfare",
+      "keywords": [
+        "virgin america"
+      ]
+    },
+    {
+      "mcc": "3058",
+      "description": "Delta Air Lines",
+      "category": "airfare",
+      "keywords": [
+        "delta",
+        "delta air"
+      ]
+    },
+    {
+      "mcc": "3059",
+      "description": "Dba Airlines",
+      "category": "airfare",
+      "keywords": [
+        "dba"
+      ]
+    },
+    {
+      "mcc": "3060",
+      "description": "Northwest Airlines",
+      "category": "airfare",
+      "keywords": [
+        "northwest"
+      ]
+    },
+    {
+      "mcc": "3061",
+      "description": "Continental Airlines",
+      "category": "airfare",
+      "keywords": [
+        "continental"
+      ]
+    },
+    {
+      "mcc": "3062",
+      "description": "Hapag-Lloyd Express",
+      "category": "airfare",
+      "keywords": [
+        "hapag lloyd"
+      ]
+    },
+    {
+      "mcc": "3063",
+      "description": "US Airways",
+      "category": "airfare",
+      "keywords": [
+        "us airways"
+      ]
+    },
+    {
+      "mcc": "3064",
+      "description": "Adria Airways",
+      "category": "airfare",
+      "keywords": [
+        "adria"
+      ]
+    },
+    {
+      "mcc": "3065",
+      "description": "Air Inter",
+      "category": "airfare",
+      "keywords": [
+        "air inter"
+      ]
+    },
+    {
+      "mcc": "3066",
+      "description": "Southwest Airlines",
+      "category": "airfare",
+      "keywords": [
+        "southwest",
+        "wn"
+      ]
+    },
+    {
+      "mcc": "3067",
+      "description": "Vanguard Airlines",
+      "category": "airfare",
+      "keywords": [
+        "vanguard"
+      ]
+    },
+    {
+      "mcc": "3068",
+      "description": "Air Astana",
+      "category": "airfare",
+      "keywords": [
+        "air astana"
+      ]
+    },
+    {
+      "mcc": "3071",
+      "description": "Air British Columbia",
+      "category": "airfare",
+      "keywords": [
+        "air bc"
+      ]
+    },
+    {
+      "mcc": "3072",
+      "description": "Cebu Pacific",
+      "category": "airfare",
+      "keywords": [
+        "cebu pacific"
+      ]
+    },
+    {
+      "mcc": "3075",
+      "description": "Singapore Airlines",
+      "category": "airfare",
+      "keywords": [
+        "singapore airlines",
+        "sq"
+      ]
+    },
+    {
+      "mcc": "3076",
+      "description": "Aeromexico",
+      "category": "airfare",
+      "keywords": [
+        "aeromexico"
+      ]
+    },
+    {
+      "mcc": "3077",
+      "description": "Thai Airways",
+      "category": "airfare",
+      "keywords": [
+        "thai airways"
+      ]
+    },
+    {
+      "mcc": "3078",
+      "description": "China Airlines",
+      "category": "airfare",
+      "keywords": [
+        "china airlines"
+      ]
+    },
+    {
+      "mcc": "3079",
+      "description": "Jetstar Airways",
+      "category": "airfare",
+      "keywords": [
+        "jetstar"
+      ]
+    },
+    {
+      "mcc": "3082",
+      "description": "Korean Air",
+      "category": "airfare",
+      "keywords": [
+        "korean air"
+      ]
+    },
+    {
+      "mcc": "3083",
+      "description": "Air Afrique",
+      "category": "airfare",
+      "keywords": [
+        "air afrique"
+      ]
+    },
+    {
+      "mcc": "3084",
+      "description": "EVA Airways",
+      "category": "airfare",
+      "keywords": [
+        "eva air"
+      ]
+    },
+    {
+      "mcc": "3085",
+      "description": "Midwest Express Airlines",
+      "category": "airfare",
+      "keywords": [
+        "midwest express"
+      ]
+    },
+    {
+      "mcc": "3087",
+      "description": "Metro Airlines",
+      "category": "airfare",
+      "keywords": [
+        "metro airlines"
+      ]
+    },
+    {
+      "mcc": "3088",
+      "description": "Croatia Airlines",
+      "category": "airfare",
+      "keywords": [
+        "croatia airlines"
+      ]
+    },
+    {
+      "mcc": "3089",
+      "description": "Transaero",
+      "category": "airfare",
+      "keywords": [
+        "transaero"
+      ]
+    },
+    {
+      "mcc": "3090",
+      "description": "Uni Airways",
+      "category": "airfare",
+      "keywords": [
+        "uni air"
+      ]
+    },
+    {
+      "mcc": "3094",
+      "description": "Zambia Airways",
+      "category": "airfare",
+      "keywords": [
+        "zambia air"
+      ]
+    },
+    {
+      "mcc": "3096",
+      "description": "Air Zimbabwe",
+      "category": "airfare",
+      "keywords": [
+        "air zimbabwe"
+      ]
+    },
+    {
+      "mcc": "3097",
+      "description": "Spanair",
+      "category": "airfare",
+      "keywords": [
+        "spanair"
+      ]
+    },
+    {
+      "mcc": "3098",
+      "description": "Asiana Airlines",
+      "category": "airfare",
+      "keywords": [
+        "asiana"
+      ]
+    },
+    {
+      "mcc": "3099",
+      "description": "Cathay Pacific",
+      "category": "airfare",
+      "keywords": [
+        "cathay pacific"
+      ]
+    },
+    {
+      "mcc": "3100",
+      "description": "Malaysian Airline System",
+      "category": "airfare",
+      "keywords": [
+        "malaysia airlines"
+      ]
+    },
+    {
+      "mcc": "3102",
+      "description": "Iberia",
+      "category": "airfare",
+      "keywords": [
+        "iberia"
+      ]
+    },
+    {
+      "mcc": "3103",
+      "description": "Garuda Indonesia",
+      "category": "airfare",
+      "keywords": [
+        "garuda"
+      ]
+    },
+    {
+      "mcc": "3106",
+      "description": "Braathens",
+      "category": "airfare",
+      "keywords": [
+        "braathens"
+      ]
+    },
+    {
+      "mcc": "3110",
+      "description": "Wings Airways",
+      "category": "airfare",
+      "keywords": [
+        "wings air"
+      ]
+    },
+    {
+      "mcc": "3111",
+      "description": "British Midland",
+      "category": "airfare",
+      "keywords": [
+        "bmi"
+      ]
+    },
+    {
+      "mcc": "3112",
+      "description": "Windward Island",
+      "category": "airfare",
+      "keywords": [
+        "windward"
+      ]
+    },
+    {
+      "mcc": "3117",
+      "description": "Venezolana International",
+      "category": "airfare",
+      "keywords": [
+        "venezolana"
+      ]
+    },
+    {
+      "mcc": "3125",
+      "description": "Tan Airlines",
+      "category": "airfare",
+      "keywords": [
+        "tan"
+      ]
+    },
+    {
+      "mcc": "3127",
+      "description": "Taca International",
+      "category": "airfare",
+      "keywords": [
+        "taca"
+      ]
+    },
+    {
+      "mcc": "3129",
+      "description": "Surinam Airways",
+      "category": "airfare",
+      "keywords": [
+        "surinam"
+      ]
+    },
+    {
+      "mcc": "3130",
+      "description": "Sunworld International",
+      "category": "airfare",
+      "keywords": [
+        "sunworld"
+      ]
+    },
+    {
+      "mcc": "3131",
+      "description": "VLM Airlines",
+      "category": "airfare",
+      "keywords": [
+        "vlm"
+      ]
+    },
+    {
+      "mcc": "3132",
+      "description": "Frontier Airlines",
+      "category": "airfare",
+      "keywords": [
+        "frontier airlines"
+      ]
+    },
+    {
+      "mcc": "3135",
+      "description": "Sudan Airways",
+      "category": "airfare",
+      "keywords": [
+        "sudan air"
+      ]
+    },
+    {
+      "mcc": "3136",
+      "description": "Qatar Airways",
+      "category": "airfare",
+      "keywords": [
+        "qatar airways"
+      ]
+    },
+    {
+      "mcc": "3137",
+      "description": "Singleton Air",
+      "category": "airfare",
+      "keywords": [
+        "singleton"
+      ]
+    },
+    {
+      "mcc": "3138",
+      "description": "Simmons Airlines",
+      "category": "airfare",
+      "keywords": [
+        "simmons"
+      ]
+    },
+    {
+      "mcc": "3143",
+      "description": "Scenic Airlines",
+      "category": "airfare",
+      "keywords": [
+        "scenic air"
+      ]
+    },
+    {
+      "mcc": "3144",
+      "description": "Virgin Atlantic",
+      "category": "airfare",
+      "keywords": [
+        "virgin atlantic"
+      ]
+    },
+    {
+      "mcc": "3146",
+      "description": "Luxair",
+      "category": "airfare",
+      "keywords": [
+        "luxair"
+      ]
+    },
+    {
+      "mcc": "3148",
+      "description": "Air Littoral",
+      "category": "airfare",
+      "keywords": [
+        "air littoral"
+      ]
+    },
+    {
+      "mcc": "3151",
+      "description": "Air Zaire",
+      "category": "airfare",
+      "keywords": [
+        "air zaire"
+      ]
+    },
+    {
+      "mcc": "3156",
+      "description": "Go Fly",
+      "category": "airfare",
+      "keywords": [
+        "go fly"
+      ]
+    },
+    {
+      "mcc": "3159",
+      "description": "Provincetown-Boston Airways",
+      "category": "airfare",
+      "keywords": [
+        "pba air"
+      ]
+    },
+    {
+      "mcc": "3161",
+      "description": "All Nippon Airways",
+      "category": "airfare",
+      "keywords": [
+        "ana",
+        "all nippon"
+      ]
+    },
+    {
+      "mcc": "3164",
+      "description": "Norontair",
+      "category": "airfare",
+      "keywords": [
+        "norontair"
+      ]
+    },
+    {
+      "mcc": "3167",
+      "description": "Aero Continente",
+      "category": "airfare",
+      "keywords": [
+        "aero continente"
+      ]
+    },
+    {
+      "mcc": "3170",
+      "description": "Mount Cook",
+      "category": "airfare",
+      "keywords": [
+        "mount cook"
+      ]
+    },
+    {
+      "mcc": "3171",
+      "description": "Canadian Airlines International",
+      "category": "airfare",
+      "keywords": [
+        "canadian airlines"
+      ]
+    },
+    {
+      "mcc": "3172",
+      "description": "Nationair",
+      "category": "airfare",
+      "keywords": [
+        "nationair"
+      ]
+    },
+    {
+      "mcc": "3174",
+      "description": "JetBlue",
+      "category": "airfare",
+      "keywords": [
+        "jetblue"
+      ]
+    },
+    {
+      "mcc": "3175",
+      "description": "Middle East Air",
+      "category": "airfare",
+      "keywords": [
+        "mea"
+      ]
+    },
+    {
+      "mcc": "3176",
+      "description": "Metroflight Airlines",
+      "category": "airfare",
+      "keywords": [
+        "metroflight"
+      ]
+    },
+    {
+      "mcc": "3177",
+      "description": "AirTran Airways",
+      "category": "airfare",
+      "keywords": [
+        "airtran"
+      ]
+    },
+    {
+      "mcc": "3178",
+      "description": "Mesa Air",
+      "category": "airfare",
+      "keywords": [
+        "mesa air"
+      ]
+    },
+    {
+      "mcc": "3180",
+      "description": "Westjet Airlines",
+      "category": "airfare",
+      "keywords": [
+        "westjet"
+      ]
+    },
+    {
+      "mcc": "3181",
+      "description": "Malev Hungarian Airlines",
+      "category": "airfare",
+      "keywords": [
+        "malev"
+      ]
+    },
+    {
+      "mcc": "3182",
+      "description": "Lot Polish Airlines",
+      "category": "airfare",
+      "keywords": [
+        "lot polish"
+      ]
+    },
+    {
+      "mcc": "3183",
+      "description": "Oman Aviation Services",
+      "category": "airfare",
+      "keywords": [
+        "oman air"
+      ]
+    },
+    {
+      "mcc": "3184",
+      "description": "LIAT",
+      "category": "airfare",
+      "keywords": [
+        "liat"
+      ]
+    },
+    {
+      "mcc": "3185",
+      "description": "LAV Linea Aeropostal",
+      "category": "airfare",
+      "keywords": [
+        "lav"
+      ]
+    },
+    {
+      "mcc": "3186",
+      "description": "Lineas Aereas Privadas",
+      "category": "airfare",
+      "keywords": [
+        "lap"
+      ]
+    },
+    {
+      "mcc": "3187",
+      "description": "LACSA",
+      "category": "airfare",
+      "keywords": [
+        "lacsa"
+      ]
+    },
+    {
+      "mcc": "3188",
+      "description": "Virgin Express",
+      "category": "airfare",
+      "keywords": [
+        "virgin express"
+      ]
+    },
+    {
+      "mcc": "3190",
+      "description": "Jugoslav Air",
+      "category": "airfare",
+      "keywords": [
+        "jugoslav"
+      ]
+    },
+    {
+      "mcc": "3191",
+      "description": "Island Airlines",
+      "category": "airfare",
+      "keywords": [
+        "island airlines"
+      ]
+    },
+    {
+      "mcc": "3193",
+      "description": "Indian Airlines",
+      "category": "airfare",
+      "keywords": [
+        "indian airlines"
+      ]
+    },
+    {
+      "mcc": "3196",
+      "description": "Hawaiian Air",
+      "category": "airfare",
+      "keywords": [
+        "hawaiian airlines"
+      ]
+    },
+    {
+      "mcc": "3197",
+      "description": "Havasu Airlines",
+      "category": "airfare",
+      "keywords": [
+        "havasu"
+      ]
+    },
+    {
+      "mcc": "3200",
+      "description": "Guyana Airways",
+      "category": "airfare",
+      "keywords": [
+        "guyana air"
+      ]
+    },
+    {
+      "mcc": "3204",
+      "description": "Freedom Air",
+      "category": "airfare",
+      "keywords": [
+        "freedom air"
+      ]
+    },
+    {
+      "mcc": "3206",
+      "description": "China Eastern Airlines",
+      "category": "airfare",
+      "keywords": [
+        "china eastern"
+      ]
+    },
+    {
+      "mcc": "3211",
+      "description": "Norwegian Air Shuttle",
+      "category": "airfare",
+      "keywords": [
+        "norwegian air"
+      ]
+    },
+    {
+      "mcc": "3212",
+      "description": "Dominicana de Aviacion",
+      "category": "airfare",
+      "keywords": [
+        "dominicana"
+      ]
+    },
+    {
+      "mcc": "3213",
+      "description": "Malmo Aviation",
+      "category": "airfare",
+      "keywords": [
+        "malmo"
+      ]
+    },
+    {
+      "mcc": "3217",
+      "description": "CSA Czech Airlines",
+      "category": "airfare",
+      "keywords": [
+        "czech airlines",
+        "csa"
+      ]
+    },
+    {
+      "mcc": "3219",
+      "description": "Compania Panamena de Aviacion",
+      "category": "airfare",
+      "keywords": [
+        "copa airlines"
+      ]
+    },
+    {
+      "mcc": "3220",
+      "description": "Compania Faucett",
+      "category": "airfare",
+      "keywords": [
+        "faucett"
+      ]
+    },
+    {
+      "mcc": "3221",
+      "description": "Transportes Aeros Militares",
+      "category": "airfare",
+      "keywords": [
+        "tam"
+      ]
+    },
+    {
+      "mcc": "3222",
+      "description": "Command Airways",
+      "category": "airfare",
+      "keywords": [
+        "command air"
+      ]
+    },
+    {
+      "mcc": "3223",
+      "description": "Comair",
+      "category": "airfare",
+      "keywords": [
+        "comair"
+      ]
+    },
+    {
+      "mcc": "3226",
+      "description": "Skyways Air",
+      "category": "airfare",
+      "keywords": [
+        "skyways"
+      ]
+    },
+    {
+      "mcc": "3228",
+      "description": "Cayman Airways",
+      "category": "airfare",
+      "keywords": [
+        "cayman air"
+      ]
+    },
+    {
+      "mcc": "3229",
+      "description": "SAETA",
+      "category": "airfare",
+      "keywords": [
+        "saeta"
+      ]
+    },
+    {
+      "mcc": "3231",
+      "description": "SAHSA",
+      "category": "airfare",
+      "keywords": [
+        "sahsa"
+      ]
+    },
+    {
+      "mcc": "3234",
+      "description": "Caribbean Airlines",
+      "category": "airfare",
+      "keywords": [
+        "caribbean airlines"
+      ]
+    },
+    {
+      "mcc": "3236",
+      "description": "Air Arabia",
+      "category": "airfare",
+      "keywords": [
+        "air arabia"
+      ]
+    },
+    {
+      "mcc": "3239",
+      "description": "Bar Harbor Airlines",
+      "category": "airfare",
+      "keywords": [
+        "bar harbor"
+      ]
+    },
+    {
+      "mcc": "3240",
+      "description": "Bahamasair",
+      "category": "airfare",
+      "keywords": [
+        "bahamasair"
+      ]
+    },
+    {
+      "mcc": "3241",
+      "description": "Aviateca",
+      "category": "airfare",
+      "keywords": [
+        "aviateca"
+      ]
+    },
+    {
+      "mcc": "3242",
+      "description": "Avensa",
+      "category": "airfare",
+      "keywords": [
+        "avensa"
+      ]
+    },
+    {
+      "mcc": "3243",
+      "description": "Austin Airways",
+      "category": "airfare",
+      "keywords": [
+        "austin air"
+      ]
+    },
+    {
+      "mcc": "3245",
+      "description": "EasyJet",
+      "category": "airfare",
+      "keywords": [
+        "easyjet"
+      ]
+    },
+    {
+      "mcc": "3246",
+      "description": "Ryanair",
+      "category": "airfare",
+      "keywords": [
+        "ryanair"
+      ]
+    },
+    {
+      "mcc": "3247",
+      "description": "Alaska Airlines",
+      "category": "airfare",
+      "keywords": [
+        "alaska airlines"
+      ]
+    },
+    {
+      "mcc": "3248",
+      "description": "Tam Airlines",
+      "category": "airfare",
+      "keywords": [
+        "tam airlines",
+        "latam"
+      ]
+    },
+    {
+      "mcc": "3251",
+      "description": "Aloha Airlines",
+      "category": "airfare",
+      "keywords": [
+        "aloha"
+      ]
+    },
+    {
+      "mcc": "3252",
+      "description": "ALM Antilean Airlines",
+      "category": "airfare",
+      "keywords": [
+        "alm"
+      ]
+    },
+    {
+      "mcc": "3253",
+      "description": "America West",
+      "category": "airfare",
+      "keywords": [
+        "america west"
+      ]
+    },
+    {
+      "mcc": "3254",
+      "description": "Trump Airline",
+      "category": "airfare",
+      "keywords": [
+        "trump air"
+      ]
+    },
+    {
+      "mcc": "3256",
+      "description": "Alaska Air",
+      "category": "airfare",
+      "keywords": [
+        "alaska air"
+      ]
+    },
+    {
+      "mcc": "3260",
+      "description": "Spirit Airlines",
+      "category": "airfare",
+      "keywords": [
+        "spirit airlines"
+      ]
+    },
+    {
+      "mcc": "3261",
+      "description": "Air China",
+      "category": "airfare",
+      "keywords": [
+        "air china"
+      ]
+    },
+    {
+      "mcc": "3263",
+      "description": "Aero Peru",
+      "category": "airfare",
+      "keywords": [
+        "aero peru"
+      ]
+    },
+    {
+      "mcc": "3266",
+      "description": "Air Seychelles",
+      "category": "airfare",
+      "keywords": [
+        "air seychelles"
+      ]
+    },
+    {
+      "mcc": "3267",
+      "description": "Air Panama",
+      "category": "airfare",
+      "keywords": [
+        "air panama"
+      ]
+    },
+    {
+      "mcc": "3280",
+      "description": "Air Jamaica",
+      "category": "airfare",
+      "keywords": [
+        "air jamaica"
+      ]
+    },
+    {
+      "mcc": "3282",
+      "description": "Air Djibouti",
+      "category": "airfare",
+      "keywords": [
+        "air djibouti"
+      ]
+    },
+    {
+      "mcc": "3284",
+      "description": "Aero Virgin Islands",
+      "category": "airfare",
+      "keywords": [
+        "aero virgin"
+      ]
+    },
+    {
+      "mcc": "3285",
+      "description": "Aero Coach Aviation",
+      "category": "airfare",
+      "keywords": [
+        "aero coach"
+      ]
+    },
+    {
+      "mcc": "3286",
+      "description": "Aero Continente Chile",
+      "category": "airfare",
+      "keywords": [
+        "aero continente chile"
+      ]
+    },
+    {
+      "mcc": "3287",
+      "description": "Aero Costa Rica",
+      "category": "airfare",
+      "keywords": [
+        "aero costa rica"
+      ]
+    },
+    {
+      "mcc": "3292",
+      "description": "Cyprus Airways",
+      "category": "airfare",
+      "keywords": [
+        "cyprus air"
+      ]
+    },
+    {
+      "mcc": "3293",
+      "description": "Ecuatoriana",
+      "category": "airfare",
+      "keywords": [
+        "ecuatoriana"
+      ]
+    },
+    {
+      "mcc": "3294",
+      "description": "Ethiopian Airlines",
+      "category": "airfare",
+      "keywords": [
+        "ethiopian"
+      ]
+    },
+    {
+      "mcc": "3295",
+      "description": "Kenya Airways",
+      "category": "airfare",
+      "keywords": [
+        "kenya airways"
+      ]
+    },
+    {
+      "mcc": "3296",
+      "description": "Air Berlin",
+      "category": "airfare",
+      "keywords": [
+        "air berlin"
+      ]
+    },
+    {
+      "mcc": "3297",
+      "description": "Tarom Romanian Air",
+      "category": "airfare",
+      "keywords": [
+        "tarom"
+      ]
+    },
+    {
+      "mcc": "3298",
+      "description": "Air Mauritius",
+      "category": "airfare",
+      "keywords": [
+        "air mauritius"
+      ]
+    },
+    {
+      "mcc": "3299",
+      "description": "Wideroe Flyveselskap",
+      "category": "airfare",
+      "keywords": [
+        "wideroe"
+      ]
+    },
+    {
+      "mcc": "3501",
+      "description": "Holiday Inn",
+      "category": "hotels",
+      "keywords": [
+        "holiday inn",
+        "ihg"
+      ]
+    },
+    {
+      "mcc": "3502",
+      "description": "Best Western",
+      "category": "hotels",
+      "keywords": [
+        "best western"
+      ]
+    },
+    {
+      "mcc": "3503",
+      "description": "Sheraton",
+      "category": "hotels",
+      "keywords": [
+        "sheraton",
+        "marriott"
+      ]
+    },
+    {
+      "mcc": "3504",
+      "description": "Hilton Hotels",
+      "category": "hotels",
+      "keywords": [
+        "hilton"
+      ]
+    },
+    {
+      "mcc": "3505",
+      "description": "Forte Hotels",
+      "category": "hotels",
+      "keywords": [
+        "forte"
+      ]
+    },
+    {
+      "mcc": "3506",
+      "description": "Golden Tulip",
+      "category": "hotels",
+      "keywords": [
+        "golden tulip"
+      ]
+    },
+    {
+      "mcc": "3507",
+      "description": "Friendship Inns",
+      "category": "hotels",
+      "keywords": [
+        "friendship inns"
+      ]
+    },
+    {
+      "mcc": "3508",
+      "description": "Quality Inns",
+      "category": "hotels",
+      "keywords": [
+        "quality inn"
+      ]
+    },
+    {
+      "mcc": "3509",
+      "description": "Marriott",
+      "category": "hotels",
+      "keywords": [
+        "marriott"
+      ]
+    },
+    {
+      "mcc": "3510",
+      "description": "Days Inn",
+      "category": "hotels",
+      "keywords": [
+        "days inn"
+      ]
+    },
+    {
+      "mcc": "3511",
+      "description": "Arabella Hotels",
+      "category": "hotels",
+      "keywords": [
+        "arabella"
+      ]
+    },
+    {
+      "mcc": "3512",
+      "description": "Inter-Continental",
+      "category": "hotels",
+      "keywords": [
+        "intercontinental",
+        "ihg"
+      ]
+    },
+    {
+      "mcc": "3513",
+      "description": "Westin",
+      "category": "hotels",
+      "keywords": [
+        "westin"
+      ]
+    },
+    {
+      "mcc": "3514",
+      "description": "AmeriSuites",
+      "category": "hotels",
+      "keywords": [
+        "amerisuites"
+      ]
+    },
+    {
+      "mcc": "3515",
+      "description": "Rodeway Inns",
+      "category": "hotels",
+      "keywords": [
+        "rodeway"
+      ]
+    },
+    {
+      "mcc": "3516",
+      "description": "La Quinta",
+      "category": "hotels",
+      "keywords": [
+        "la quinta"
+      ]
+    },
+    {
+      "mcc": "3517",
+      "description": "Americana Hotels",
+      "category": "hotels",
+      "keywords": [
+        "americana"
+      ]
+    },
+    {
+      "mcc": "3518",
+      "description": "Sol Hotels",
+      "category": "hotels",
+      "keywords": [
+        "sol hotels"
+      ]
+    },
+    {
+      "mcc": "3519",
+      "description": "Pullman International",
+      "category": "hotels",
+      "keywords": [
+        "pullman"
+      ]
+    },
+    {
+      "mcc": "3520",
+      "description": "Meridien",
+      "category": "hotels",
+      "keywords": [
+        "meridien"
+      ]
+    },
+    {
+      "mcc": "3521",
+      "description": "Royal Lahaina Resort",
+      "category": "hotels",
+      "keywords": [
+        "royal lahaina"
+      ]
+    },
+    {
+      "mcc": "3522",
+      "description": "Tokyo Hotel",
+      "category": "hotels",
+      "keywords": [
+        "tokyo hotel"
+      ]
+    },
+    {
+      "mcc": "3523",
+      "description": "Peninsula Hotel",
+      "category": "hotels",
+      "keywords": [
+        "peninsula"
+      ]
+    },
+    {
+      "mcc": "3524",
+      "description": "WelcomGroup Hotels",
+      "category": "hotels",
+      "keywords": [
+        "welcomgroup"
+      ]
+    },
+    {
+      "mcc": "3525",
+      "description": "Dunfey Hotels",
+      "category": "hotels",
+      "keywords": [
+        "dunfey"
+      ]
+    },
+    {
+      "mcc": "3526",
+      "description": "Prince Hotels",
+      "category": "hotels",
+      "keywords": [
+        "prince hotel"
+      ]
+    },
+    {
+      "mcc": "3527",
+      "description": "Downtowner-Passport",
+      "category": "hotels",
+      "keywords": [
+        "downtowner"
+      ]
+    },
+    {
+      "mcc": "3528",
+      "description": "Red Lion",
+      "category": "hotels",
+      "keywords": [
+        "red lion"
+      ]
+    },
+    {
+      "mcc": "3529",
+      "description": "CP Hotels",
+      "category": "hotels",
+      "keywords": [
+        "cp hotels"
+      ]
+    },
+    {
+      "mcc": "3530",
+      "description": "Renaissance Hotels",
+      "category": "hotels",
+      "keywords": [
+        "renaissance",
+        "marriott"
+      ]
+    },
+    {
+      "mcc": "3531",
+      "description": "Kauai Coconut Beach Resort",
+      "category": "hotels",
+      "keywords": [
+        "coconut beach"
+      ]
+    },
+    {
+      "mcc": "3532",
+      "description": "Royal Kona Resort",
+      "category": "hotels",
+      "keywords": [
+        "royal kona"
+      ]
+    },
+    {
+      "mcc": "3533",
+      "description": "Hotel Ibis",
+      "category": "hotels",
+      "keywords": [
+        "ibis hotel"
+      ]
+    },
+    {
+      "mcc": "3534",
+      "description": "Southern Pacific Hotels",
+      "category": "hotels",
+      "keywords": [
+        "southern pacific"
+      ]
+    },
+    {
+      "mcc": "3535",
+      "description": "Hilton International",
+      "category": "hotels",
+      "keywords": [
+        "hilton international"
+      ]
+    },
+    {
+      "mcc": "3536",
+      "description": "AMFAC Hotels",
+      "category": "hotels",
+      "keywords": [
+        "amfac"
+      ]
+    },
+    {
+      "mcc": "3537",
+      "description": "ANA Hotels",
+      "category": "hotels",
+      "keywords": [
+        "ana hotel"
+      ]
+    },
+    {
+      "mcc": "3538",
+      "description": "Concorde Hotels",
+      "category": "hotels",
+      "keywords": [
+        "concorde hotel"
+      ]
+    },
+    {
+      "mcc": "3539",
+      "description": "Summerfield Suites",
+      "category": "hotels",
+      "keywords": [
+        "summerfield"
+      ]
+    },
+    {
+      "mcc": "3540",
+      "description": "Iberotel",
+      "category": "hotels",
+      "keywords": [
+        "iberotel"
+      ]
+    },
+    {
+      "mcc": "3541",
+      "description": "Hotel Okura",
+      "category": "hotels",
+      "keywords": [
+        "hotel okura"
+      ]
+    },
+    {
+      "mcc": "3542",
+      "description": "Royal Hotels",
+      "category": "hotels",
+      "keywords": [
+        "royal hotels"
+      ]
+    },
+    {
+      "mcc": "3543",
+      "description": "Four Seasons",
+      "category": "hotels",
+      "keywords": [
+        "four seasons"
+      ]
+    },
+    {
+      "mcc": "3544",
+      "description": "Ciga Hotels",
+      "category": "hotels",
+      "keywords": [
+        "ciga"
+      ]
+    },
+    {
+      "mcc": "3545",
+      "description": "Shangri-La",
+      "category": "hotels",
+      "keywords": [
+        "shangri la"
+      ]
+    },
+    {
+      "mcc": "3546",
+      "description": "Hotel Sierra",
+      "category": "hotels",
+      "keywords": [
+        "hotel sierra"
+      ]
+    },
+    {
+      "mcc": "3548",
+      "description": "Hoteles Melia",
+      "category": "hotels",
+      "keywords": [
+        "melia"
+      ]
+    },
+    {
+      "mcc": "3549",
+      "description": "Auberge des Gouverneurs",
+      "category": "hotels",
+      "keywords": [
+        "auberge"
+      ]
+    },
+    {
+      "mcc": "3550",
+      "description": "Regal 8 Inns",
+      "category": "hotels",
+      "keywords": [
+        "regal 8"
+      ]
+    },
+    {
+      "mcc": "3551",
+      "description": "Mirage Hotel and Casino",
+      "category": "hotels",
+      "keywords": [
+        "mirage"
+      ]
+    },
+    {
+      "mcc": "3552",
+      "description": "Coast Hotels",
+      "category": "hotels",
+      "keywords": [
+        "coast hotels"
+      ]
+    },
+    {
+      "mcc": "3553",
+      "description": "Park Inns International",
+      "category": "hotels",
+      "keywords": [
+        "park inn"
+      ]
+    },
+    {
+      "mcc": "3554",
+      "description": "Pinehurst Resort",
+      "category": "hotels",
+      "keywords": [
+        "pinehurst"
+      ]
+    },
+    {
+      "mcc": "3555",
+      "description": "Treasure Island",
+      "category": "hotels",
+      "keywords": [
+        "treasure island"
+      ]
+    },
+    {
+      "mcc": "3556",
+      "description": "Barton Creek Resort",
+      "category": "hotels",
+      "keywords": [
+        "barton creek"
+      ]
+    },
+    {
+      "mcc": "3557",
+      "description": "Manhattan East Suite Hotels",
+      "category": "hotels",
+      "keywords": [
+        "manhattan east"
+      ]
+    },
+    {
+      "mcc": "3558",
+      "description": "Jolly Hotels",
+      "category": "hotels",
+      "keywords": [
+        "jolly hotel"
+      ]
+    },
+    {
+      "mcc": "3559",
+      "description": "Candlewood Suites",
+      "category": "hotels",
+      "keywords": [
+        "candlewood"
+      ]
+    },
+    {
+      "mcc": "3560",
+      "description": "Aladdin Resort and Casino",
+      "category": "hotels",
+      "keywords": [
+        "aladdin"
+      ]
+    },
+    {
+      "mcc": "3561",
+      "description": "Golden Nugget",
+      "category": "hotels",
+      "keywords": [
+        "golden nugget"
+      ]
+    },
+    {
+      "mcc": "3562",
+      "description": "Comfort Inns",
+      "category": "hotels",
+      "keywords": [
+        "comfort inn"
+      ]
+    },
+    {
+      "mcc": "3563",
+      "description": "Journeys End Motels",
+      "category": "hotels",
+      "keywords": [
+        "journeys end"
+      ]
+    },
+    {
+      "mcc": "3564",
+      "description": "Sams Town Hotel and Casino",
+      "category": "hotels",
+      "keywords": [
+        "sams town"
+      ]
+    },
+    {
+      "mcc": "3565",
+      "description": "Relais Inn",
+      "category": "hotels",
+      "keywords": [
+        "relais"
+      ]
+    },
+    {
+      "mcc": "3566",
+      "description": "Hoteles El Presidente",
+      "category": "hotels",
+      "keywords": [
+        "el presidente"
+      ]
+    },
+    {
+      "mcc": "3567",
+      "description": "Flag Inns",
+      "category": "hotels",
+      "keywords": [
+        "flag inn"
+      ]
+    },
+    {
+      "mcc": "3568",
+      "description": "Hampton Inns",
+      "category": "hotels",
+      "keywords": [
+        "hampton inn"
+      ]
+    },
+    {
+      "mcc": "3569",
+      "description": "Stakis Hotels",
+      "category": "hotels",
+      "keywords": [
+        "stakis"
+      ]
+    },
+    {
+      "mcc": "3570",
+      "description": "Luxor Hotel and Casino",
+      "category": "hotels",
+      "keywords": [
+        "luxor"
+      ]
+    },
+    {
+      "mcc": "3571",
+      "description": "Maritim Hotels",
+      "category": "hotels",
+      "keywords": [
+        "maritim"
+      ]
+    },
+    {
+      "mcc": "3572",
+      "description": "Eldorado Hotel and Casino",
+      "category": "hotels",
+      "keywords": [
+        "eldorado"
+      ]
+    },
+    {
+      "mcc": "3573",
+      "description": "Arcade Hotels",
+      "category": "hotels",
+      "keywords": [
+        "arcade hotel"
+      ]
+    },
+    {
+      "mcc": "3574",
+      "description": "Venture Inn",
+      "category": "hotels",
+      "keywords": [
+        "venture inn"
+      ]
+    },
+    {
+      "mcc": "3575",
+      "description": "Vagabond Hotels",
+      "category": "hotels",
+      "keywords": [
+        "vagabond"
+      ]
+    },
+    {
+      "mcc": "3576",
+      "description": "La Quinta Motor Inns",
+      "category": "hotels",
+      "keywords": [
+        "la quinta"
+      ]
+    },
+    {
+      "mcc": "3577",
+      "description": "Mandarin Oriental",
+      "category": "hotels",
+      "keywords": [
+        "mandarin oriental"
+      ]
+    },
+    {
+      "mcc": "3578",
+      "description": "Frankenmuth Bavarian",
+      "category": "hotels",
+      "keywords": [
+        "frankenmuth"
+      ]
+    },
+    {
+      "mcc": "3579",
+      "description": "Hotel Mercure",
+      "category": "hotels",
+      "keywords": [
+        "mercure"
+      ]
+    },
+    {
+      "mcc": "3580",
+      "description": "Hotel Del Coronado",
+      "category": "hotels",
+      "keywords": [
+        "del coronado"
+      ]
+    },
+    {
+      "mcc": "3581",
+      "description": "Delta Hotels",
+      "category": "hotels",
+      "keywords": [
+        "delta hotel"
+      ]
+    },
+    {
+      "mcc": "3582",
+      "description": "California Hotel and Casino",
+      "category": "hotels",
+      "keywords": [
+        "california hotel"
+      ]
+    },
+    {
+      "mcc": "3583",
+      "description": "Radisson BLU",
+      "category": "hotels",
+      "keywords": [
+        "radisson blu"
+      ]
+    },
+    {
+      "mcc": "3584",
+      "description": "Princess Hotels International",
+      "category": "hotels",
+      "keywords": [
+        "princess hotel"
+      ]
+    },
+    {
+      "mcc": "3585",
+      "description": "Hungar Hotels",
+      "category": "hotels",
+      "keywords": [
+        "hungar"
+      ]
+    },
+    {
+      "mcc": "3586",
+      "description": "Sokos Hotels",
+      "category": "hotels",
+      "keywords": [
+        "sokos"
+      ]
+    },
+    {
+      "mcc": "3587",
+      "description": "Doral Hotels",
+      "category": "hotels",
+      "keywords": [
+        "doral"
+      ]
+    },
+    {
+      "mcc": "3588",
+      "description": "Helmsley Hotels",
+      "category": "hotels",
+      "keywords": [
+        "helmsley"
+      ]
+    },
+    {
+      "mcc": "3589",
+      "description": "Doral Golf Resort",
+      "category": "hotels",
+      "keywords": [
+        "doral golf"
+      ]
+    },
+    {
+      "mcc": "3590",
+      "description": "Fairmont Hotels",
+      "category": "hotels",
+      "keywords": [
+        "fairmont"
+      ]
+    },
+    {
+      "mcc": "3591",
+      "description": "Sonesta Hotels",
+      "category": "hotels",
+      "keywords": [
+        "sonesta"
+      ]
+    },
+    {
+      "mcc": "3592",
+      "description": "Omni Hotels",
+      "category": "hotels",
+      "keywords": [
+        "omni hotel"
+      ]
+    },
+    {
+      "mcc": "3593",
+      "description": "Cunard Hotels",
+      "category": "hotels",
+      "keywords": [
+        "cunard"
+      ]
+    },
+    {
+      "mcc": "3594",
+      "description": "Arizona Biltmore",
+      "category": "hotels",
+      "keywords": [
+        "biltmore"
+      ]
+    },
+    {
+      "mcc": "3595",
+      "description": "Hospitality Inns",
+      "category": "hotels",
+      "keywords": [
+        "hospitality inn"
+      ]
+    },
+    {
+      "mcc": "3596",
+      "description": "Wynn Las Vegas",
+      "category": "hotels",
+      "keywords": [
+        "wynn"
+      ]
+    },
+    {
+      "mcc": "3597",
+      "description": "Riverside Resort",
+      "category": "hotels",
+      "keywords": [
+        "riverside resort"
+      ]
+    },
+    {
+      "mcc": "3598",
+      "description": "Regent International",
+      "category": "hotels",
+      "keywords": [
+        "regent"
+      ]
+    },
+    {
+      "mcc": "3599",
+      "description": "Pannonia Hotels",
+      "category": "hotels",
+      "keywords": [
+        "pannonia"
+      ]
+    },
+    {
+      "mcc": "3600",
+      "description": "Saddlebrook Resort",
+      "category": "hotels",
+      "keywords": [
+        "saddlebrook"
+      ]
+    },
+    {
+      "mcc": "4111",
+      "description": "Local/Suburban Commuter Passenger Transportation",
+      "category": "transit",
+      "keywords": [
+        "commuter",
+        "subway",
+        "metro",
+        "transit"
+      ]
+    },
+    {
+      "mcc": "4112",
+      "description": "Passenger Railways",
+      "category": "transit",
+      "keywords": [
+        "railway",
+        "train",
+        "amtrak"
+      ]
+    },
+    {
+      "mcc": "4121",
+      "description": "Taxicabs and Limousines",
+      "category": "transit",
+      "keywords": [
+        "taxi",
+        "cab",
+        "limousine",
+        "uber",
+        "lyft"
+      ]
+    },
+    {
+      "mcc": "4131",
+      "description": "Bus Lines",
+      "category": "transit",
+      "keywords": [
+        "bus",
+        "greyhound"
+      ]
+    },
+    {
+      "mcc": "4411",
+      "description": "Cruise Lines",
+      "category": "travel",
+      "keywords": [
+        "cruise",
+        "carnival",
+        "royal caribbean"
+      ]
+    },
+    {
+      "mcc": "4511",
+      "description": "Airlines, Air Carriers",
+      "category": "airfare",
+      "keywords": [
+        "airline",
+        "delta",
+        "united",
+        "american airlines",
+        "southwest",
+        "jetblue"
+      ]
+    },
+    {
+      "mcc": "4582",
+      "description": "Airports, Flying Fields, Airport Terminals",
+      "category": "travel",
+      "keywords": [
+        "airport",
+        "terminal"
+      ]
+    },
+    {
+      "mcc": "4722",
+      "description": "Travel Agencies and Tour Operators",
+      "category": "travel",
+      "keywords": [
+        "travel agency",
+        "tour operator",
+        "expedia"
+      ]
+    },
+    {
+      "mcc": "4784",
+      "description": "Tolls and Bridge Fees",
+      "category": "transit",
+      "keywords": [
+        "toll",
+        "bridge fee"
+      ]
+    },
+    {
+      "mcc": "4812",
+      "description": "Telecommunication Equipment and Telephone Sales",
+      "category": "utilities",
+      "keywords": [
+        "telecom",
+        "phone sales"
+      ]
+    },
+    {
+      "mcc": "4814",
+      "description": "Telecommunication Services",
+      "category": "utilities",
+      "keywords": [
+        "telecom",
+        "phone bill",
+        "wireless"
+      ]
+    },
+    {
+      "mcc": "4816",
+      "description": "Computer Network/Information Services",
+      "category": "utilities",
+      "keywords": [
+        "internet",
+        "network services"
+      ]
+    },
+    {
+      "mcc": "4899",
+      "description": "Cable, Satellite, and Other Pay Television Services",
+      "category": "utilities",
+      "keywords": [
+        "cable",
+        "satellite",
+        "directv",
+        "spectrum"
+      ]
+    },
+    {
+      "mcc": "4900",
+      "description": "Utilities - Electric, Gas, Water, Sanitary",
+      "category": "utilities",
+      "keywords": [
+        "utility",
+        "electric",
+        "gas bill",
+        "water bill"
+      ]
+    },
+    {
+      "mcc": "5013",
+      "description": "Motor Vehicle Supplies and New Parts",
+      "category": "retail",
+      "keywords": [
+        "auto parts",
+        "motor vehicle"
+      ]
+    },
+    {
+      "mcc": "5172",
+      "description": "Petroleum and Petroleum Products",
+      "category": "gas",
+      "keywords": [
+        "petroleum",
+        "oil"
+      ]
+    },
+    {
+      "mcc": "5192",
+      "description": "Books, Periodicals, and Newspapers",
+      "category": "retail",
+      "keywords": [
+        "bookstore",
+        "newspaper",
+        "magazine"
+      ]
+    },
+    {
+      "mcc": "5200",
+      "description": "Home Supply Warehouse Stores",
+      "category": "retail",
+      "keywords": [
+        "home depot",
+        "lowes",
+        "home supply"
+      ]
+    },
+    {
+      "mcc": "5211",
+      "description": "Lumber and Building Materials Stores",
+      "category": "retail",
+      "keywords": [
+        "lumber",
+        "building materials"
+      ]
+    },
+    {
+      "mcc": "5251",
+      "description": "Hardware Stores",
+      "category": "retail",
+      "keywords": [
+        "hardware"
+      ]
+    },
+    {
+      "mcc": "5261",
+      "description": "Nurseries, Lawn and Garden Supply Stores",
+      "category": "retail",
+      "keywords": [
+        "nursery",
+        "garden",
+        "lawn"
+      ]
+    },
+    {
+      "mcc": "5300",
+      "description": "Wholesale Clubs",
+      "category": "retail",
+      "keywords": [
+        "costco",
+        "sams club",
+        "wholesale club"
+      ]
+    },
+    {
+      "mcc": "5310",
+      "description": "Discount Stores",
+      "category": "retail",
+      "keywords": [
+        "discount store",
+        "walmart",
+        "target"
+      ]
+    },
+    {
+      "mcc": "5311",
+      "description": "Department Stores",
+      "category": "retail",
+      "keywords": [
+        "department store",
+        "macy",
+        "nordstrom"
+      ]
+    },
+    {
+      "mcc": "5331",
+      "description": "Variety Stores",
+      "category": "retail",
+      "keywords": [
+        "variety store"
+      ]
+    },
+    {
+      "mcc": "5399",
+      "description": "Miscellaneous General Merchandise",
+      "category": "retail",
+      "keywords": [
+        "general merchandise",
+        "amazon"
+      ]
+    },
+    {
+      "mcc": "5411",
+      "description": "Grocery Stores, Supermarkets",
+      "category": "groceries",
+      "keywords": [
+        "grocery",
+        "supermarket",
+        "whole foods",
+        "kroger",
+        "safeway",
+        "trader joe"
+      ]
+    },
+    {
+      "mcc": "5422",
+      "description": "Freezer and Locker Meat Provisioners",
+      "category": "groceries",
+      "keywords": [
+        "meat market",
+        "butcher"
+      ]
+    },
+    {
+      "mcc": "5441",
+      "description": "Candy, Nut, and Confectionery Stores",
+      "category": "retail",
+      "keywords": [
+        "candy",
+        "confectionery"
+      ]
+    },
+    {
+      "mcc": "5451",
+      "description": "Dairy Products Stores",
+      "category": "groceries",
+      "keywords": [
+        "dairy",
+        "milk store"
+      ]
+    },
+    {
+      "mcc": "5462",
+      "description": "Bakeries",
+      "category": "dining",
+      "keywords": [
+        "bakery",
+        "bake shop"
+      ]
+    },
+    {
+      "mcc": "5499",
+      "description": "Miscellaneous Food Stores",
+      "category": "groceries",
+      "keywords": [
+        "food store",
+        "specialty food"
+      ]
+    },
+    {
+      "mcc": "5511",
+      "description": "Car and Truck Dealers (New and Used)",
+      "category": "retail",
+      "keywords": [
+        "car dealer",
+        "auto dealer",
+        "ford",
+        "toyota"
+      ]
+    },
+    {
+      "mcc": "5531",
+      "description": "Auto and Home Supply Stores",
+      "category": "retail",
+      "keywords": [
+        "auto supply"
+      ]
+    },
+    {
+      "mcc": "5541",
+      "description": "Service Stations (with or without ancillary services)",
+      "category": "gas",
+      "keywords": [
+        "gas station",
+        "service station",
+        "shell",
+        "chevron",
+        "exxon"
+      ]
+    },
+    {
+      "mcc": "5542",
+      "description": "Automated Fuel Dispensers",
+      "category": "gas",
+      "keywords": [
+        "fuel dispenser",
+        "gas pump",
+        "petrol"
+      ]
+    },
+    {
+      "mcc": "5552",
+      "description": "Electric Vehicle Charging",
+      "category": "gas",
+      "keywords": [
+        "ev charging",
+        "chargepoint",
+        "tesla supercharger"
+      ]
+    },
+    {
+      "mcc": "5811",
+      "description": "Caterers",
+      "category": "dining",
+      "keywords": [
+        "caterer",
+        "catering"
+      ]
+    },
+    {
+      "mcc": "5812",
+      "description": "Eating Places, Restaurants",
+      "category": "dining",
+      "keywords": [
+        "restaurant",
+        "dining",
+        "eatery",
+        "bistro"
+      ]
+    },
+    {
+      "mcc": "5813",
+      "description": "Drinking Places (Alcoholic Beverages), Bars, Taverns",
+      "category": "dining",
+      "keywords": [
+        "bar",
+        "tavern",
+        "pub",
+        "nightclub"
+      ]
+    },
+    {
+      "mcc": "5814",
+      "description": "Fast Food Restaurants",
+      "category": "dining",
+      "keywords": [
+        "fast food",
+        "mcdonalds",
+        "burger king",
+        "wendys",
+        "chipotle",
+        "starbucks",
+        "dunkin",
+        "subway",
+        "taco bell",
+        "pizza hut",
+        "dominos"
+      ]
+    },
+    {
+      "mcc": "5912",
+      "description": "Drug Stores and Pharmacies",
+      "category": "healthcare",
+      "keywords": [
+        "pharmacy",
+        "drug store",
+        "cvs",
+        "walgreens",
+        "rite aid"
+      ]
+    },
+    {
+      "mcc": "5921",
+      "description": "Package Stores - Beer, Wine, and Liquor",
+      "category": "retail",
+      "keywords": [
+        "liquor store",
+        "wine shop",
+        "beer store"
+      ]
+    },
+    {
+      "mcc": "5941",
+      "description": "Sporting Goods Stores",
+      "category": "retail",
+      "keywords": [
+        "sporting goods",
+        "rei",
+        "dicks"
+      ]
+    },
+    {
+      "mcc": "5942",
+      "description": "Book Stores",
+      "category": "retail",
+      "keywords": [
+        "book store",
+        "barnes noble"
+      ]
+    },
+    {
+      "mcc": "5943",
+      "description": "Stationery Stores, Office and School Supply Stores",
+      "category": "retail",
+      "keywords": [
+        "stationery",
+        "office supply",
+        "staples"
+      ]
+    },
+    {
+      "mcc": "5944",
+      "description": "Jewelry Stores, Watches, Clocks, and Silverware Stores",
+      "category": "retail",
+      "keywords": [
+        "jewelry",
+        "jeweler"
+      ]
+    },
+    {
+      "mcc": "5945",
+      "description": "Hobby, Toy, and Game Shops",
+      "category": "retail",
+      "keywords": [
+        "toy store",
+        "hobby shop"
+      ]
+    },
+    {
+      "mcc": "5947",
+      "description": "Gift, Card, Novelty, and Souvenir Shops",
+      "category": "retail",
+      "keywords": [
+        "gift shop",
+        "souvenir"
+      ]
+    },
+    {
+      "mcc": "5970",
+      "description": "Artist Supply and Craft Shops",
+      "category": "retail",
+      "keywords": [
+        "craft store",
+        "art supply"
+      ]
+    },
+    {
+      "mcc": "5977",
+      "description": "Cosmetic Stores",
+      "category": "retail",
+      "keywords": [
+        "cosmetics",
+        "sephora",
+        "ulta"
+      ]
+    },
+    {
+      "mcc": "5993",
+      "description": "Cigar Stores and Stands",
+      "category": "retail",
+      "keywords": [
+        "cigar",
+        "tobacco"
+      ]
+    },
+    {
+      "mcc": "5995",
+      "description": "Pet Shops, Pet Food, and Supply Stores",
+      "category": "retail",
+      "keywords": [
+        "pet shop",
+        "petco",
+        "petsmart"
+      ]
+    },
+    {
+      "mcc": "6010",
+      "description": "Financial Institutions - Manual Cash Disbursements",
+      "category": "cash_equivalent",
+      "keywords": [
+        "cash disbursement",
+        "bank teller"
+      ]
+    },
+    {
+      "mcc": "6011",
+      "description": "Financial Institutions - Automated Cash Disbursements",
+      "category": "cash_equivalent",
+      "keywords": [
+        "atm",
+        "cash advance"
+      ]
+    },
+    {
+      "mcc": "6012",
+      "description": "Financial Institutions - Merchandise and Services",
+      "category": "cash_equivalent",
+      "keywords": [
+        "financial institution"
+      ]
+    },
+    {
+      "mcc": "6051",
+      "description": "Non-Financial Institutions - Foreign Currency, Money Orders",
+      "category": "cash_equivalent",
+      "keywords": [
+        "money order",
+        "foreign currency",
+        "wire transfer"
+      ]
+    },
+    {
+      "mcc": "6211",
+      "description": "Security Brokers/Dealers",
+      "category": "cash_equivalent",
+      "keywords": [
+        "broker",
+        "securities"
+      ]
+    },
+    {
+      "mcc": "6300",
+      "description": "Insurance Sales, Underwriting, and Premiums",
+      "category": "insurance",
+      "keywords": [
+        "insurance",
+        "premium"
+      ]
+    },
+    {
+      "mcc": "6513",
+      "description": "Real Estate Agents",
+      "category": "other",
+      "keywords": [
+        "real estate",
+        "realtor"
+      ]
+    },
+    {
+      "mcc": "7011",
+      "description": "Lodging - Hotels, Motels, Resorts",
+      "category": "hotels",
+      "keywords": [
+        "hotel",
+        "motel",
+        "resort",
+        "marriott",
+        "hilton",
+        "hyatt",
+        "airbnb"
+      ]
+    },
+    {
+      "mcc": "7032",
+      "description": "Sporting and Recreational Camps",
+      "category": "entertainment",
+      "keywords": [
+        "camp",
+        "recreation camp"
+      ]
+    },
+    {
+      "mcc": "7033",
+      "description": "Recreational Vehicle Parks and Campgrounds",
+      "category": "travel",
+      "keywords": [
+        "campground",
+        "rv park"
+      ]
+    },
+    {
+      "mcc": "7210",
+      "description": "Laundry, Cleaning, and Garment Services",
+      "category": "other",
+      "keywords": [
+        "laundry",
+        "dry clean"
+      ]
+    },
+    {
+      "mcc": "7211",
+      "description": "Laundry Services",
+      "category": "other",
+      "keywords": [
+        "laundromat"
+      ]
+    },
+    {
+      "mcc": "7216",
+      "description": "Dry Cleaners",
+      "category": "other",
+      "keywords": [
+        "dry cleaner"
+      ]
+    },
+    {
+      "mcc": "7221",
+      "description": "Photographic Studios",
+      "category": "other",
+      "keywords": [
+        "photography"
+      ]
+    },
+    {
+      "mcc": "7230",
+      "description": "Beauty and Barber Shops",
+      "category": "other",
+      "keywords": [
+        "salon",
+        "barber",
+        "beauty shop"
+      ]
+    },
+    {
+      "mcc": "7251",
+      "description": "Shoe Repair Shops",
+      "category": "other",
+      "keywords": [
+        "shoe repair"
+      ]
+    },
+    {
+      "mcc": "7261",
+      "description": "Funeral Services",
+      "category": "other",
+      "keywords": [
+        "funeral"
+      ]
+    },
+    {
+      "mcc": "7273",
+      "description": "Dating Services",
+      "category": "other",
+      "keywords": [
+        "dating"
+      ]
+    },
+    {
+      "mcc": "7276",
+      "description": "Tax Preparation Services",
+      "category": "other",
+      "keywords": [
+        "tax prep",
+        "hr block"
+      ]
+    },
+    {
+      "mcc": "7277",
+      "description": "Counseling Services",
+      "category": "other",
+      "keywords": [
+        "counseling"
+      ]
+    },
+    {
+      "mcc": "7278",
+      "description": "Buying Shopping Services",
+      "category": "other",
+      "keywords": [
+        "personal shopper"
+      ]
+    },
+    {
+      "mcc": "7296",
+      "description": "Clothing Rental",
+      "category": "other",
+      "keywords": [
+        "clothing rental"
+      ]
+    },
+    {
+      "mcc": "7297",
+      "description": "Massage Parlors",
+      "category": "other",
+      "keywords": [
+        "massage",
+        "spa"
+      ]
+    },
+    {
+      "mcc": "7298",
+      "description": "Health and Beauty Spas",
+      "category": "healthcare",
+      "keywords": [
+        "spa",
+        "massage"
+      ]
+    },
+    {
+      "mcc": "7299",
+      "description": "Miscellaneous Personal Services",
+      "category": "other",
+      "keywords": [
+        "personal services"
+      ]
+    },
+    {
+      "mcc": "7311",
+      "description": "Advertising Services",
+      "category": "other",
+      "keywords": [
+        "advertising",
+        "marketing"
+      ]
+    },
+    {
+      "mcc": "7321",
+      "description": "Consumer Credit Reporting",
+      "category": "other",
+      "keywords": [
+        "credit report",
+        "experian"
+      ]
+    },
+    {
+      "mcc": "7333",
+      "description": "Commercial Photography",
+      "category": "other",
+      "keywords": [
+        "commercial photo"
+      ]
+    },
+    {
+      "mcc": "7338",
+      "description": "Quick Copy Reproduction",
+      "category": "other",
+      "keywords": [
+        "copy shop",
+        "fedex office"
+      ]
+    },
+    {
+      "mcc": "7339",
+      "description": "Stenographic Services",
+      "category": "other",
+      "keywords": [
+        "stenography"
+      ]
+    },
+    {
+      "mcc": "7342",
+      "description": "Exterminating Services",
+      "category": "other",
+      "keywords": [
+        "exterminator",
+        "pest control"
+      ]
+    },
+    {
+      "mcc": "7349",
+      "description": "Cleaning and Maintenance",
+      "category": "other",
+      "keywords": [
+        "cleaning service"
+      ]
+    },
+    {
+      "mcc": "7361",
+      "description": "Employment Agencies",
+      "category": "other",
+      "keywords": [
+        "staffing",
+        "recruiting"
+      ]
+    },
+    {
+      "mcc": "7372",
+      "description": "Computer Programming",
+      "category": "other",
+      "keywords": [
+        "software dev",
+        "programming"
+      ]
+    },
+    {
+      "mcc": "7375",
+      "description": "Information Retrieval Services",
+      "category": "other",
+      "keywords": [
+        "data services"
+      ]
+    },
+    {
+      "mcc": "7379",
+      "description": "Computer Maintenance",
+      "category": "other",
+      "keywords": [
+        "computer repair"
+      ]
+    },
+    {
+      "mcc": "7392",
+      "description": "Management Consulting",
+      "category": "other",
+      "keywords": [
+        "consulting"
+      ]
+    },
+    {
+      "mcc": "7393",
+      "description": "Detective Agencies",
+      "category": "other",
+      "keywords": [
+        "detective",
+        "security"
+      ]
+    },
+    {
+      "mcc": "7394",
+      "description": "Equipment Rental",
+      "category": "other",
+      "keywords": [
+        "equipment rental"
+      ]
+    },
+    {
+      "mcc": "7395",
+      "description": "Photo Developing",
+      "category": "other",
+      "keywords": [
+        "photo developing"
+      ]
+    },
+    {
+      "mcc": "7399",
+      "description": "Business Services",
+      "category": "other",
+      "keywords": [
+        "business services"
+      ]
+    },
+    {
+      "mcc": "7512",
+      "description": "Automobile Rental",
+      "category": "travel",
+      "keywords": [
+        "car rental",
+        "hertz",
+        "enterprise",
+        "avis"
+      ]
+    },
+    {
+      "mcc": "7513",
+      "description": "Truck Rental",
+      "category": "travel",
+      "keywords": [
+        "truck rental",
+        "uhaul"
+      ]
+    },
+    {
+      "mcc": "7519",
+      "description": "Motor Home Rental",
+      "category": "travel",
+      "keywords": [
+        "rv rental"
+      ]
+    },
+    {
+      "mcc": "7523",
+      "description": "Parking Lots, Parking Meters, and Garages",
+      "category": "transit",
+      "keywords": [
+        "parking",
+        "garage",
+        "parkmobile"
+      ]
+    },
+    {
+      "mcc": "7531",
+      "description": "Automotive Body Repair Shops",
+      "category": "other",
+      "keywords": [
+        "auto body",
+        "car repair"
+      ]
+    },
+    {
+      "mcc": "7534",
+      "description": "Tire Retreading",
+      "category": "other",
+      "keywords": [
+        "tire shop"
+      ]
+    },
+    {
+      "mcc": "7535",
+      "description": "Auto Paint Shops",
+      "category": "other",
+      "keywords": [
+        "auto paint"
+      ]
+    },
+    {
+      "mcc": "7538",
+      "description": "Automotive Service Shops (Non-Dealer)",
+      "category": "other",
+      "keywords": [
+        "auto service",
+        "mechanic",
+        "jiffy lube"
+      ]
+    },
+    {
+      "mcc": "7542",
+      "description": "Car Washes",
+      "category": "other",
+      "keywords": [
+        "car wash"
+      ]
+    },
+    {
+      "mcc": "7549",
+      "description": "Towing Services",
+      "category": "other",
+      "keywords": [
+        "towing",
+        "tow truck"
+      ]
+    },
+    {
+      "mcc": "7622",
+      "description": "Electronics Repair",
+      "category": "other",
+      "keywords": [
+        "electronics repair"
+      ]
+    },
+    {
+      "mcc": "7623",
+      "description": "Air Conditioning Repair",
+      "category": "other",
+      "keywords": [
+        "ac repair",
+        "hvac"
+      ]
+    },
+    {
+      "mcc": "7629",
+      "description": "Appliance Repair",
+      "category": "other",
+      "keywords": [
+        "appliance repair"
+      ]
+    },
+    {
+      "mcc": "7631",
+      "description": "Watch and Jewelry Repair",
+      "category": "other",
+      "keywords": [
+        "jewelry repair"
+      ]
+    },
+    {
+      "mcc": "7641",
+      "description": "Furniture Reupholstery",
+      "category": "other",
+      "keywords": [
+        "upholstery"
+      ]
+    },
+    {
+      "mcc": "7692",
+      "description": "Welding Services",
+      "category": "other",
+      "keywords": [
+        "welding"
+      ]
+    },
+    {
+      "mcc": "7699",
+      "description": "Miscellaneous Repair",
+      "category": "other",
+      "keywords": [
+        "repair shop"
+      ]
+    },
+    {
+      "mcc": "7829",
+      "description": "Motion Picture Production",
+      "category": "entertainment",
+      "keywords": [
+        "film production"
+      ]
+    },
+    {
+      "mcc": "7832",
+      "description": "Motion Picture Theaters",
+      "category": "entertainment",
+      "keywords": [
+        "movie theater",
+        "cinema",
+        "amc",
+        "regal"
+      ]
+    },
+    {
+      "mcc": "7841",
+      "description": "Video Tape Rental",
+      "category": "entertainment",
+      "keywords": [
+        "video rental"
+      ]
+    },
+    {
+      "mcc": "7911",
+      "description": "Dance Halls, Studios, and Schools",
+      "category": "entertainment",
+      "keywords": [
+        "dance studio",
+        "dance hall"
+      ]
+    },
+    {
+      "mcc": "7922",
+      "description": "Theatrical Producers and Ticket Agencies",
+      "category": "entertainment",
+      "keywords": [
+        "ticket agency",
+        "theater tickets",
+        "ticketmaster"
+      ]
+    },
+    {
+      "mcc": "7929",
+      "description": "Bands, Orchestras, and Miscellaneous Entertainers",
+      "category": "entertainment",
+      "keywords": [
+        "concert",
+        "orchestra",
+        "band"
+      ]
+    },
+    {
+      "mcc": "7932",
+      "description": "Billiard Establishments",
+      "category": "entertainment",
+      "keywords": [
+        "billiards",
+        "pool hall"
+      ]
+    },
+    {
+      "mcc": "7933",
+      "description": "Bowling Alleys",
+      "category": "entertainment",
+      "keywords": [
+        "bowling"
+      ]
+    },
+    {
+      "mcc": "7941",
+      "description": "Commercial Sports, Athletic Fields, Professional Sports Clubs",
+      "category": "entertainment",
+      "keywords": [
+        "stadium",
+        "sports club",
+        "arena"
+      ]
+    },
+    {
+      "mcc": "7991",
+      "description": "Tourist Attractions and Exhibits",
+      "category": "entertainment",
+      "keywords": [
+        "museum",
+        "zoo",
+        "theme park",
+        "disney"
+      ]
+    },
+    {
+      "mcc": "7992",
+      "description": "Public Golf Courses",
+      "category": "entertainment",
+      "keywords": [
+        "golf course"
+      ]
+    },
+    {
+      "mcc": "7993",
+      "description": "Video Amusement Games",
+      "category": "entertainment",
+      "keywords": [
+        "arcade"
+      ]
+    },
+    {
+      "mcc": "7994",
+      "description": "Video Game Arcades/Establishments",
+      "category": "entertainment",
+      "keywords": [
+        "arcade",
+        "video game"
+      ]
+    },
+    {
+      "mcc": "7995",
+      "description": "Betting, including Lottery Tickets, Casino Gaming Chips",
+      "category": "entertainment",
+      "keywords": [
+        "casino",
+        "lottery",
+        "gambling"
+      ]
+    },
+    {
+      "mcc": "7996",
+      "description": "Amusement Parks, Circuses, Carnivals",
+      "category": "entertainment",
+      "keywords": [
+        "amusement park",
+        "carnival",
+        "circus"
+      ]
+    },
+    {
+      "mcc": "7997",
+      "description": "Membership Clubs (Sports, Recreation, Athletic), Country Clubs",
+      "category": "entertainment",
+      "keywords": [
+        "country club",
+        "golf club",
+        "gym membership"
+      ]
+    },
+    {
+      "mcc": "7998",
+      "description": "Aquariums and Zoos",
+      "category": "entertainment",
+      "keywords": [
+        "aquarium",
+        "zoo"
+      ]
+    },
+    {
+      "mcc": "7999",
+      "description": "Recreation Services (Not Elsewhere Classified)",
+      "category": "entertainment",
+      "keywords": [
+        "recreation",
+        "recreational"
+      ]
+    },
+    {
+      "mcc": "8011",
+      "description": "Doctors and Physicians (Not Elsewhere Classified)",
+      "category": "healthcare",
+      "keywords": [
+        "doctor",
+        "physician",
+        "medical"
+      ]
+    },
+    {
+      "mcc": "8021",
+      "description": "Dentists and Orthodontists",
+      "category": "healthcare",
+      "keywords": [
+        "dentist",
+        "orthodontist",
+        "dental"
+      ]
+    },
+    {
+      "mcc": "8031",
+      "description": "Osteopathic Physicians",
+      "category": "healthcare",
+      "keywords": [
+        "osteopath"
+      ]
+    },
+    {
+      "mcc": "8041",
+      "description": "Chiropractors",
+      "category": "healthcare",
+      "keywords": [
+        "chiropractor"
+      ]
+    },
+    {
+      "mcc": "8042",
+      "description": "Optometrists and Ophthalmologists",
+      "category": "healthcare",
+      "keywords": [
+        "optometrist",
+        "eye doctor"
+      ]
+    },
+    {
+      "mcc": "8043",
+      "description": "Opticians and Eyeglasses",
+      "category": "healthcare",
+      "keywords": [
+        "optician",
+        "lenscrafters"
+      ]
+    },
+    {
+      "mcc": "8049",
+      "description": "Podiatrists and Chiropodists",
+      "category": "healthcare",
+      "keywords": [
+        "podiatrist"
+      ]
+    },
+    {
+      "mcc": "8050",
+      "description": "Nursing and Personal Care",
+      "category": "healthcare",
+      "keywords": [
+        "nursing home"
+      ]
+    },
+    {
+      "mcc": "8062",
+      "description": "Hospitals",
+      "category": "healthcare",
+      "keywords": [
+        "hospital",
+        "medical center"
+      ]
+    },
+    {
+      "mcc": "8071",
+      "description": "Medical and Dental Labs",
+      "category": "healthcare",
+      "keywords": [
+        "medical lab"
+      ]
+    },
+    {
+      "mcc": "8099",
+      "description": "Medical Services",
+      "category": "healthcare",
+      "keywords": [
+        "medical services",
+        "clinic"
+      ]
+    },
+    {
+      "mcc": "8211",
+      "description": "Elementary and Secondary Schools",
+      "category": "education",
+      "keywords": [
+        "school",
+        "elementary",
+        "high school"
+      ]
+    },
+    {
+      "mcc": "8220",
+      "description": "Colleges, Universities, Professional Schools",
+      "category": "education",
+      "keywords": [
+        "college",
+        "university",
+        "tuition"
+      ]
+    },
+    {
+      "mcc": "8241",
+      "description": "Correspondence Schools",
+      "category": "education",
+      "keywords": [
+        "online school"
+      ]
+    },
+    {
+      "mcc": "8244",
+      "description": "Business and Secretarial Schools",
+      "category": "education",
+      "keywords": [
+        "business school"
+      ]
+    },
+    {
+      "mcc": "8249",
+      "description": "Trade and Vocational Schools",
+      "category": "education",
+      "keywords": [
+        "trade school",
+        "vocational"
+      ]
+    },
+    {
+      "mcc": "8299",
+      "description": "Schools and Educational Services",
+      "category": "education",
+      "keywords": [
+        "education",
+        "tutoring"
+      ]
+    },
+    {
+      "mcc": "8398",
+      "description": "Charitable and Social Service Organizations",
+      "category": "charity",
+      "keywords": [
+        "charity",
+        "donation",
+        "nonprofit",
+        "non-profit"
+      ]
+    },
+    {
+      "mcc": "8641",
+      "description": "Civic and Social Associations",
+      "category": "charity",
+      "keywords": [
+        "civic association"
+      ]
+    },
+    {
+      "mcc": "8651",
+      "description": "Political Organizations",
+      "category": "government",
+      "keywords": [
+        "political"
+      ]
+    },
+    {
+      "mcc": "8661",
+      "description": "Religious Organizations",
+      "category": "charity",
+      "keywords": [
+        "church",
+        "religious",
+        "temple"
+      ]
+    },
+    {
+      "mcc": "8675",
+      "description": "Automobile Associations",
+      "category": "other",
+      "keywords": [
+        "aaa",
+        "auto association"
+      ]
+    },
+    {
+      "mcc": "8699",
+      "description": "Membership Organizations",
+      "category": "other",
+      "keywords": [
+        "membership org"
+      ]
+    },
+    {
+      "mcc": "8734",
+      "description": "Testing Laboratories",
+      "category": "other",
+      "keywords": [
+        "testing lab"
+      ]
+    },
+    {
+      "mcc": "8911",
+      "description": "Architectural and Engineering",
+      "category": "other",
+      "keywords": [
+        "architect",
+        "engineering"
+      ]
+    },
+    {
+      "mcc": "8931",
+      "description": "Accounting and Bookkeeping",
+      "category": "other",
+      "keywords": [
+        "accounting",
+        "bookkeeping",
+        "cpa"
+      ]
+    },
+    {
+      "mcc": "8999",
+      "description": "Professional Services",
+      "category": "other",
+      "keywords": [
+        "professional services"
+      ]
+    },
+    {
+      "mcc": "9211",
+      "description": "Court Costs, Including Alimony and Child Support",
+      "category": "government",
+      "keywords": [
+        "court",
+        "alimony",
+        "child support"
+      ]
+    },
+    {
+      "mcc": "9222",
+      "description": "Fines",
+      "category": "government",
+      "keywords": [
+        "fine",
+        "penalty"
+      ]
+    },
+    {
+      "mcc": "9223",
+      "description": "Bail and Bond Payments",
+      "category": "government",
+      "keywords": [
+        "bail"
+      ]
+    },
+    {
+      "mcc": "9311",
+      "description": "Tax Payments",
+      "category": "government",
+      "keywords": [
+        "tax payment",
+        "irs",
+        "state tax"
+      ]
+    },
+    {
+      "mcc": "9399",
+      "description": "Government Services (Not Elsewhere Classified)",
+      "category": "government",
+      "keywords": [
+        "government",
+        "govt services"
+      ]
+    },
+    {
+      "mcc": "9402",
+      "description": "Postal Services - Government Only",
+      "category": "government",
+      "keywords": [
+        "post office",
+        "postal",
+        "usps"
+      ]
+    },
+    {
+      "mcc": "9405",
+      "description": "Intra-Government Purchases",
+      "category": "government",
+      "keywords": [
+        "government purchase"
+      ]
+    },
+    {
+      "mcc": "9752",
+      "description": "Electric, Gas, Sanitary, and Water Utilities",
+      "category": "utilities",
+      "keywords": [
+        "utility payment",
+        "electric bill",
+        "gas utility"
+      ]
+    }
   ]
 }

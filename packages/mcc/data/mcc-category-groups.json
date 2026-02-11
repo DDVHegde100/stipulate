@@ -1,0 +1,65 @@
+{
+  "version": "2026.06",
+  "groups": [
+    {
+      "id": "travel",
+      "label": "Travel & Transportation",
+      "categories": ["airfare", "hotels", "travel", "transit"],
+      "mccRanges": ["3000-3299", "3500-3999", "4111-4789", "7011"]
+    },
+    {
+      "id": "dining",
+      "label": "Dining & Food Service",
+      "categories": ["dining"],
+      "mccRanges": ["5812-5814", "5462"]
+    },
+    {
+      "id": "groceries",
+      "label": "Groceries & Supermarkets",
+      "categories": ["groceries"],
+      "mccRanges": ["5411-5499"]
+    },
+    {
+      "id": "gas",
+      "label": "Gas & Fuel",
+      "categories": ["gas"],
+      "mccRanges": ["5172", "5541-5542", "5983"]
+    },
+    {
+      "id": "retail",
+      "label": "Retail & Shopping",
+      "categories": ["retail"],
+      "mccRanges": ["5200-5399", "5611-5699", "5732-5999"]
+    },
+    {
+      "id": "entertainment",
+      "label": "Entertainment & Recreation",
+      "categories": ["entertainment", "streaming"],
+      "mccRanges": ["7832-7999", "4899"]
+    },
+    {
+      "id": "healthcare",
+      "label": "Healthcare & Pharmacy",
+      "categories": ["healthcare"],
+      "mccRanges": ["0742", "5912", "8011-8099"]
+    },
+    {
+      "id": "utilities",
+      "label": "Utilities & Telecom",
+      "categories": ["utilities"],
+      "mccRanges": ["4812-4899", "4900"]
+    },
+    {
+      "id": "financial",
+      "label": "Financial Services",
+      "categories": ["cash_equivalent", "insurance"],
+      "mccRanges": ["6010-6051", "6300-6399"]
+    },
+    {
+      "id": "other",
+      "label": "Other & Miscellaneous",
+      "categories": ["other", "government", "charity", "education"],
+      "mccRanges": ["9000-9999"]
+    }
+  ]
+}
