@@ -20,7 +20,8 @@
     "dev": "tsc --watch",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:eval": "vitest run src/eval"
   },
   "dependencies": {
     "@stipulate/schema": "workspace:*",

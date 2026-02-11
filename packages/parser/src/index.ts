@@ -73,23 +73,47 @@ export {
 
 export {
   normalizeCapPeriod,
+  parseCapPeriodFromText,
   parseCapFromText,
   normalizeBenefitCaps,
   extractCapsFromText,
   annualizeCapAmount,
   mergeDuplicateCaps,
   isValidBenefitPeriod,
+  computeCapTrackerState,
+  capPeriodBounds,
+  type CapTrackerState,
+  type ParsedCapRule,
 } from "./normalize/caps.js";
 
 export {
   EXCLUSION_PATTERNS,
+  FAST_FOOD_MERCHANTS,
+  DINING_EXCLUSION_POLICIES,
   normalizeExclusionType,
+  parseMerchantListExclusions,
+  applyIssuerDiningExclusions,
+  disambiguateDiningMerchant,
   extractExclusionsFromText,
   normalizeBenefitExclusions,
   dedupeExclusions,
   isTransactionExcluded,
   parseExclusionFootnotes,
 } from "./normalize/exclusions.js";
+
+export {
+  DEFAULT_STACKING_RULES,
+  detectPortalBonus,
+  detectLimitedTimeOffer,
+  detectAnniversaryBonus,
+  extractMultiplierLayers,
+  computeStackedMultiplier,
+  applyMultiplierStacking,
+  benefitRulesToLayers,
+  type MultiplierLayerType,
+  type MultiplierLayer,
+  type StackedMultiplierResult,
+} from "./normalize/multiplier-stacking.js";
 
 export {
   StubLLMClient,
@@ -114,3 +138,25 @@ export {
   extractionToPrompt,
   type PipelineRunnerOptions,
 } from "./pipeline/runner.js";
+
+export {
+  hashContent,
+  hasContentChanged,
+  fetchAndHash,
+  reparseCard,
+  ReparseScheduler,
+  summarizeReparseBatch,
+  type ReparseTarget,
+  type ReparseJobResult,
+  type ReparseSchedulerOptions,
+} from "./scheduler/reparse.js";
+
+export {
+  GOLDEN_FIXTURES,
+  evaluateFixture,
+  runEvalSuite,
+  assertEvalGate,
+  type EvalFixture,
+  type EvalCaseResult,
+  type EvalReport,
+} from "./eval/harness.js";
