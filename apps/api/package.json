@@ -14,16 +14,19 @@
     "typecheck": "tsc --noEmit",
     "db:migrate": "tsx scripts/migrate.ts",
     "db:seed": "tsx scripts/seed-cards.ts",
-    "db:seed-valuations": "tsx scripts/seed-valuations.ts"
+    "db:seed-valuations": "tsx scripts/seed-valuations.ts",
+    "schedule:reparse": "tsx scripts/schedule-reparse.ts"
   },
   "dependencies": {
-    "@stipulate/schema": "workspace:*",
     "@hono/node-server": "^1.14.1",
+    "@stipulate/parser": "workspace:*",
+    "@stipulate/schema": "workspace:*",
     "hono": "^4.7.5",
     "ioredis": "^5.6.0",
     "pg": "^8.14.1",
     "pino": "^9.6.0",
     "pino-pretty": "^13.0.0",
+    "thread-stream": "^4.2.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {
