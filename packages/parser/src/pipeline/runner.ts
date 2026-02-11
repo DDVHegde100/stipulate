@@ -10,6 +10,7 @@ import { extractFromHtmlString } from "../extract/web.js";
 import { normalizeBenefitCategories } from "../normalize/categories.js";
 import { normalizeBenefitCaps } from "../normalize/caps.js";
 import { normalizeBenefitExclusions } from "../normalize/exclusions.js";
+import { applyMultiplierStacking } from "../normalize/multiplier-stacking.js";
 import {
   parseBenefitsWithLLM,
   rawBenefitsToRules,
@@ -82,9 +83,13 @@ export class BenefitParserPipeline {
       recordStage(capsStage.stage);
       rawBenefits = capsStage.benefits;
 
-      const exclusionsStage = this.runNormalizeExclusions(rawBenefits);
+      const exclusionsStage = this.runNormalizeExclusions(rawBenefits, config);
       recordStage(exclusionsStage.stage);
       rawBenefits = exclusionsStage.benefits;
+
+      const multipliersStage = this.runNormalizeMultipliers(rawBenefits, config, text);
+      recordStage(multipliersStage.stage);
+      rawBenefits = multipliersStage.benefits;
 
       const validateStage = this.runValidate(rawBenefits, config.cardId);
       recordStage(validateStage.stage);
@@ -288,9 +293,12 @@ export class BenefitParserPipeline {
 
   private runNormalizeExclusions(
     benefits: RawParsedBenefit[],
+    config: PipelineConfig,
   ): { benefits: RawParsedBenefit[]; stage: StageResult } {
     const start = Date.now();
-    const { benefits: normalized, notes } = normalizeBenefitExclusions(benefits);
+    const { benefits: normalized, notes } = normalizeBenefitExclusions(benefits, {
+      issuer: config.issuer,
+    });
 
     return {
       benefits: normalized,
@@ -299,6 +307,29 @@ export class BenefitParserPipeline {
         success: true,
         durationMs: Date.now() - start,
         warnings: notes,
+      },
+    };
+  }
+
+  private runNormalizeMultipliers(
+    benefits: RawParsedBenefit[],
+    config: PipelineConfig,
+    sourceText: string,
+  ): { benefits: RawParsedBenefit[]; stage: StageResult } {
+    const start = Date.now();
+    const { benefits: normalized, stackingNotes } = applyMultiplierStacking(
+      benefits,
+      config.issuer,
+      sourceText,
+    );
+
+    return {
+      benefits: normalized,
+      stage: {
+        stage: "normalize_multipliers",
+        success: true,
+        durationMs: Date.now() - start,
+        warnings: stackingNotes,
       },
     };
   }
@@ -415,7 +446,7 @@ export function renormalizeRules(
     defaultCurrency: "USD",
     statementCycleMonths: 1,
   }).benefits;
-  normalized = normalizeBenefitExclusions(normalized).benefits;
+  normalized = normalizeBenefitExclusions(normalized, { issuer }).benefits;
 
   return rawBenefitsToRules(normalized, rules[0]?.cardId ?? "unknown").map(
     (rule) => ({

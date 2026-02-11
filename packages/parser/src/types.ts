@@ -131,6 +131,7 @@ export type PipelineStage =
   | "normalize_categories"
   | "normalize_caps"
   | "normalize_exclusions"
+  | "normalize_multipliers"
   | "validate"
   | "assemble";
 
