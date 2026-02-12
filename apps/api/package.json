@@ -19,7 +19,9 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.14.1",
+    "@stipulate/mcc": "workspace:*",
     "@stipulate/parser": "workspace:*",
+    "@stipulate/routing": "workspace:*",
     "@stipulate/schema": "workspace:*",
     "hono": "^4.7.5",
     "ioredis": "^5.6.0",

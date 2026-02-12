@@ -8,9 +8,9 @@ import {
 } from "../resolver.js";
 
 describe("loadMccDatabase", () => {
-  it("loads at least 50 MCC entries", () => {
+  it("loads at least 400 MCC entries", () => {
     const entries = loadMccDatabase();
-    expect(entries.length).toBeGreaterThanOrEqual(50);
+    expect(entries.length).toBeGreaterThanOrEqual(400);
   });
 });
 

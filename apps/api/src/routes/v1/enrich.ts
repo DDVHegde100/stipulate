@@ -3,10 +3,12 @@ import { HTTPException } from 'hono/http-exception';
 
 import type { AppBindings } from '../../app.js';
 import {
-  RoutingServiceError,
-  enrichRequestSchema,
-  routingService,
-} from '../../services/routing.service.js';
+  EnrichServiceError,
+  EnrichRequestSchema,
+  enrichMerchant,
+  submitCorrection,
+  MccCorrectionRequestSchema,
+} from '../../services/enrich.service.js';
 
 export const enrichHandler = new Hono<AppBindings>();
 
@@ -16,7 +18,7 @@ enrichHandler.post('/', async (c) => {
     throw new HTTPException(400, { message: 'Request body must be valid JSON' });
   });
 
-  const parsed = enrichRequestSchema.safeParse(body);
+  const parsed = EnrichRequestSchema.safeParse(body);
 
   if (!parsed.success) {
     return c.json(
@@ -33,27 +35,50 @@ enrichHandler.post('/', async (c) => {
   }
 
   try {
-    const result = await routingService.enrich(parsed.data, requestId);
-
-    return c.json({
-      data: result,
-      requestId,
-    });
+    const result = await enrichMerchant(parsed.data, requestId);
+    return c.json({ data: result, requestId });
   } catch (error) {
-    if (error instanceof RoutingServiceError) {
+    if (error instanceof EnrichServiceError) {
+      const status = error.code === 'RECEIPT_PARSE_FAILED' ? 422 : 400;
       return c.json(
         {
-          error: {
-            code: error.code,
-            message: error.message,
-            details: error.details,
-          },
+          error: { code: error.code, message: error.message, details: error.details },
           requestId,
         },
+        status,
+      );
+    }
+    throw error;
+  }
+});
+
+enrichHandler.post('/corrections', async (c) => {
+  const requestId = c.get('requestId');
+  const body: unknown = await c.req.json().catch(() => {
+    throw new HTTPException(400, { message: 'Request body must be valid JSON' });
+  });
+
+  const parsed = MccCorrectionRequestSchema.safeParse(body);
+  if (!parsed.success) {
+    return c.json(
+      {
+        error: { code: 'VALIDATION_ERROR', message: 'Invalid correction', details: parsed.error.flatten() },
+        requestId,
+      },
+      422,
+    );
+  }
+
+  try {
+    const result = await submitCorrection(parsed.data);
+    return c.json({ data: result, requestId }, 201);
+  } catch (error) {
+    if (error instanceof EnrichServiceError) {
+      return c.json(
+        { error: { code: error.code, message: error.message }, requestId },
         422,
       );
     }
-
     throw error;
   }
 });

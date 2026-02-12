@@ -123,3 +123,14 @@ export {
   type BenefitLookupQuery,
   type CardBenefitsResponse,
 } from "./changelog.js";
+
+export {
+  EnrichRequestSchema,
+  EnrichResponseSchema,
+  MccCorrectionRequestSchema,
+  MccCorrectionResponseSchema,
+  type EnrichRequest,
+  type EnrichResponse,
+  type MccCorrectionRequest,
+  type MccCorrectionResponse,
+} from "./enrich.js";
