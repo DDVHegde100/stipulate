@@ -93,6 +93,32 @@ export const CITI_OVERRIDES: IssuerOverride[] = [
   },
 ];
 
+/** Discover rotating category overrides. */
+export const DISCOVER_OVERRIDES: IssuerOverride[] = [
+  {
+    issuer: "Discover",
+    merchantPattern: /amazon/i,
+    category: "retail",
+    reason: "Discover codes Amazon as retail, not online shopping bonus",
+  },
+  {
+    issuer: "Discover",
+    merchantPattern: /paypal/i,
+    category: "other",
+    reason: "PayPal purchases typically earn base rate on Discover",
+  },
+];
+
+/** BofA Preferred Rewards category overrides. */
+export const BOFA_OVERRIDES: IssuerOverride[] = [
+  {
+    issuer: "Bank of America",
+    merchantPattern: /mccormick/i,
+    category: "dining",
+    reason: "BofA dining category for select restaurants",
+  },
+];
+
 /** All issuer overrides indexed by issuer name. */
 export const ISSUER_OVERRIDES: Record<string, IssuerOverride[]> = {
   Chase: CHASE_OVERRIDES,
@@ -100,6 +126,8 @@ export const ISSUER_OVERRIDES: Record<string, IssuerOverride[]> = {
   "American Express": AMEX_OVERRIDES,
   "Capital One": CAPITAL_ONE_OVERRIDES,
   Citi: CITI_OVERRIDES,
+  Discover: DISCOVER_OVERRIDES,
+  "Bank of America": BOFA_OVERRIDES,
 };
 
 /** Find matching issuer override for a merchant name. */
