@@ -1,6 +1,11 @@
 export { ROUTING_MODEL_VERSION, routeTransaction, routeBatch } from './engine.js';
 export type { CardBenefitBundle, RouteEngineOptions } from './engine.js';
 
+export { buildRoutingFactors } from './explainability.js';
+export { runRoutingBenchmark } from './benchmark/harness.js';
+export type { BenchmarkResult } from './benchmark/harness.js';
+export { generateRoutingScenarios } from './fixtures/scenarios.js';
+
 export {
   checkRuleExclusions,
   findMatchingRule,

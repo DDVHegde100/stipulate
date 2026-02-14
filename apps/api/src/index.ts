@@ -5,6 +5,7 @@ import { loadEnv } from './config/env.js';
 import { connectRedis, disconnectRedis } from './lib/redis.js';
 import { disconnectDatabase } from './lib/db.js';
 import { logFatal, logShutdown, logStartup, logger } from './lib/logger.js';
+import { prewarmRoutingCache } from './cache/prewarm.js';
 
 async function bootstrap(): Promise<void> {
   const env = loadEnv();
@@ -12,6 +13,16 @@ async function bootstrap(): Promise<void> {
   const port = env.PORT;
 
   await Promise.allSettled([connectRedis()]);
+
+  if (env.NODE_ENV !== 'test') {
+    prewarmRoutingCache()
+      .then((manifest) => {
+        logger.info({ warmedAt: manifest.warmedAt, keys: manifest.cardBundleKeys.length }, 'Routing cache prewarmed');
+      })
+      .catch((err) => {
+        logger.warn({ err }, 'Routing cache prewarm skipped');
+      });
+  }
 
   const server = serve(
     {

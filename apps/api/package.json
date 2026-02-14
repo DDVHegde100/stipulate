@@ -15,7 +15,9 @@
     "db:migrate": "tsx scripts/migrate.ts",
     "db:seed": "tsx scripts/seed-cards.ts",
     "db:seed-valuations": "tsx scripts/seed-valuations.ts",
-    "schedule:reparse": "tsx scripts/schedule-reparse.ts"
+    "schedule:reparse": "tsx scripts/schedule-reparse.ts",
+    "benchmark:route": "tsx scripts/benchmark-route.ts",
+    "webhooks:deliver": "tsx scripts/webhook-worker.ts"
   },
   "dependencies": {
     "@hono/node-server": "^1.14.1",
