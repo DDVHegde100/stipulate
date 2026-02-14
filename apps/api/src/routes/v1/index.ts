@@ -6,6 +6,7 @@ import { enrichHandler } from './enrich.js';
 import { routeHandler } from './route.js';
 import { cardsHandler } from './cards.js';
 import { changelogHandler } from './changelog.js';
+import { openapiHandler } from './openapi.js';
 
 export const v1Routes = new Hono<AppBindings>();
 
@@ -15,6 +16,7 @@ v1Routes.route('/route', routeHandler);
 v1Routes.route('/enrich', enrichHandler);
 v1Routes.route('/cards', cardsHandler);
 v1Routes.route('/changelog', changelogHandler);
+v1Routes.route('/openapi', openapiHandler);
 
 v1Routes.get('/', (c) => {
   return c.json({
@@ -29,6 +31,16 @@ v1Routes.get('/', (c) => {
         method: 'POST',
         path: '/v1/enrich',
         description: 'Normalize merchant metadata for benefit matching',
+      },
+      enrichCorrections: {
+        method: 'POST',
+        path: '/v1/enrich/corrections',
+        description: 'Submit crowd-sourced MCC corrections',
+      },
+      openapi: {
+        method: 'GET',
+        path: '/v1/openapi',
+        description: 'OpenAPI 3.1 specification',
       },
       cards: {
         method: 'GET',

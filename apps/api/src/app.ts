@@ -12,8 +12,6 @@ import { timing } from './middleware/timing.js';
 import { healthRoutes } from './routes/health.js';
 import { v1Routes } from './routes/v1/index.js';
 import { adminRoutes } from './routes/admin/index.js';
-import type { RoutingService } from './services/routing.service.js';
-import { routingService as defaultRoutingService } from './services/routing.service.js';
 
 export type AppVariables = {
   requestId: string;
@@ -25,7 +23,6 @@ export type AppBindings = {
 };
 
 export interface CreateAppOptions {
-  routingService?: RoutingService;
   enablePrettyJson?: boolean;
 }
 
@@ -121,13 +118,6 @@ export function createApp(options: CreateAppOptions = {}): Hono<AppBindings> {
       500,
     );
   });
-
-  if (options.routingService) {
-    // Reserved for dependency injection in tests; routes use module singleton today.
-    void options.routingService;
-  } else {
-    void defaultRoutingService;
-  }
 
   return app;
 }

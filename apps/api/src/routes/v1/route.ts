@@ -4,8 +4,8 @@ import { HTTPException } from 'hono/http-exception';
 import type { AppBindings } from '../../app.js';
 import {
   RoutingServiceError,
-  routeRequestSchema,
-  routingService,
+  RouteRequestSchema,
+  routePurchase,
 } from '../../services/routing.service.js';
 
 export const routeHandler = new Hono<AppBindings>();
@@ -16,7 +16,7 @@ routeHandler.post('/', async (c) => {
     throw new HTTPException(400, { message: 'Request body must be valid JSON' });
   });
 
-  const parsed = routeRequestSchema.safeParse(body);
+  const parsed = RouteRequestSchema.safeParse(body);
 
   if (!parsed.success) {
     return c.json(
@@ -33,7 +33,7 @@ routeHandler.post('/', async (c) => {
   }
 
   try {
-    const result = await routingService.route(parsed.data, requestId);
+    const result = await routePurchase(parsed.data, requestId);
 
     return c.json({
       data: result,
@@ -41,7 +41,8 @@ routeHandler.post('/', async (c) => {
     });
   } catch (error: unknown) {
     if (error instanceof RoutingServiceError) {
-      const status = error.code === 'INVALID_REQUEST' ? 422 : 400;
+      const status =
+        error.code === 'INVALID_REQUEST' ? 422 : error.code === 'NO_CARDS' ? 400 : 500;
 
       return c.json(
         {

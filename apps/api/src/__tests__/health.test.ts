@@ -98,39 +98,24 @@ describe('health routes', () => {
     expect(body.requestId).toEqual(expect.any(String));
   });
 
-  it('POST /v1/route returns card recommendation for valid payload', async () => {
+  it('POST /v1/route returns ranked cards for valid payload', async () => {
     const app = createApp();
     const response = await app.request('/v1/route', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        amount: 120.5,
-        currency: 'USD',
-        merchant: {
-          merchantName: 'Blue Bottle Coffee',
-          category: 'dining',
-        },
-        cards: [
-          {
-            issuer: 'Chase',
-            productName: 'Sapphire Preferred',
-            network: 'visa',
-          },
-          {
-            issuer: 'American Express',
-            productName: 'Gold Card',
-            network: 'amex',
-          },
-        ],
+        merchantName: 'Blue Bottle Coffee',
+        mcc: '5812',
+        amount: { amountMinor: 12050, currency: 'USD' },
+        userCardIds: ['chase_sapphire_preferred', 'amex_gold'],
       }),
     });
 
     const body = await response.json();
 
     expect(response.status).toBe(200);
-    expect(body.data.recommended).toBeTruthy();
-    expect(body.data.recommended.card.network).toEqual(expect.any(String));
-    expect(body.data.alternatives.length).toBeGreaterThanOrEqual(0);
+    expect(body.data.bestCardId).toEqual(expect.any(String));
+    expect(body.data.rankedCards.length).toBeGreaterThanOrEqual(1);
   });
 
   it('POST /v1/enrich normalizes merchant metadata', async () => {
@@ -147,7 +132,7 @@ describe('health routes', () => {
     const body = await response.json();
 
     expect(response.status).toBe(200);
-    expect(body.data.merchant).toMatchObject({
+    expect(body.data.enrichment).toMatchObject({
       category: 'groceries',
       mcc: '5411',
       confidence: expect.any(Number),
