@@ -1,15 +1,8 @@
-import { randomUUID } from 'node:crypto';
-import { createHash } from 'node:crypto';
+import type { IngestionStatus } from '../repositories/ingestion.repository.js';
+import * as ingestionRepo from '../repositories/ingestion.repository.js';
+import { publishIngestionBenefits } from './benefit-publish.service.js';
 
-export type IngestionStatus =
-  | 'queued'
-  | 'extracting'
-  | 'parsing'
-  | 'review'
-  | 'approved'
-  | 'rejected'
-  | 'published'
-  | 'failed';
+export type { IngestionStatus };
 
 export interface IngestionJob {
   id: string;
@@ -29,9 +22,6 @@ export interface IngestionJob {
   completedAt?: string;
 }
 
-/** In-memory job store — replaced by Postgres in production path. */
-const jobStore = new Map<string, IngestionJob>();
-
 export interface CreateIngestionJobInput {
   cardId: string;
   sourceUrl: string;
@@ -39,47 +29,59 @@ export interface CreateIngestionJobInput {
   priority?: number;
 }
 
+function toJob(row: ingestionRepo.IngestionJobRow): IngestionJob {
+  return {
+    id: row.id,
+    cardId: row.cardId,
+    sourceUrl: row.sourceUrl,
+    sourceFormat: row.sourceFormat,
+    status: row.status,
+    priority: row.priority,
+    contentHash: row.contentHash,
+    confidence: row.confidence,
+    requiresReview: row.requiresReview,
+    reviewNotes: row.reviewNotes,
+    reviewedBy: row.reviewedBy,
+    errorMessage: row.errorMessage,
+    createdAt: row.createdAt,
+    updatedAt: row.updatedAt,
+    completedAt: row.completedAt,
+  };
+}
+
 export async function createIngestionJob(input: CreateIngestionJobInput): Promise<IngestionJob> {
-  const now = new Date().toISOString();
-  const job: IngestionJob = {
-    id: randomUUID(),
+  const job = await ingestionRepo.insertIngestionJob({
     cardId: input.cardId,
     sourceUrl: input.sourceUrl,
     sourceFormat: input.sourceFormat ?? inferFormat(input.sourceUrl),
-    status: 'queued',
     priority: input.priority ?? 0,
-    requiresReview: false,
-    createdAt: now,
-    updatedAt: now,
-  };
-
-  jobStore.set(job.id, job);
-
-  // Defer pipeline so callers receive the queued job first
-  setImmediate(() => {
-    void processJobAsync(job.id);
   });
 
-  return job;
+  if (process.env.SQS_PARSER_JOBS_QUEUE && process.env.NODE_ENV !== 'test') {
+    const { publishIngestionJobMessage } = await import('../lib/sqs.js');
+    await publishIngestionJobMessage({ jobId: job.id, cardId: job.cardId }).catch(() => {});
+  } else {
+    setImmediate(() => {
+      void import('./ingestion-pipeline.service.js').then(({ processIngestionJob }) =>
+        processIngestionJob(job.id),
+      );
+    });
+  }
+
+  return toJob(job);
 }
 
 export async function listIngestionJobs(filter: {
   status?: IngestionStatus;
   limit?: number;
 }): Promise<IngestionJob[]> {
-  let jobs = [...jobStore.values()];
-
-  if (filter.status) {
-    jobs = jobs.filter((j) => j.status === filter.status);
-  }
-
-  jobs.sort((a, b) => b.priority - a.priority || a.createdAt.localeCompare(b.createdAt));
-
-  return jobs.slice(0, filter.limit ?? 50);
+  const rows = await ingestionRepo.listIngestionJobs(filter);
+  return rows.map(toJob);
 }
 
 export async function getIngestionJob(id: string): Promise<IngestionJob | null> {
-  return jobStore.get(id) ?? null;
+  const row = await ingestionRepo.getIngestionJobById(id);
+  return row ? toJob(row) : null;
 }
 
 export async function reviewIngestionJob(input: {
@@ -88,24 +90,30 @@ export async function reviewIngestionJob(input: {
   reviewedBy: string;
   notes?: string;
 }): Promise<IngestionJob> {
-  const job = jobStore.get(input.id);
+  const job = await ingestionRepo.getIngestionJobById(input.id);
   if (!job) throw new IngestionServiceError('Job not found', 'NOT_FOUND');
   if (job.status !== 'review') {
     throw new IngestionServiceError(`Job is in status "${job.status}", expected "review"`, 'INVALID_STATE');
   }
 
-  job.status = input.action === 'approve' ? 'approved' : 'rejected';
-  job.reviewedBy = input.reviewedBy;
-  job.reviewNotes = input.notes;
-  job.updatedAt = new Date().toISOString();
-
-  if (input.action === 'approve') {
-    job.status = 'published';
-    job.completedAt = new Date().toISOString();
+  if (input.action === 'reject') {
+    const updated = await ingestionRepo.updateIngestionJob(input.id, {
+      status: 'rejected',
+      reviewedBy: input.reviewedBy,
+      reviewNotes: input.notes,
+    });
+    return toJob(updated!);
   }
 
-  jobStore.set(job.id, job);
-  return job;
+  await ingestionRepo.updateIngestionJob(input.id, {
+    status: 'approved',
+    reviewedBy: input.reviewedBy,
+    reviewNotes: input.notes,
+  });
+
+  await publishIngestionBenefits(input.id);
+  const published = await ingestionRepo.getIngestionJobById(input.id);
+  return toJob(published!);
 }
 
 export class IngestionServiceError extends Error {
@@ -122,49 +130,6 @@ function inferFormat(url: string): IngestionJob['sourceFormat'] {
   if (url.endsWith('.pdf')) return 'pdf';
   if (url.endsWith('.md')) return 'markdown';
   return 'html';
-}
-
-async function processJobAsync(jobId: string): Promise<void> {
-  const job = jobStore.get(jobId);
-  if (!job) return;
-
-  try {
-    job.status = 'extracting';
-    job.updatedAt = new Date().toISOString();
-    job.contentHash = createHash('sha256').update(job.sourceUrl).digest('hex').slice(0, 16);
-    jobStore.set(jobId, job);
-
-    await sleep(50);
-
-    job.status = 'parsing';
-    job.updatedAt = new Date().toISOString();
-    jobStore.set(jobId, job);
-
-    await sleep(50);
-
-    // Simulate confidence scoring — flag for review if low
-    const confidence = 0.72 + Math.random() * 0.25;
-    job.confidence = Math.round(confidence * 1000) / 1000;
-    job.requiresReview = confidence < 0.85;
-    job.status = job.requiresReview ? 'review' : 'approved';
-    job.updatedAt = new Date().toISOString();
-
-    if (!job.requiresReview) {
-      job.status = 'published';
-      job.completedAt = new Date().toISOString();
-    }
-
-    jobStore.set(jobId, job);
-  } catch (error) {
-    job.status = 'failed';
-    job.errorMessage = error instanceof Error ? error.message : String(error);
-    job.updatedAt = new Date().toISOString();
-    jobStore.set(jobId, job);
-  }
-}
-
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export const ingestionService = {

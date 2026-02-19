@@ -1,17 +1,23 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { createApp } from '../app.js';
+import { resetEnvCache } from '../config/env.js';
+import { resetIngestionMemoryStore } from '../repositories/ingestion.repository.js';
 
 describe('admin ingestion API', () => {
-  const app = createApp();
+  let app: ReturnType<typeof createApp>;
   const adminHeaders = {
-    'X-Admin-Key': 'test_api_key_ci',
+    'X-Admin-Key': 'test_admin_key_ci_only',
     'Content-Type': 'application/json',
   };
 
   beforeEach(() => {
-    process.env.API_KEY = 'test_api_key_ci';
-    process.env.ADMIN_API_KEY = 'test_api_key_ci';
+    resetEnvCache();
+    resetIngestionMemoryStore();
+    process.env.API_KEY = 'test_admin_key_ci_only';
+    process.env.ADMIN_API_KEY = 'test_admin_key_ci_only';
     process.env.NODE_ENV = 'test';
+    process.env.LOG_LEVEL = 'silent';
+    app = createApp();
   });
 
   it('POST /admin/ingestion/jobs creates a job', async () => {
