@@ -31,6 +31,16 @@ const envSchema = z
           .map((origin) => origin.trim())
           .filter(Boolean),
       ),
+    OPENAI_API_KEY: z.string().optional(),
+    OPENAI_BASE_URL: z.string().url().optional(),
+    PARSER_CONFIDENCE_THRESHOLD: z.coerce.number().min(0).max(1).optional(),
+    PARSER_LLM_MODEL: z.string().optional(),
+    AWS_REGION: z.string().default('us-east-1'),
+    AWS_ACCESS_KEY_ID: z.string().optional(),
+    AWS_SECRET_ACCESS_KEY: z.string().optional(),
+    AWS_ENDPOINT_URL: z.string().url().optional(),
+    S3_BENEFIT_PDF_BUCKET: z.string().optional(),
+    SQS_PARSER_JOBS_QUEUE: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     if (data.NODE_ENV === 'production' && !data.API_KEY) {
