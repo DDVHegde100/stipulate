@@ -142,3 +142,17 @@ export async function listWebhookSubscriptions(orgId: string): Promise<
     created_at: row.created_at,
   }));
 }
+
+/** All active subscriptions listening for an event type. */
+export async function listActiveSubscriptionsForEvent(
+  eventType: string,
+): Promise<Array<{ id: string; org_id: string; url: string }>> {
+  const result = await query<{ id: string; org_id: string; url: string; events: unknown }>(
+    `SELECT id, org_id, url, events FROM webhook_subscriptions WHERE is_active = TRUE`,
+  );
+
+  return result.rows.filter((row) => {
+    const events = Array.isArray(row.events) ? row.events : JSON.parse(String(row.events ?? '[]'));
+    return events.includes(eventType) || events.includes('*');
+  });
+}

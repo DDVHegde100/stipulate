@@ -167,6 +167,48 @@ export async function listChangelog(options: {
   return { rows, hasMore };
 }
 
+/** Insert or replace benefit rules from ingestion publish. */
+export async function upsertBenefitRules(
+  client: pg.PoolClient,
+  input: {
+    cardUuid: string;
+    rules: Array<{
+      id: string;
+      cardId: string;
+      name: string;
+      category: string;
+      multiplier: number;
+      rewardType: string;
+      caps?: Array<{ period: string; limit: { amountMinor: number; currency: string } }>;
+      exclusions?: unknown[];
+    }>;
+    sourceUrl: string;
+    version: number;
+  },
+): Promise<void> {
+  for (const rule of input.rules) {
+    const cap = rule.caps?.[0];
+    await client.query(
+      `INSERT INTO benefit_rules
+         (card_id, category, multiplier, reward_type, cap_amount_cents, cap_period, exclusions, source_url, confidence, version, raw_json)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+      [
+        input.cardUuid,
+        rule.category,
+        rule.multiplier,
+        rule.rewardType,
+        cap?.limit.amountMinor ?? null,
+        cap?.period ?? null,
+        JSON.stringify(rule.exclusions ?? []),
+        input.sourceUrl,
+        0.9,
+        input.version,
+        JSON.stringify(rule),
+      ],
+    );
+  }
+}
+
 /** Insert a new benefit version snapshot (used by ingestion pipeline). */
 export async function publishBenefitVersion(
   client: pg.PoolClient,
