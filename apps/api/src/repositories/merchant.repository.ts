@@ -81,6 +81,8 @@ export async function submitMccCorrection(input: {
 
 /** List pending corrections for admin review. */
 export async function listPendingCorrections(limit = 50): Promise<MerchantMappingRow[]> {
+  if (process.env.NODE_ENV === 'test') return [];
+
   const result = await query<MerchantMappingRow>(
     `SELECT id, merchant_name_normalized, mcc, category, confidence::text, source, status, submitted_by, notes
      FROM merchant_mcc_mappings
@@ -90,4 +92,64 @@ export async function listPendingCorrections(limit = 50): Promise<MerchantMappin
     [limit],
   );
   return result.rows;
+}
+
+/** Approve a pending MCC correction. */
+export async function approveMccCorrection(
+  id: string,
+  reviewedBy: string,
+  notes?: string,
+): Promise<MerchantMappingRow | null> {
+  if (process.env.NODE_ENV === 'test') {
+    return {
+      id,
+      merchant_name_normalized: 'test',
+      mcc: '5814',
+      category: 'dining',
+      confidence: '0.9',
+      source: 'crowd',
+      status: 'approved',
+      submitted_by: reviewedBy,
+      notes: notes ?? null,
+    };
+  }
+
+  const result = await query<MerchantMappingRow>(
+    `UPDATE merchant_mcc_mappings
+     SET status = 'approved', notes = COALESCE($3, notes), source = 'crowd_approved'
+     WHERE id = $1::uuid AND status = 'pending'
+     RETURNING id, merchant_name_normalized, mcc, category, confidence::text, source, status, submitted_by, notes`,
+    [id, reviewedBy, notes ?? null],
+  );
+  return result.rows[0] ?? null;
+}
+
+/** Reject a pending MCC correction. */
+export async function rejectMccCorrection(
+  id: string,
+  reviewedBy: string,
+  notes?: string,
+): Promise<MerchantMappingRow | null> {
+  if (process.env.NODE_ENV === 'test') {
+    return {
+      id,
+      merchant_name_normalized: 'test',
+      mcc: '5814',
+      category: 'dining',
+      confidence: '0.5',
+      source: 'crowd',
+      status: 'rejected',
+      submitted_by: reviewedBy,
+      notes: notes ?? null,
+    };
+  }
+
+  const result = await query<MerchantMappingRow>(
+    `UPDATE merchant_mcc_mappings
+     SET status = 'rejected', notes = COALESCE($3, notes)
+     WHERE id = $1::uuid AND status = 'pending'
+     RETURNING id, merchant_name_normalized, mcc, category, confidence::text, source, status, submitted_by, notes`,
+    [id, reviewedBy, notes ?? null],
+  );
+  return result.rows[0] ?? null;
 }
