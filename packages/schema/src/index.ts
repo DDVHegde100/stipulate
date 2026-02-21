@@ -56,6 +56,22 @@ export {
 } from "./merchant.js";
 
 export {
+  CardCatalogQuerySchema,
+  CardSummarySchema,
+  CardCatalogResponseSchema,
+  type CardCatalogQuery,
+  type CardSummary,
+  type CardCatalogResponse,
+} from "./catalog-query.js";
+
+export {
+  WalletCardSchema,
+  RouteRecommendationSchema,
+  type WalletCard,
+  type RouteRecommendation,
+} from "./mobile.js";
+
+export {
   RouteRequestSchema,
   RoutingFactorSchema,
   RankedCardSchema,

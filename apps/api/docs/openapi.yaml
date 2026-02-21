@@ -98,6 +98,46 @@ paths:
         '200':
           description: Usage totals for the org
 
+  /cards:
+    get:
+      operationId: listCards
+      summary: Search and list cards in the catalog
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 25
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: issuer
+          in: query
+          schema:
+            type: string
+        - name: network
+          in: query
+          schema:
+            type: string
+            enum: [visa, mastercard, amex, discover]
+        - name: q
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Paginated card catalog
+
+  /valuations:
+    get:
+      operationId: getValuations
+      summary: Points program valuations and org overrides
+      responses:
+        '200':
+          description: Valuation programs and overrides
+
   /enrich:
     post:
       operationId: enrichMerchant
