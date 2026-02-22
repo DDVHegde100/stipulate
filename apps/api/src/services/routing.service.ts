@@ -103,9 +103,12 @@ async function loadCardBundles(cardIds: string[]): Promise<CardBenefitBundle[]> 
 }
 
 /** Load valuation table from DB or use defaults. */
-async function loadValuationTable(): Promise<PointsValuationTable> {
+async function loadValuationTable(orgId?: string): Promise<PointsValuationTable> {
   try {
-    const rows = await valuationRepo.loadValuationPrograms();
+    const [rows, overrideMap] = await Promise.all([
+      valuationRepo.loadValuationPrograms(),
+      valuationRepo.loadOverrideMap(orgId),
+    ]);
     if (rows.length === 0) return DEFAULT_VALUATION_TABLE;
 
     return PointsValuationTableSchema.parse({
@@ -116,7 +119,7 @@ async function loadValuationTable(): Promise<PointsValuationTable> {
         id: r.program_id,
         name: r.name,
         issuer: r.issuer,
-        centsPerPoint: parseFloat(r.cents_per_point),
+        centsPerPoint: overrideMap.get(r.program_id) ?? parseFloat(r.cents_per_point),
         floorCpp: r.floor_cpp ? parseFloat(r.floor_cpp) : undefined,
         ceilingCpp: r.ceiling_cpp ? parseFloat(r.ceiling_cpp) : undefined,
         transferPartners: [],
@@ -130,6 +133,7 @@ async function loadValuationTable(): Promise<PointsValuationTable> {
 export async function routePurchase(
   request: RouteRequest,
   requestId: string,
+  context: { orgId?: string } = {},
 ): Promise<RouteResponse> {
   const start = Date.now();
   const parsed = RouteRequestSchema.safeParse(request);
@@ -149,7 +153,7 @@ export async function routePurchase(
   try {
     const [bundles, valuation] = await Promise.all([
       loadCardBundles(payload.userCardIds),
-      loadValuationTable(),
+      loadValuationTable(context.orgId),
     ]);
 
     if (bundles.length === 0) {
@@ -159,6 +163,8 @@ export async function routePurchase(
     let spendRecords: Array<{ category: string; spentMinor: number }> = [];
     try {
       const rows = await spendRepo.getUserCategorySpend({
+        orgId: context.orgId,
+        userRef: payload.userRef,
         cardIds: payload.userCardIds,
         periodStart: spendRepo.annualPeriodStart(),
       });
@@ -187,6 +193,19 @@ export async function routePurchase(
     );
 
     const latencyMs = Date.now() - start;
+
+    if (payload.trackSpend && process.env.NODE_ENV !== 'test') {
+      const category = response.merchantEnrichment?.category ?? 'other';
+      void spendRepo.recordCategorySpend({
+        orgId: context.orgId,
+        userRef: payload.userRef,
+        cardId: response.bestCardId,
+        category,
+        capPeriod: 'annual',
+        periodStart: spendRepo.annualPeriodStart(),
+        spentCents: payload.amount.amountMinor,
+      }).catch(() => {});
+    }
 
     if (process.env.NODE_ENV !== 'test') {
       routingRepo.logRoutingRequest({

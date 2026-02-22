@@ -38,7 +38,9 @@ routeHandler.post('/', async (c) => {
   }
 
   try {
-    const result = await routePurchase(parsed.data, requestId);
+    const result = await routePurchase(parsed.data, requestId, {
+      orgId: c.get('orgId'),
+    });
 
     void recordApiUsage('route', {
       orgId: c.get('orgId'),

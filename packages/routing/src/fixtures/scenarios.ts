@@ -50,6 +50,7 @@ export function generateRoutingScenarios(count = 500): Array<{
         channel: i % 3 === 0 ? 'online' : 'in_store',
         isInternational: i % 17 === 0,
         preferences: { optimizeFor: 'max_reward', excludeCardIds: [] },
+        trackSpend: false,
       },
     });
   }

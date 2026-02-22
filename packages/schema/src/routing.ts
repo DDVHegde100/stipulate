@@ -29,6 +29,10 @@ export const RouteRequestSchema = z.object({
     })
     .default({ optimizeFor: "max_reward", excludeCardIds: [] }),
   metadata: MetadataSchema.optional(),
+  /** When true, record spend against caps for the best card. */
+  trackSpend: z.boolean().default(false),
+  /** User reference for cap spend tracking across sessions. */
+  userRef: z.string().min(1).optional(),
 });
 
 /** Structured explainability factor for UI tooltips. */
