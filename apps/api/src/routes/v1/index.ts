@@ -11,6 +11,7 @@ import { changelogHandler } from './changelog.js';
 import { openapiHandler } from './openapi.js';
 import { webhooksHandler } from './webhooks.js';
 import { usageHandler } from './usage.js';
+import { valuationsHandler } from './valuations.js';
 
 export const v1Routes = new Hono<AppBindings>();
 
@@ -25,6 +26,7 @@ v1Routes.route('/changelog', changelogHandler);
 v1Routes.route('/openapi', openapiHandler);
 v1Routes.route('/webhooks', webhooksHandler);
 v1Routes.route('/usage', usageHandler);
+v1Routes.route('/valuations', valuationsHandler);
 
 v1Routes.get('/', (c) => {
   return c.json({
@@ -62,8 +64,18 @@ v1Routes.get('/', (c) => {
       },
       cards: {
         method: 'GET',
+        path: '/v1/cards',
+        description: 'Search and list cards in the catalog',
+      },
+      cardBenefits: {
+        method: 'GET',
         path: '/v1/cards/{card_id}/benefits',
         description: 'Versioned benefit rules for a card (supports ?as_of= and ?version=)',
+      },
+      valuations: {
+        method: 'GET',
+        path: '/v1/valuations',
+        description: 'Points program valuations and org overrides',
       },
       changelog: {
         method: 'GET',
