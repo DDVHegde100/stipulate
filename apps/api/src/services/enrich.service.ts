@@ -42,6 +42,11 @@ export async function enrichMerchant(
   const payload = parsed.data;
 
   if (payload.receiptOcrText) {
+    const { getFeatureFlags } = await import('../lib/feature-flags.js');
+    if (!getFeatureFlags().receiptOcr) {
+      throw new EnrichServiceError('Receipt OCR is not enabled', 'INVALID_REQUEST');
+    }
+
     const { receipt, enrichment } = enrichFromReceiptOcr(payload.receiptOcrText, {
       issuer: payload.issuer,
     });

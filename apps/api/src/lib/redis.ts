@@ -103,6 +103,15 @@ export async function setCachedJson(
   await client.set(key, JSON.stringify(value), 'EX', ttlSeconds);
 }
 
+export async function deleteCachedJson(key: string): Promise<void> {
+  try {
+    const client = getRedis();
+    await client.del(key);
+  } catch {
+    // non-fatal
+  }
+}
+
 /** Reset singleton — intended for tests only. */
 export function resetRedisClient(): void {
   redisClient = undefined;
