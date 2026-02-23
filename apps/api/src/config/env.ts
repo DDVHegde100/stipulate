@@ -41,6 +41,17 @@ const envSchema = z
     AWS_ENDPOINT_URL: z.string().url().optional(),
     S3_BENEFIT_PDF_BUCKET: z.string().optional(),
     SQS_PARSER_JOBS_QUEUE: z.string().optional(),
+    ADMIN_API_KEY: z.string().min(16).optional(),
+    STRIPE_SECRET_KEY: z.string().optional(),
+    STRIPE_WEBHOOK_SECRET: z.string().optional(),
+    STRIPE_PRICE_ID_METERED: z.string().optional(),
+    STRIPE_PRICE_ID_SAAS: z.string().optional(),
+    SENTRY_DSN: z.string().url().optional(),
+    POSTHOG_API_KEY: z.string().optional(),
+    POSTHOG_HOST: z.string().url().optional(),
+    FEATURE_RECEIPT_OCR: z.string().optional(),
+    FEATURE_PROXY_PAY: z.string().optional(),
+    FEATURE_BENEFIT_WEBHOOKS: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     if (data.NODE_ENV === 'production' && !data.API_KEY) {
