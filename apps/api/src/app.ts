@@ -12,6 +12,8 @@ import { timing } from './middleware/timing.js';
 import { healthRoutes } from './routes/health.js';
 import { v1Routes } from './routes/v1/index.js';
 import { adminRoutes } from './routes/admin/index.js';
+import { stripeWebhookHandler } from './routes/webhooks/stripe.js';
+import { captureException } from './lib/observability.js';
 
 export type AppVariables = {
   requestId: string;
@@ -70,6 +72,7 @@ export function createApp(options: CreateAppOptions = {}): Hono<AppBindings> {
   });
 
   app.route('/health', healthRoutes);
+  app.route('/webhooks/stripe', stripeWebhookHandler);
   app.route(`/${env.API_VERSION}`, v1Routes);
   app.route('/admin', adminRoutes);
 
@@ -111,6 +114,8 @@ export function createApp(options: CreateAppOptions = {}): Hono<AppBindings> {
       },
       'Unhandled application error',
     );
+
+    void captureException(error, { requestId, path: c.req.path, method: c.req.method });
 
     return c.json(
       {

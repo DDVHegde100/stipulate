@@ -6,6 +6,7 @@ import { connectRedis, disconnectRedis } from './lib/redis.js';
 import { disconnectDatabase } from './lib/db.js';
 import { logFatal, logShutdown, logStartup, logger } from './lib/logger.js';
 import { prewarmRoutingCache } from './cache/prewarm.js';
+import { trackEvent } from './lib/observability.js';
 
 async function bootstrap(): Promise<void> {
   const env = loadEnv();
@@ -13,6 +14,8 @@ async function bootstrap(): Promise<void> {
   const port = env.PORT;
 
   await Promise.allSettled([connectRedis()]);
+
+  void trackEvent('api.startup', { port, env: env.NODE_ENV });
 
   if (env.NODE_ENV !== 'test') {
     prewarmRoutingCache()
