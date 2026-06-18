@@ -3,47 +3,22 @@
  * Weekly benefit guide re-parse scheduler.
  * Usage: pnpm --filter @stipulate/api schedule:reparse
  */
-import {
-  ReparseScheduler,
-  summarizeReparseBatch,
-  type ReparseTarget,
-} from '@stipulate/parser';
-
-const DEFAULT_TARGETS: ReparseTarget[] = [
-  {
-    cardId: 'chase_sapphire_preferred',
-    issuer: 'Chase',
-    productName: 'Sapphire Preferred',
-    sourceUrl: 'https://creditcards.chase.com/rewards-credit-cards/sapphire/preferred',
-  },
-  {
-    cardId: 'amex_gold',
-    issuer: 'American Express',
-    productName: 'Gold Card',
-    sourceUrl: 'https://www.americanexpress.com/us/credit-cards/card/gold-card/',
-  },
-];
+import { runScheduledReparse } from '../src/services/reparse.service.js';
 
 async function main(): Promise<void> {
-  const targets = DEFAULT_TARGETS;
-  const scheduler = new ReparseScheduler({
-    onJobComplete: (result) => {
-      const status = result.error ? 'FAILED' : result.changed ? 'CHANGED' : 'UNCHANGED';
-      console.log(`[${status}] ${result.cardId} (${result.durationMs}ms)`);
-    },
+  console.log('Starting scheduled reparse run...');
+
+  const { runId, summary, enqueued } = await runScheduledReparse({
+    limit: Number(process.env.REPARSE_LIMIT ?? 50),
+    concurrency: Number(process.env.REPARSE_CONCURRENCY ?? 3),
   });
 
-  scheduler.enqueueAll(targets);
-  console.log(`Starting re-parse for ${targets.length} cards...`);
-
-  const results = await scheduler.runConcurrent(2);
-  const summary = summarizeReparseBatch(results);
-
-  console.log('\nBatch summary:');
-  console.log(`  Total:     ${summary.total}`);
+  console.log(`Run ${runId} complete`);
+  console.log(`  Checked:   ${summary.total}`);
   console.log(`  Changed:   ${summary.changed}`);
   console.log(`  Unchanged: ${summary.unchanged}`);
   console.log(`  Failed:    ${summary.failed}`);
+  console.log(`  Enqueued:  ${enqueued}`);
 
   if (summary.failed > 0) process.exit(1);
 }
