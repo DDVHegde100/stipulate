@@ -1,8 +1,12 @@
 import type {
   BatchRouteRequest,
   BatchRouteResponse,
+  BenefitChangelogResponse,
+  CardCatalogResponse,
+  CardBenefitsResponse,
   EnrichRequest,
   EnrichResponse,
+  PointsValuationTable,
   RouteRequest,
   RouteResponse,
 } from '@stipulate/schema';
@@ -57,6 +61,52 @@ export class StipulateClient {
     return this.post<EnrichResponse>('/enrich', request);
   }
 
+  async listCards(query: { q?: string; limit?: number } = {}): Promise<CardCatalogResponse> {
+    const params = new URLSearchParams();
+    if (query.q) params.set('q', query.q);
+    if (query.limit) params.set('limit', String(query.limit));
+    const qs = params.toString();
+    return this.get<CardCatalogResponse>(`/cards${qs ? `?${qs}` : ''}`);
+  }
+
+  async getCardBenefits(cardId: string, query: { asOf?: string; version?: number } = {}): Promise<CardBenefitsResponse> {
+    const params = new URLSearchParams();
+    if (query.asOf) params.set('as_of', query.asOf);
+    if (query.version) params.set('version', String(query.version));
+    const qs = params.toString();
+    return this.get<CardBenefitsResponse>(`/cards/${encodeURIComponent(cardId)}/benefits${qs ? `?${qs}` : ''}`);
+  }
+
+  async getChangelog(query: { limit?: number; cursor?: string; cardId?: string } = {}): Promise<BenefitChangelogResponse> {
+    const params = new URLSearchParams();
+    if (query.limit) params.set('limit', String(query.limit));
+    if (query.cursor) params.set('cursor', query.cursor);
+    if (query.cardId) params.set('card_id', query.cardId);
+    const qs = params.toString();
+    return this.get<BenefitChangelogResponse>(`/changelog${qs ? `?${qs}` : ''}`);
+  }
+
+  async getValuations(): Promise<PointsValuationTable> {
+    return this.get<PointsValuationTable>('/valuations');
+  }
+
+  async getUsage(): Promise<{
+    periodStart: string;
+    totalCalls: number;
+    totalCostUsd: number;
+    plan: string;
+  }> {
+    return this.get('/usage');
+  }
+
+  async createWebhookSubscription(input: {
+    url: string;
+    events: string[];
+    secret?: string;
+  }): Promise<{ id: string; url: string }> {
+    return this.post('/webhooks', input);
+  }
+
   async getOpenApiSpec(): Promise<string> {
     const response = await this.fetchFn(`${this.baseUrl}/openapi`, {
       headers: { 'X-API-Key': this.apiKey },
@@ -66,6 +116,29 @@ export class StipulateClient {
       throw new StipulateError('Failed to fetch OpenAPI spec', response.status);
     }
     return response.text();
+  }
+
+  private async get<T>(path: string): Promise<T> {
+    const response = await this.fetchFn(`${this.baseUrl}${path}`, {
+      headers: { 'X-API-Key': this.apiKey },
+      signal: AbortSignal.timeout(this.timeoutMs),
+    });
+
+    const json = (await response.json()) as StipulateApiEnvelope<T> & {
+      error?: { code: string; message: string };
+      requestId?: string;
+    };
+
+    if (!response.ok) {
+      throw new StipulateError(
+        json.error?.message ?? `HTTP ${response.status}`,
+        response.status,
+        json.error?.code,
+        json.requestId,
+      );
+    }
+
+    return json.data;
   }
 
   private async post<T>(path: string, body: unknown): Promise<T> {
