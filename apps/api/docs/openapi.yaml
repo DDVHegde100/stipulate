@@ -43,6 +43,61 @@ paths:
         '422':
           description: Validation error
 
+  /route/batch:
+    post:
+      operationId: routeBatch
+      summary: Batch rank cards for multiple transactions
+      description: Process up to 100 routing requests in a single call with shared benefit index loading.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchRouteRequest'
+      responses:
+        '200':
+          description: Batch routing results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/BatchRouteResponse'
+                  requestId:
+                    type: string
+
+  /webhooks:
+    post:
+      operationId: createWebhookSubscription
+      summary: Subscribe to benefit change webhooks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url]
+              properties:
+                url:
+                  type: string
+                  format: uri
+                events:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '201':
+          description: Webhook subscription created
+
+  /usage:
+    get:
+      operationId: getUsageSummary
+      summary: Current billing period usage summary
+      responses:
+        '200':
+          description: Usage totals for the org
+
   /enrich:
     post:
       operationId: enrichMerchant
@@ -175,6 +230,75 @@ components:
             type: string
         reasoning:
           type: string
+
+        reasoning:
+          type: string
+        factors:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingFactor'
+
+    RoutingFactor:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        value:
+          oneOf:
+            - type: string
+            - type: number
+        impactMinor:
+          type: number
+        weight:
+          type: number
+        category:
+          type: string
+          enum: [multiplier, valuation, cap, exclusion, fee, merchant]
+
+    BatchRouteRequest:
+      type: object
+      required: [requests]
+      properties:
+        requests:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/RouteRequest'
+        sharedUserCardIds:
+          type: array
+          items:
+            type: string
+
+    BatchRouteResponse:
+      type: object
+      properties:
+        batchId:
+          type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RouteResponse'
+        total:
+          type: integer
+        succeeded:
+          type: integer
+        failed:
+          type: integer
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              index:
+                type: integer
+              message:
+                type: string
+        computedAt:
+          type: string
+          format: date-time
 
     RouteResponse:
       type: object

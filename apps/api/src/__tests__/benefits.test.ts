@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createApp } from '../app.js';
+import { createApp, type App } from '../app.js';
+import { resetEnvCache } from '../config/env.js';
 
 vi.mock('../repositories/benefit.repository.js', () => ({
   findCardUuid: vi.fn(() => Promise.reject(new Error('no db'))),
@@ -10,12 +11,15 @@ vi.mock('../repositories/benefit.repository.js', () => ({
 }));
 
 describe('benefits API', () => {
-  const app = createApp();
-  const headers = { 'X-API-Key': 'test_api_key_ci', 'Content-Type': 'application/json' };
+  let app: App;
+  const headers = { 'X-API-Key': 'test_api_key_ci_only', 'Content-Type': 'application/json' };
 
   beforeEach(() => {
-    process.env.API_KEY = 'test_api_key_ci';
+    resetEnvCache();
+    process.env.API_KEY = 'test_api_key_ci_only';
     process.env.NODE_ENV = 'test';
+    process.env.LOG_LEVEL = 'silent';
+    app = createApp();
   });
 
   it('GET /v1/cards/:id/benefits returns demo benefits', async () => {
