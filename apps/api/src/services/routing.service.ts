@@ -56,10 +56,12 @@ async function loadCardBundles(cardIds: string[]): Promise<CardBenefitBundle[]> 
   const asOf = new Date().toISOString().slice(0, 10);
 
   for (const cardId of cardIds) {
-    const demo = DEMO_CARD_BUNDLES.find((b) => b.cardId === cardId);
-    if (demo) {
-      bundles.push(demo);
-      continue;
+    if (process.env.NODE_ENV === 'test') {
+      const demo = DEMO_CARD_BUNDLES.find((b) => b.cardId === cardId);
+      if (demo) {
+        bundles.push(demo);
+        continue;
+      }
     }
 
     try {
@@ -90,8 +92,10 @@ async function loadCardBundles(cardIds: string[]): Promise<CardBenefitBundle[]> 
 
       bundles.push({ cardId, rules });
     } catch {
-      const demoFallback = DEMO_CARD_BUNDLES.find((b) => b.cardId === cardId);
-      if (demoFallback) bundles.push(demoFallback);
+      if (process.env.NODE_ENV === 'test') {
+        const demoFallback = DEMO_CARD_BUNDLES.find((b) => b.cardId === cardId);
+        if (demoFallback) bundles.push(demoFallback);
+      }
     }
   }
 
