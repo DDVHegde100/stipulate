@@ -32,6 +32,19 @@ jobs:
           NODE_ENV: production
           NEXT_PUBLIC_API_URL: https://api.stipulate.io
 
+      - name: Build API Docker image
+        run: docker build -f apps/api/Dockerfile -t stipulate-api:${{ github.ref_name }} .
+
+      - name: Deploy to Fly.io
+        run: |
+          if [ -n "${{ secrets.FLY_API_TOKEN }}" ]; then
+            flyctl deploy --config apps/api/fly.toml --dockerfile apps/api/Dockerfile --remote-only
+          else
+            echo "FLY_API_TOKEN not configured — skipping deploy"
+          fi
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:

@@ -28,8 +28,18 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build --filter=@stipulate/api
 
-      - name: Deploy placeholder
-        run: echo "Configure Fly.io/Railway deploy here"
+      - name: Build API Docker image
+        run: docker build -f apps/api/Dockerfile -t stipulate-api:staging .
+
+      - name: Deploy to Fly.io staging
+        run: |
+          if [ -n "${{ secrets.FLY_API_TOKEN }}" ]; then
+            flyctl deploy --config apps/api/fly.toml --dockerfile apps/api/Dockerfile --remote-only --app stipulate-api-staging
+          else
+            echo "FLY_API_TOKEN not configured — skipping deploy"
+          fi
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
   deploy-web:
     name: deploy web (staging)
