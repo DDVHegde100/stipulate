@@ -6,6 +6,7 @@ import { ingestionHandler } from './ingestion.js';
 
 import { correctionsHandler } from './corrections.js';
 import { orgsHandler } from './orgs.js';
+import { reparseHandler } from './reparse.js';
 
 export const adminRoutes = new Hono<AppBindings>();
 
@@ -13,6 +14,7 @@ adminRoutes.use('*', adminAuth);
 adminRoutes.route('/ingestion', ingestionHandler);
 adminRoutes.route('/corrections', correctionsHandler);
 adminRoutes.route('/orgs', orgsHandler);
+adminRoutes.route('/reparse', reparseHandler);
 
 adminRoutes.get('/', (c) => {
   return c.json({
