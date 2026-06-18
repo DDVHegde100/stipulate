@@ -156,3 +156,10 @@ export {
   type MccCorrectionRequest,
   type MccCorrectionResponse,
 } from "./enrich.js";
+
+export {
+  ProxyPayRequestSchema,
+  ProxyPayResponseSchema,
+  type ProxyPayRequest,
+  type ProxyPayResponse,
+} from "./proxy-pay.js";

@@ -158,7 +158,7 @@ export async function getCardBenefits(input: {
     }
   }
 
-  const demo = DEMO_BENEFITS[input.cardId];
+  const demo = process.env.NODE_ENV === 'test' ? DEMO_BENEFITS[input.cardId] : undefined;
   if (!demo) {
     throw new BenefitServiceError(`Card not found: ${input.cardId}`, 'CARD_NOT_FOUND');
   }
@@ -211,6 +211,10 @@ export async function getChangelog(input: {
     }
   } catch {
     // fall through to demo changelog
+  }
+
+  if (process.env.NODE_ENV !== 'test') {
+    return { entries: [], has_more: false };
   }
 
   const demoEntries: BenefitChangelogEntry[] = [

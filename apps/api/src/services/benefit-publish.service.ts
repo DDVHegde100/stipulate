@@ -5,6 +5,8 @@ import * as changelogRepo from '../repositories/changelog.repository.js';
 import * as ingestionRepo from '../repositories/ingestion.repository.js';
 import * as webhookRepo from '../repositories/webhook.repository.js';
 import { withTransaction } from '../lib/db.js';
+import { invalidateBenefitIndex } from '../lib/cache-invalidation.js';
+import { getFeatureFlags } from '../lib/feature-flags.js';
 
 /** Publish normalized rules from an approved ingestion job to the catalog. */
 export async function publishIngestionBenefits(jobId: string): Promise<void> {
@@ -82,17 +84,21 @@ export async function publishIngestionBenefits(jobId: string): Promise<void> {
   });
 
   try {
-    const subs = await webhookRepo.listActiveSubscriptionsForEvent('benefit.version_published');
-    for (const sub of subs) {
-      await webhookRepo.queueWebhookDelivery({
-        subscriptionId: sub.id,
-        eventId,
-        payload,
-      });
+    if (getFeatureFlags().benefitWebhooks) {
+      const subs = await webhookRepo.listActiveSubscriptionsForEvent('benefit.version_published');
+      for (const sub of subs) {
+        await webhookRepo.queueWebhookDelivery({
+          subscriptionId: sub.id,
+          eventId,
+          payload,
+        });
+      }
     }
   } catch {
     // webhook queue is best-effort
   }
+
+  void invalidateBenefitIndex([job.cardId]);
 
   await ingestionRepo.updateIngestionJob(jobId, {
     status: 'published',
