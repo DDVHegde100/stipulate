@@ -48,6 +48,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   extra: {
     tagline: brand.tagline,
     domain: brand.domain,
+    apiUrl: 'http://localhost:3000/v1',
+    apiKey: '',
     eas: {
       projectId: 'stipulate-mobile',
     },
