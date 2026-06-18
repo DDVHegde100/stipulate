@@ -7,6 +7,7 @@ import {
   createWebhookSubscription,
   generateWebhookSecret,
   listWebhookSubscriptions,
+  deactivateWebhookSubscription,
 } from '../../repositories/webhook.repository.js';
 import { processWebhookQueue } from '../../services/webhook-delivery.service.js';
 import { requireScope } from '../../middleware/org-auth.js';
@@ -75,6 +76,18 @@ webhooksHandler.get('/', async (c) => {
 
   const subs = await listWebhookSubscriptions(orgId);
   return c.json({ data: subs, requestId: c.get('requestId') });
+});
+
+webhooksHandler.delete('/:id', async (c) => {
+  const orgId = c.get('orgId');
+  if (!orgId) {
+    throw new HTTPException(403, { message: 'Org context required' });
+  }
+
+  const ok = await deactivateWebhookSubscription(orgId, c.req.param('id'));
+  if (!ok) throw new HTTPException(404, { message: 'Webhook subscription not found' });
+
+  return c.json({ data: { revoked: true }, requestId: c.get('requestId') });
 });
 
 webhooksHandler.post('/deliver', async (c) => {
