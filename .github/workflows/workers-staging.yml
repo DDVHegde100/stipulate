@@ -1,0 +1,31 @@
+name: Workers Staging
+
+on:
+  push:
+    branches: [staging]
+  workflow_dispatch:
+
+jobs:
+  deploy-workers:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @stipulate/api build
+
+      - name: Deploy ingestion worker placeholder
+        run: echo "Deploy ingestion:worker and webhooks:deliver to staging runtime"
+
+      - name: Deploy SQS worker placeholder
+        run: echo "Deploy ingestion:sqs-worker when AWS credentials configured"
