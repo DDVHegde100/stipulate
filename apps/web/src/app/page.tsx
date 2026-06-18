@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { brand } from '@stipulate/brand';
 import {
   Badge,
@@ -41,9 +42,11 @@ export default function HomePage() {
             <Text as="span" variant="body-sm" tone="secondary" className="hover:text-[var(--color-text-primary)] transition-colors">
               Docs
             </Text>
-            <Button variant="secondary" size="sm">
-              Sign in
-            </Button>
+            <Link href="/login">
+              <Button variant="secondary" size="sm">
+                Sign in
+              </Button>
+            </Link>
           </nav>
         </Container>
       </header>
