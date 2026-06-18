@@ -1,4 +1,5 @@
 import { getUsageSummary, logUsageEvent, COST_PER_CALL_MICROS } from '../repositories/usage.repository.js';
+import { findBillingSubscription } from '../repositories/billing.repository.js';
 
 export interface MeteringContext {
   orgId?: string;
@@ -30,6 +31,13 @@ export async function recordApiUsage(
       status: options.status,
       metadata: options.metadata,
     });
+
+    if (ctx.orgId) {
+      const billing = await findBillingSubscription(ctx.orgId);
+      if (billing?.stripe_customer_id && billing.plan === 'payg') {
+        await reportStripeUsage(billing.stripe_customer_id, 1);
+      }
+    }
   } catch {
     // metering failures are non-fatal
   }

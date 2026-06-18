@@ -12,6 +12,8 @@ import { openapiHandler } from './openapi.js';
 import { webhooksHandler } from './webhooks.js';
 import { usageHandler } from './usage.js';
 import { valuationsHandler } from './valuations.js';
+import { billingHandler } from './billing.js';
+import { proxyPayHandler } from './proxy-pay.js';
 
 export const v1Routes = new Hono<AppBindings>();
 
@@ -27,6 +29,8 @@ v1Routes.route('/openapi', openapiHandler);
 v1Routes.route('/webhooks', webhooksHandler);
 v1Routes.route('/usage', usageHandler);
 v1Routes.route('/valuations', valuationsHandler);
+v1Routes.route('/billing', billingHandler);
+v1Routes.route('/proxy-pay', proxyPayHandler);
 
 v1Routes.get('/', (c) => {
   return c.json({
