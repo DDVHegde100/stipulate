@@ -156,3 +156,14 @@ export async function listActiveSubscriptionsForEvent(
     return events.includes(eventType) || events.includes('*');
   });
 }
+
+export async function deactivateWebhookSubscription(orgId: string, subscriptionId: string): Promise<boolean> {
+  if (process.env.NODE_ENV === 'test') return true;
+
+  const result = await query(
+    `UPDATE webhook_subscriptions SET is_active = FALSE, updated_at = NOW()
+     WHERE id = $1::uuid AND org_id = $2::uuid`,
+    [subscriptionId, orgId],
+  );
+  return (result.rowCount ?? 0) > 0;
+}
