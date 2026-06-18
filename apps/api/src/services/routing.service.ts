@@ -1,9 +1,12 @@
 import {
   RouteRequestSchema,
+  BatchRouteRequestSchema,
   BenefitRuleSchema,
   PointsValuationTableSchema,
   type RouteRequest,
   type RouteResponse,
+  type BatchRouteRequest,
+  type BatchRouteResponse,
   type BenefitRule,
   type PointsValuationTable,
 } from '@stipulate/schema';
@@ -36,7 +39,7 @@ export class RoutingServiceError extends Error {
   }
 }
 
-export { RouteRequestSchema };
+export { RouteRequestSchema, BatchRouteRequestSchema };
 
 /** Load benefit rules for requested cards from DB or demo fallback. */
 async function loadCardBundles(cardIds: string[]): Promise<CardBenefitBundle[]> {
@@ -221,4 +224,127 @@ export async function enrichForRoute(
   mcc?: string,
 ): Promise<ReturnType<typeof resolveMerchant>> {
   return resolveMerchant(merchantName, { mcc });
+}
+
+/** Batch route up to 100 transactions with shared card bundle loading. */
+export async function routeBatchPurchases(
+  request: BatchRouteRequest,
+  requestId: string,
+): Promise<BatchRouteResponse> {
+  const parsed = BatchRouteRequestSchema.safeParse(request);
+  if (!parsed.success) {
+    throw new RoutingServiceError('Invalid batch route request', 'INVALID_REQUEST', {
+      issues: parsed.error.flatten(),
+    });
+  }
+
+  const batchId = `batch-${requestId}`;
+  const requests = parsed.data.requests.map((req) => {
+    if (parsed.data.sharedUserCardIds && req.userCardIds.length === 0) {
+      return { ...req, userCardIds: parsed.data.sharedUserCardIds };
+    }
+    return req;
+  });
+
+  const allCardIds = [...new Set(requests.flatMap((r) => r.userCardIds))];
+  if (allCardIds.length === 0) {
+    throw new RoutingServiceError('At least one card id is required', 'NO_CARDS');
+  }
+
+  const start = Date.now();
+  const errors: Array<{ index: number; message: string }> = [];
+  const results: RouteResponse[] = [];
+
+  try {
+    const [bundles, valuation] = await Promise.all([
+      loadCardBundles(allCardIds),
+      loadValuationTable(),
+    ]);
+
+    if (bundles.length === 0) {
+      throw new RoutingServiceError('No benefit data found for requested cards', 'NO_CARDS');
+    }
+
+    let spendRecords: Array<{ category: string; spentMinor: number }> = [];
+    try {
+      const rows = await spendRepo.getUserCategorySpend({
+        cardIds: allCardIds,
+        periodStart: spendRepo.annualPeriodStart(),
+      });
+      spendRecords = rows.map((r) => ({
+        category: r.category,
+        spentMinor: r.spent_cents,
+      }));
+    } catch {
+      // optional
+    }
+
+    const capContext = buildCapContext(
+      spendRecords.map((r) => ({ category: r.category, spentMinor: r.spentMinor })),
+    );
+
+    const engineOptions = {
+      valuation,
+      capContext,
+      conservativeValuation: true,
+    };
+
+    for (let i = 0; i < requests.length; i++) {
+      const req = requests[i]!;
+      try {
+        const response = routeTransaction(
+          req,
+          bundles.filter((b) => req.userCardIds.includes(b.cardId)),
+          {
+            ...engineOptions,
+            conservativeValuation: req.preferences.optimizeFor !== 'max_reward',
+            foreignTransactionFeeRate: req.isInternational ? 0.03 : undefined,
+          },
+          req.requestId ?? `${batchId}-${i}`,
+        );
+        results.push({
+          ...response,
+          metadata: {
+            ...response.metadata,
+            modelVersion: ROUTING_MODEL_VERSION,
+            batchIndex: i,
+          },
+        });
+      } catch (error) {
+        errors.push({
+          index: i,
+          message: error instanceof Error ? error.message : String(error),
+        });
+      }
+    }
+
+    return {
+      batchId,
+      results,
+      total: requests.length,
+      succeeded: results.length,
+      failed: errors.length,
+      errors,
+      computedAt: new Date().toISOString(),
+    };
+  } catch (error) {
+    if (error instanceof RoutingServiceError) throw error;
+    throw new RoutingServiceError(
+      error instanceof Error ? error.message : 'Batch routing failed',
+      'ROUTING_FAILED',
+    );
+  } finally {
+    if (process.env.NODE_ENV !== 'test') {
+      routingRepo.logRoutingRequest({
+        requestId: batchId,
+        mcc: undefined,
+        amountCents: 0,
+        cardCount: allCardIds.length,
+        latencyMs: Date.now() - start,
+        bestCardId: results[0]?.bestCardId,
+        merchantName: 'batch',
+        category: 'batch',
+      }).catch(() => {});
+    }
+  }
 }

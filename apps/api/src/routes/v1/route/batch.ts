@@ -1,34 +1,31 @@
 import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
+import { BatchRouteRequestSchema } from '@stipulate/schema';
 
-import type { AppBindings } from '../../app.js';
+import type { AppBindings } from '../../../app.js';
 import {
   RoutingServiceError,
-  RouteRequestSchema,
-  routePurchase,
-} from '../../services/routing.service.js';
-import { recordApiUsage } from '../../services/metering.service.js';
-import { batchRouteHandler } from './route/batch.js';
+  routeBatchPurchases,
+} from '../../../services/routing.service.js';
+import { recordApiUsage } from '../../../services/metering.service.js';
 
-export const routeHandler = new Hono<AppBindings>();
+export const batchRouteHandler = new Hono<AppBindings>();
 
-routeHandler.route('/batch', batchRouteHandler);
-
-routeHandler.post('/', async (c) => {
+batchRouteHandler.post('/', async (c) => {
   const requestId = c.get('requestId');
   const start = Date.now();
+
   const body: unknown = await c.req.json().catch(() => {
     throw new HTTPException(400, { message: 'Request body must be valid JSON' });
   });
 
-  const parsed = RouteRequestSchema.safeParse(body);
-
+  const parsed = BatchRouteRequestSchema.safeParse(body);
   if (!parsed.success) {
     return c.json(
       {
         error: {
           code: 'VALIDATION_ERROR',
-          message: 'Invalid route request',
+          message: 'Invalid batch route request',
           details: parsed.error.flatten(),
         },
         requestId,
@@ -38,43 +35,33 @@ routeHandler.post('/', async (c) => {
   }
 
   try {
-    const result = await routePurchase(parsed.data, requestId);
+    const result = await routeBatchPurchases(parsed.data, requestId);
 
-    void recordApiUsage('route', {
+    void recordApiUsage('batch_route', {
       orgId: c.get('orgId'),
       apiKeyId: c.get('apiKeyId'),
       requestId,
     }, {
-      amountCents: parsed.data.amount.amountMinor,
       latencyMs: Date.now() - start,
       status: 'success',
+      metadata: { total: result.total, succeeded: result.succeeded },
     });
 
-    return c.json({
-      data: result,
-      requestId,
-    });
+    return c.json({ data: result, requestId });
   } catch (error: unknown) {
-    void recordApiUsage('route', {
+    void recordApiUsage('batch_route', {
       orgId: c.get('orgId'),
       apiKeyId: c.get('apiKeyId'),
       requestId,
     }, { latencyMs: Date.now() - start, status: 'error' });
 
     if (error instanceof RoutingServiceError) {
-      const status =
-        error.code === 'INVALID_REQUEST' ? 422 : error.code === 'NO_CARDS' ? 400 : 500;
-
       return c.json(
         {
-          error: {
-            code: error.code,
-            message: error.message,
-            details: error.details,
-          },
+          error: { code: error.code, message: error.message, details: error.details },
           requestId,
         },
-        status,
+        error.code === 'INVALID_REQUEST' ? 422 : 400,
       );
     }
 

@@ -31,6 +31,16 @@ export const RouteRequestSchema = z.object({
   metadata: MetadataSchema.optional(),
 });
 
+/** Structured explainability factor for UI tooltips. */
+export const RoutingFactorSchema = z.object({
+  id: z.string().min(1),
+  label: z.string().min(1),
+  value: z.union([z.string(), z.number()]),
+  impactMinor: z.number().optional(),
+  weight: z.number().min(0).max(1).optional(),
+  category: z.enum(['multiplier', 'valuation', 'cap', 'exclusion', 'fee', 'merchant']).default('multiplier'),
+});
+
 /** A card ranked for a specific purchase with computed reward estimate. */
 export const RankedCardSchema = z.object({
   cardId: z.string().min(1),
@@ -53,6 +63,7 @@ export const RankedCardSchema = z.object({
     })
     .optional(),
   reasoning: z.string().optional(),
+  factors: z.array(RoutingFactorSchema).default([]),
 });
 
 /** Output from the routing engine with ranked recommendations. */
@@ -67,8 +78,31 @@ export const RouteResponseSchema = z.object({
 });
 
 export type RouteRequest = z.infer<typeof RouteRequestSchema>;
+export type RoutingFactor = z.infer<typeof RoutingFactorSchema>;
 export type RankedCard = z.infer<typeof RankedCardSchema>;
 export type RouteResponse = z.infer<typeof RouteResponseSchema>;
+
+/** Batch routing request — up to 100 transactions per call. */
+export const BatchRouteRequestSchema = z.object({
+  requests: z.array(RouteRequestSchema).min(1).max(100),
+  sharedUserCardIds: z.array(z.string().min(1)).optional(),
+});
+
+/** Batch routing response with per-request results. */
+export const BatchRouteResponseSchema = z.object({
+  batchId: z.string().min(1),
+  results: z.array(RouteResponseSchema),
+  total: z.number().int().positive(),
+  succeeded: z.number().int().nonnegative(),
+  failed: z.number().int().nonnegative(),
+  errors: z
+    .array(z.object({ index: z.number().int(), message: z.string() }))
+    .default([]),
+  computedAt: z.string().datetime({ offset: true }),
+});
+
+export type BatchRouteRequest = z.infer<typeof BatchRouteRequestSchema>;
+export type BatchRouteResponse = z.infer<typeof BatchRouteResponseSchema>;
 
 /** Sort ranked cards by rank ascending (best first). */
 export function sortRankedCards(cards: RankedCard[]): RankedCard[] {

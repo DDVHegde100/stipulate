@@ -57,14 +57,20 @@ export {
 
 export {
   RouteRequestSchema,
+  RoutingFactorSchema,
   RankedCardSchema,
   RouteResponseSchema,
+  BatchRouteRequestSchema,
+  BatchRouteResponseSchema,
   sortRankedCards,
   getBestCard,
   validateRouteResponseConsistency,
   type RouteRequest,
+  type RoutingFactor,
   type RankedCard,
   type RouteResponse,
+  type BatchRouteRequest,
+  type BatchRouteResponse,
 } from "./routing.js";
 
 export {
