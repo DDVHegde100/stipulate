@@ -16,6 +16,11 @@ import { adminRoutes } from './routes/admin/index.js';
 export type AppVariables = {
   requestId: string;
   authenticated: boolean;
+  orgId?: string;
+  orgPlan?: string;
+  apiKeyId?: string;
+  scopes?: string[];
+  rateLimitPerMinute?: number;
 };
 
 export type AppBindings = {
