@@ -4,6 +4,7 @@ import type { AppBindings } from '../../app.js';
 import { orgAuth } from '../../middleware/org-auth.js';
 import { rateLimit } from '../../middleware/rate-limit.js';
 import { planEnforcement } from '../../middleware/plan-enforcement.js';
+import { metrics } from '../../middleware/metrics.js';
 import { enrichHandler } from './enrich.js';
 import { routeHandler } from './route.js';
 import { cardsHandler } from './cards.js';
@@ -14,12 +15,15 @@ import { usageHandler } from './usage.js';
 import { valuationsHandler } from './valuations.js';
 import { billingHandler } from './billing.js';
 import { proxyPayHandler } from './proxy-pay.js';
+import { keysHandler } from './keys.js';
+import { spendHandler } from './spend.js';
 
 export const v1Routes = new Hono<AppBindings>();
 
 v1Routes.use('*', orgAuth);
 v1Routes.use('*', rateLimit);
 v1Routes.use('*', planEnforcement);
+v1Routes.use('*', metrics);
 
 v1Routes.route('/route', routeHandler);
 v1Routes.route('/enrich', enrichHandler);
@@ -31,6 +35,8 @@ v1Routes.route('/usage', usageHandler);
 v1Routes.route('/valuations', valuationsHandler);
 v1Routes.route('/billing', billingHandler);
 v1Routes.route('/proxy-pay', proxyPayHandler);
+v1Routes.route('/keys', keysHandler);
+v1Routes.route('/spend', spendHandler);
 
 v1Routes.get('/', (c) => {
   return c.json({

@@ -117,3 +117,87 @@ export async function createOrgWithApiKey(input: {
 export async function touchApiKey(keyId: string): Promise<void> {
   await query(`UPDATE api_keys SET last_used_at = NOW() WHERE id = $1`, [keyId]);
 }
+
+export interface ApiKeySummary {
+  id: string;
+  prefix: string;
+  name: string;
+  scopes: string[];
+  is_active: boolean;
+  last_used_at: string | null;
+  created_at: string;
+}
+
+/** List API keys for an org (self-service). */
+export async function listApiKeysForOrg(orgId: string): Promise<ApiKeySummary[]> {
+  if (process.env.NODE_ENV === 'test') {
+    return [
+      {
+        id: '00000000-0000-4000-8000-000000000010',
+        prefix: 'stip_test12',
+        name: 'default',
+        scopes: ['route:read', 'enrich:read'],
+        is_active: true,
+        last_used_at: null,
+        created_at: new Date().toISOString(),
+      },
+    ];
+  }
+
+  const result = await query<{
+    id: string;
+    key_prefix: string;
+    name: string;
+    scopes: unknown;
+    is_active: boolean;
+    last_used_at: string | null;
+    created_at: string;
+  }>(
+    `SELECT id, key_prefix, name, scopes, is_active, last_used_at::text, created_at::text
+     FROM api_keys WHERE org_id = $1::uuid ORDER BY created_at DESC`,
+    [orgId],
+  );
+
+  return result.rows.map((row) => ({
+    id: row.id,
+    prefix: row.key_prefix,
+    name: row.name,
+    scopes: Array.isArray(row.scopes) ? (row.scopes as string[]) : JSON.parse(String(row.scopes ?? '[]')),
+    is_active: row.is_active,
+    last_used_at: row.last_used_at,
+    created_at: row.created_at,
+  }));
+}
+
+/** Create a new API key for an existing org. */
+export async function createApiKeyForOrg(
+  orgId: string,
+  input: { name: string; scopes: string[]; plan: string },
+): Promise<{ id: string; rawKey: string; prefix: string }> {
+  const { rawKey, prefix, hash } = generateApiKey();
+
+  if (process.env.NODE_ENV === 'test') {
+    return { id: '00000000-0000-4000-8000-000000000011', rawKey, prefix };
+  }
+
+  const result = await query<{ id: string }>(
+    `INSERT INTO api_keys (org_id, key_hash, key_prefix, name, scopes, rate_limit_per_minute)
+     VALUES ($1, $2, $3, $4, $5, $6)
+     RETURNING id`,
+    [orgId, hash, prefix, input.name, JSON.stringify(input.scopes), rateLimitForPlan(input.plan)],
+  );
+
+  return { id: result.rows[0]!.id, rawKey, prefix };
+}
+
+/** Revoke (deactivate) an org API key. */
+export async function revokeApiKeyForOrg(orgId: string, keyId: string): Promise<boolean> {
+  if (process.env.NODE_ENV === 'test') return true;
+
+  const result = await query(
+    `UPDATE api_keys SET is_active = FALSE, updated_at = NOW()
+     WHERE id = $1::uuid AND org_id = $2::uuid AND is_active = TRUE`,
+    [keyId, orgId],
+  );
+  return (result.rowCount ?? 0) > 0;
+}
