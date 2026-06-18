@@ -16,6 +16,7 @@ import {
   resolveSpendCategory,
 } from './exclusions.js';
 import { applyForeignTransactionFee, scoreBenefitRule } from './scoring.js';
+import { buildRoutingFactors } from './explainability.js';
 
 export const ROUTING_MODEL_VERSION = 'routing-engine-1.0.0';
 
@@ -96,6 +97,11 @@ export function routeTransaction(
           ? [{ exclusionId: capEval.capApplied.id, reason: 'Cap exhausted for period' }]
           : undefined,
         reasoning: capEval.reasoning.join('; '),
+        factors: buildRoutingFactors(
+          { multiplier: 0, rewardMinor: 0, cashEquivalentMinor: 0, cpp: 0, score: 0, reasoning: [] },
+          capEval,
+          rule.name,
+        ),
       });
       continue;
     }
@@ -138,6 +144,7 @@ export function routeTransaction(
       applicableRuleIds: [rule.id],
       excludedBy: excludedHits.length > 0 ? excludedHits : undefined,
       reasoning: [...scoreResult.reasoning, ...capEval.reasoning].join('; '),
+      factors: buildRoutingFactors(scoreResult, capEval, rule.name),
     });
   }
 
