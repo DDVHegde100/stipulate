@@ -62,5 +62,10 @@ jobs:
         env:
           NEXT_PUBLIC_API_URL: https://api.staging.stipulate.io
 
-      - name: Deploy placeholder
-        run: echo "Configure Vercel deploy here"
+      - name: Deploy to Vercel staging
+        run: |
+          if [ -n "${{ secrets.VERCEL_TOKEN }}" ]; then
+            npx vercel deploy --prod --token "${{ secrets.VERCEL_TOKEN }}" --cwd apps/web
+          else
+            echo "VERCEL_TOKEN not configured — skipping web deploy"
+          fi
