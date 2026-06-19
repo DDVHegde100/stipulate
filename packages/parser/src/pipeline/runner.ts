@@ -155,8 +155,8 @@ export class BenefitParserPipeline {
     }
 
     if (config.sourceUrl) {
-      const { extractFromWeb } = await import("../extract/web.js");
-      const extraction = await extractFromWeb(config.sourceUrl, {
+      const { extractFromSourceUrl } = await import("../extract/pipeline.js");
+      const extraction = await extractFromSourceUrl(config.sourceUrl, {
         id: `doc-${config.cardId}`,
         issuer: config.issuer,
         productName: config.productName,

@@ -1,4 +1,2 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/husky.sh"
-
 pnpm exec turbo run typecheck --filter='[HEAD^1]'

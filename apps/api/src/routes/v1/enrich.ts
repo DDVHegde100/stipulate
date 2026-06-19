@@ -9,8 +9,11 @@ import {
   submitCorrection,
   MccCorrectionRequestSchema,
 } from '../../services/enrich.service.js';
+import { idempotency } from '../../middleware/idempotency.js';
 
 export const enrichHandler = new Hono<AppBindings>();
+
+enrichHandler.use('*', idempotency);
 
 enrichHandler.post('/', async (c) => {
   const requestId = c.get('requestId');

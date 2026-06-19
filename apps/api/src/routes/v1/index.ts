@@ -17,6 +17,7 @@ import { billingHandler } from './billing.js';
 import { proxyPayHandler } from './proxy-pay.js';
 import { keysHandler } from './keys.js';
 import { spendHandler } from './spend.js';
+import { orgHandler } from './org.js';
 
 export const v1Routes = new Hono<AppBindings>();
 
@@ -37,6 +38,7 @@ v1Routes.route('/billing', billingHandler);
 v1Routes.route('/proxy-pay', proxyPayHandler);
 v1Routes.route('/keys', keysHandler);
 v1Routes.route('/spend', spendHandler);
+v1Routes.route('/org', orgHandler);
 
 v1Routes.get('/', (c) => {
   return c.json({

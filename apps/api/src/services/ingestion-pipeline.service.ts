@@ -4,10 +4,15 @@ import {
   scoreParseResult,
   CONFIDENCE_REVIEW_THRESHOLD,
   StubLLMClient,
-  createOpenAICompatibleClient,
+  createProductionLLMClient,
+  scoreExtractionQuality,
+  MIN_EXTRACTION_QUALITY,
 } from '@stipulate/parser';
 import type { NormalizedBenefitRule } from '@stipulate/parser';
+import { createChildLogger } from '../lib/logger.js';
 import * as ingestionRepo from '../repositories/ingestion.repository.js';
+
+const log = createChildLogger({ component: 'ingestion-pipeline' });
 
 const CARD_ISSUER_MAP: Record<string, { issuer: string; productName: string }> = {
   chase_sapphire_preferred: { issuer: 'Chase', productName: 'Sapphire Preferred' },
@@ -28,13 +33,21 @@ export async function processIngestionJob(jobId: string): Promise<void> {
   try {
     await ingestionRepo.updateIngestionJob(jobId, { status: 'extracting' });
 
-    const contentHash = createHash('sha256').update(job.sourceUrl).digest('hex').slice(0, 16);
-    await ingestionRepo.updateIngestionJob(jobId, { contentHash, status: 'parsing' });
-
     const llmClient = process.env.OPENAI_API_KEY
-      ? createOpenAICompatibleClient(
+      ? createProductionLLMClient(
           process.env.OPENAI_API_KEY,
           process.env.OPENAI_BASE_URL ?? 'https://api.openai.com/v1',
+          (usage) => {
+            log.info(
+              {
+                model: usage.model,
+                tokens: usage.totalTokens,
+                costUsd: usage.estimatedCostUsd.toFixed(6),
+                jobId,
+              },
+              'LLM parse usage',
+            );
+          },
         )
       : new StubLLMClient();
 
@@ -50,6 +63,25 @@ export async function processIngestionJob(jobId: string): Promise<void> {
       },
       { llmClient },
     );
+
+    const extractionQuality = result.extraction
+      ? scoreExtractionQuality(result.extraction)
+      : 0;
+
+    if (extractionQuality < MIN_EXTRACTION_QUALITY) {
+      await ingestionRepo.updateIngestionJob(jobId, {
+        status: 'failed',
+        errorMessage: `Extraction quality ${extractionQuality.toFixed(2)} below minimum ${MIN_EXTRACTION_QUALITY}`,
+        extractionResult: result.extraction,
+      });
+      return;
+    }
+
+    const contentHash =
+      result.extraction?.document.checksum ??
+      createHash('sha256').update(result.extraction?.rawText ?? job.sourceUrl).digest('hex').slice(0, 16);
+
+    await ingestionRepo.updateIngestionJob(jobId, { contentHash, status: 'parsing' });
 
     const sourceText = result.extraction?.rawText ?? '';
     const confidence = result.parse?.rawBenefits?.length

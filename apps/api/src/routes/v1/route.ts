@@ -9,8 +9,11 @@ import {
 } from '../../services/routing.service.js';
 import { recordApiUsage } from '../../services/metering.service.js';
 import { batchRouteHandler } from './route/batch.js';
+import { idempotency } from '../../middleware/idempotency.js';
 
 export const routeHandler = new Hono<AppBindings>();
+
+routeHandler.use('*', idempotency);
 
 routeHandler.route('/batch', batchRouteHandler);
 

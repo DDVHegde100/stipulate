@@ -55,3 +55,49 @@ def test_route_raises_stipulate_error(monkeypatch: pytest.MonkeyPatch) -> None:
         client.route({"amount": {"amountMinor": -1, "currency": "USD"}, "userCardIds": []})
 
     assert exc.value.status == 422
+
+
+def test_route_batch_parses_envelope(monkeypatch: pytest.MonkeyPatch) -> None:
+    def fake_urlopen(request: Any, timeout: float = 30.0) -> _FakeResponse:
+        assert request.full_url.endswith("/route/batch")
+        return _FakeResponse(
+            {
+                "data": {
+                    "batchId": "batch-r4",
+                    "results": [],
+                    "total": 2,
+                    "succeeded": 2,
+                    "failed": 0,
+                    "errors": [],
+                    "computedAt": "2026-06-19T00:00:00Z",
+                },
+                "requestId": "r4",
+            }
+        )
+
+    monkeypatch.setattr("urllib.request.urlopen", fake_urlopen)
+    client = StipulateClient("test_key", base_url="http://localhost:3000/v1")
+    data = client.route_batch(
+        {
+            "requests": [
+                {
+                    "merchantName": "Starbucks",
+                    "amount": {"amountMinor": 650, "currency": "USD"},
+                    "userCardIds": ["amex_gold"],
+                }
+            ]
+        }
+    )
+    assert data["succeeded"] == 2
+
+
+def test_get_org_audit_log_parses_envelope(monkeypatch: pytest.MonkeyPatch) -> None:
+    def fake_urlopen(request: Any, timeout: float = 30.0) -> _FakeResponse:
+        return _FakeResponse(
+            {"data": {"events": [{"id": "e1", "action": "api_key.created"}]}, "requestId": "r3"}
+        )
+
+    monkeypatch.setattr("urllib.request.urlopen", fake_urlopen)
+    client = StipulateClient("test_key", base_url="http://localhost:3000/v1")
+    data = client.get_org_audit_log(limit=10)
+    assert data["events"][0]["action"] == "api_key.created"

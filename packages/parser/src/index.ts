@@ -38,6 +38,9 @@ export {
 export {
   runExtractionPipeline,
   scoreExtractionQuality,
+  extractFromSourceUrl,
+  hashExtractionContent,
+  MIN_EXTRACTION_QUALITY,
   type ExtractSource,
   type ExtractPipelineOptions,
 } from "./extract/pipeline.js";
@@ -122,6 +125,12 @@ export {
   rawBenefitsToRules,
   createOpenAICompatibleClient,
 } from "./parse/llm-parser.js";
+
+export {
+  OpenAILLMClient,
+  createProductionLLMClient,
+  type OpenAILLMClientOptions,
+} from "./parse/openai-client.js";
 
 export {
   CONFIDENCE_REVIEW_THRESHOLD,

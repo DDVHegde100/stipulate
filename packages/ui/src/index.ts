@@ -7,6 +7,21 @@ export { Container, type ContainerProps } from './components/Container.js';
 export { Section, type SectionProps } from './components/Section.js';
 export { Heading, type HeadingProps, type HeadingLevel, type HeadingSize } from './components/Heading.js';
 export { Text, type TextProps, type TextVariant, type TextTone } from './components/Text.js';
+export {
+  MotionFade,
+  GlassPanel,
+  FeatureGrid,
+  PricingCard,
+  StatStrip,
+  TestimonialCard,
+  type MotionFadeProps,
+  type GlassPanelProps,
+  type FeatureGridProps,
+  type PricingCardProps,
+  type StatStripProps,
+  type TestimonialCardProps,
+} from './components/Marketing.js';
+export { NavBar, Footer, type NavBarProps, type FooterProps, type NavLink } from './components/NavBar.js';
 export { cn } from './lib/cn.js';
 
 export { default as stipulateUiPreset } from './tailwind.config.js';

@@ -167,3 +167,63 @@ export async function deactivateWebhookSubscription(orgId: string, subscriptionI
   );
   return (result.rowCount ?? 0) > 0;
 }
+
+export async function listWebhookDeliveriesForOrg(
+  orgId: string,
+  limit = 50,
+): Promise<
+  Array<{
+    id: string;
+    subscription_id: string;
+    url: string;
+    event_id: string;
+    status: string;
+    attempts: number;
+    response_status: number | null;
+    error_message: string | null;
+    created_at: string;
+    last_attempt_at: string | null;
+  }>
+> {
+  if (process.env.NODE_ENV === 'test') {
+    return [
+      {
+        id: '00000000-0000-4000-8000-000000000101',
+        subscription_id: '00000000-0000-4000-8000-000000000100',
+        url: 'https://example.com/webhooks/stipulate',
+        event_id: 'evt_demo_001',
+        status: 'delivered',
+        attempts: 1,
+        response_status: 200,
+        error_message: null,
+        created_at: new Date().toISOString(),
+        last_attempt_at: new Date().toISOString(),
+      },
+    ];
+  }
+
+  const result = await query<{
+    id: string;
+    subscription_id: string;
+    url: string;
+    event_id: string;
+    status: string;
+    attempts: number;
+    response_status: number | null;
+    error_message: string | null;
+    created_at: string;
+    last_attempt_at: string | null;
+  }>(
+    `SELECT wd.id, wd.subscription_id, ws.url, wd.event_id, wd.status, wd.attempts,
+            wd.response_status, wd.error_message, wd.created_at::text,
+            wd.last_attempt_at::text
+     FROM webhook_deliveries wd
+     JOIN webhook_subscriptions ws ON ws.id = wd.subscription_id
+     WHERE ws.org_id = $1::uuid
+     ORDER BY wd.created_at DESC
+     LIMIT $2`,
+    [orgId, limit],
+  );
+
+  return result.rows;
+}

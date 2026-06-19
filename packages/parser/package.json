@@ -21,7 +21,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:eval": "vitest run src/eval"
+    "test:eval": "vitest run src/eval",
+    "eval:gate": "tsx scripts/run-eval-gate.ts"
   },
   "dependencies": {
     "@stipulate/schema": "workspace:*",
