@@ -6,11 +6,12 @@ import {
   Card,
   Container,
   Heading,
-  Input,
   Logo,
   Section,
   Text,
 } from '@stipulate/ui';
+
+import { WaitlistForm } from '../components/WaitlistForm';
 
 const features = [
   {
@@ -78,13 +79,7 @@ export default function HomePage() {
             </div>
 
             <Card variant="glass" padding="lg" className="stipulate-animate-in mx-auto mt-16 max-w-xl text-left">
-              <Text variant="overline" tone="tertiary" className="mb-3">
-                Early access
-              </Text>
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <Input type="email" placeholder="you@company.com" aria-label="Email address" />
-                <Button className="shrink-0">Join waitlist</Button>
-              </div>
+              <WaitlistForm />
             </Card>
           </Container>
         </Section>
