@@ -52,6 +52,8 @@ const envSchema = z
     FEATURE_RECEIPT_OCR: z.string().optional(),
     FEATURE_PROXY_PAY: z.string().optional(),
     FEATURE_BENEFIT_WEBHOOKS: z.string().optional(),
+    RESEND_API_KEY: z.string().optional(),
+    RESEND_FROM_EMAIL: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     if (data.NODE_ENV === 'production' && !data.API_KEY) {
