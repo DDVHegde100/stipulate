@@ -73,6 +73,26 @@ export async function enrichMerchant(input: { merchantName: string; mcc?: string
   return envelope.data.enrichment;
 }
 
+export async function fetchSpendSummary(input: {
+  userRef: string;
+  cardIds: string[];
+}): Promise<Array<{ cardId: string; category: string; capPeriod: string; spentMinor: number }>> {
+  const params = new URLSearchParams({
+    user_ref: input.userRef,
+    card_ids: input.cardIds.join(','),
+  });
+  const headers: Record<string, string> = {};
+  if (API_KEY) headers['X-API-Key'] = API_KEY;
+
+  const response = await fetch(`${API_BASE}/spend/summary?${params}`, { headers });
+  if (!response.ok) return [];
+
+  const envelope = (await response.json()) as {
+    data: { caps: Array<{ cardId: string; category: string; capPeriod: string; spentMinor: number }> };
+  };
+  return envelope.data.caps;
+}
+
 export async function listCatalogCards(): Promise<Array<{ card_id: string; name: string }>> {
   const headers: Record<string, string> = {};
   if (API_KEY) headers['X-API-Key'] = API_KEY;
