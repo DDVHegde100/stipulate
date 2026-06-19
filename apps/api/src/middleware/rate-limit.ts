@@ -36,7 +36,9 @@ export const rateLimit = createMiddleware<AppBindings>(async (c, next) => {
     }
   } catch (error) {
     if (error instanceof HTTPException) throw error;
-    // Redis down — allow request
+    if (process.env.NODE_ENV === 'production') {
+      throw new HTTPException(503, { message: 'Rate limiting unavailable' });
+    }
   }
 
   await next();
