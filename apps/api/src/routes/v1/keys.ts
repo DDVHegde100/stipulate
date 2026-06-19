@@ -8,6 +8,7 @@ import {
   listApiKeysForOrg,
   revokeApiKeyForOrg,
 } from '../../repositories/org.repository.js';
+import { recordAuditEvent } from '../../repositories/audit.repository.js';
 
 const CreateKeySchema = z.object({
   name: z.string().min(1).max(64).default('default'),
@@ -45,6 +46,14 @@ keysHandler.post('/', async (c) => {
     plan: c.get('orgPlan') ?? 'free',
   });
 
+  await recordAuditEvent({
+    orgId,
+    action: 'api_key.created',
+    resourceType: 'api_key',
+    resourceId: result.id,
+    metadata: { name: parsed.data.name, prefix: result.prefix },
+  });
+
   return c.json(
     {
       data: {
@@ -66,6 +75,13 @@ keysHandler.delete('/:id', async (c) => {
 
   const revoked = await revokeApiKeyForOrg(orgId, c.req.param('id'));
   if (!revoked) throw new HTTPException(404, { message: 'API key not found' });
+
+  await recordAuditEvent({
+    orgId,
+    action: 'api_key.revoked',
+    resourceType: 'api_key',
+    resourceId: c.req.param('id'),
+  });
 
   return c.json({ data: { revoked: true }, requestId: c.get('requestId') });
 });

@@ -7,10 +7,13 @@ import {
   createWebhookSubscription,
   generateWebhookSecret,
   listWebhookSubscriptions,
+  listWebhookDeliveriesForOrg,
   deactivateWebhookSubscription,
 } from '../../repositories/webhook.repository.js';
+import { recordAuditEvent } from '../../repositories/audit.repository.js';
 import { processWebhookQueue } from '../../services/webhook-delivery.service.js';
 import { requireScope } from '../../middleware/org-auth.js';
+import { idempotency } from '../../middleware/idempotency.js';
 
 const CreateWebhookSchema = z.object({
   url: z.string().url(),
@@ -22,9 +25,7 @@ const CreateWebhookSchema = z.object({
 
 export const webhooksHandler = new Hono<AppBindings>();
 
-webhooksHandler.use('*', requireScope('webhooks:write'));
-
-webhooksHandler.post('/', async (c) => {
+webhooksHandler.post('/', requireScope('webhooks:write'), idempotency, async (c) => {
   const orgId = c.get('orgId');
   if (!orgId) {
     throw new HTTPException(403, { message: 'Org context required for webhooks' });
@@ -53,6 +54,14 @@ webhooksHandler.post('/', async (c) => {
     secret,
   });
 
+  await recordAuditEvent({
+    orgId,
+    action: 'webhook.created',
+    resourceType: 'webhook',
+    resourceId: sub.id,
+    metadata: { url: parsed.data.url, events: parsed.data.events },
+  });
+
   return c.json(
     {
       data: {
@@ -68,7 +77,7 @@ webhooksHandler.post('/', async (c) => {
   );
 });
 
-webhooksHandler.get('/', async (c) => {
+webhooksHandler.get('/', requireScope('webhooks:write'), async (c) => {
   const orgId = c.get('orgId');
   if (!orgId) {
     throw new HTTPException(403, { message: 'Org context required' });
@@ -78,7 +87,18 @@ webhooksHandler.get('/', async (c) => {
   return c.json({ data: subs, requestId: c.get('requestId') });
 });
 
-webhooksHandler.delete('/:id', async (c) => {
+webhooksHandler.get('/deliveries', requireScope('webhooks:write'), async (c) => {
+  const orgId = c.get('orgId');
+  if (!orgId) {
+    throw new HTTPException(403, { message: 'Org context required' });
+  }
+
+  const limit = Math.min(parseInt(c.req.query('limit') ?? '50', 10), 100);
+  const deliveries = await listWebhookDeliveriesForOrg(orgId, limit);
+  return c.json({ data: { deliveries }, requestId: c.get('requestId') });
+});
+
+webhooksHandler.delete('/:id', requireScope('webhooks:write'), async (c) => {
   const orgId = c.get('orgId');
   if (!orgId) {
     throw new HTTPException(403, { message: 'Org context required' });
@@ -87,10 +107,17 @@ webhooksHandler.delete('/:id', async (c) => {
   const ok = await deactivateWebhookSubscription(orgId, c.req.param('id'));
   if (!ok) throw new HTTPException(404, { message: 'Webhook subscription not found' });
 
+  await recordAuditEvent({
+    orgId,
+    action: 'webhook.revoked',
+    resourceType: 'webhook',
+    resourceId: c.req.param('id'),
+  });
+
   return c.json({ data: { revoked: true }, requestId: c.get('requestId') });
 });
 
-webhooksHandler.post('/deliver', async (c) => {
+webhooksHandler.post('/deliver', requireScope('webhooks:write'), async (c) => {
   const result = await processWebhookQueue({ limit: 25 });
   return c.json({ data: result, requestId: c.get('requestId') });
 });

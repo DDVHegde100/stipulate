@@ -12,6 +12,7 @@ const NAV = [
   { href: '/dashboard/billing', label: 'Billing' },
   { href: '/dashboard/keys', label: 'API keys' },
   { href: '/dashboard/webhooks', label: 'Webhooks' },
+  { href: '/dashboard/audit', label: 'Audit' },
   { href: '/console', label: 'Console' },
 ] as const;
 

@@ -28,6 +28,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: 'io.stipulate.app',
+    associatedDomains: ['applinks:stipulate.io', 'applinks:www.stipulate.io'],
+    config: {
+      usesNonExemptEncryption: false,
+    },
+    infoPlist: {
+      NSUserNotificationsUsageDescription:
+        'Stipulate sends alerts when card benefits on your wallet change.',
+    },
   },
   android: {
     adaptiveIcon: {
@@ -35,21 +43,42 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: brand.colors.ink,
     },
     package: 'io.stipulate.app',
+    permissions: ['POST_NOTIFICATIONS'],
+    intentFilters: [
+      {
+        action: 'VIEW',
+        autoVerify: true,
+        data: [
+          { scheme: 'https', host: 'stipulate.io', pathPrefix: '/app' },
+          { scheme: 'stipulate' },
+        ],
+        category: ['BROWSABLE', 'DEFAULT'],
+      },
+    ],
   },
   web: {
     bundler: 'metro',
     output: 'static',
     favicon: '../../packages/brand/assets/favicon.svg',
   },
-  plugins: ['expo-router'],
+  plugins: [
+    'expo-router',
+    [
+      'expo-notifications',
+      {
+        icon: '../../packages/brand/assets/logo-icon.svg',
+        color: brand.colors.accent,
+      },
+    ],
+  ],
   experiments: {
     typedRoutes: true,
   },
   extra: {
     tagline: brand.tagline,
     domain: brand.domain,
-    apiUrl: 'http://localhost:3000/v1',
-    apiKey: '',
+    apiUrl: process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3000/v1',
+    apiKey: process.env.EXPO_PUBLIC_API_KEY ?? 'stip_dev_local_key_change_in_production',
     eas: {
       projectId: 'stipulate-mobile',
     },

@@ -5,6 +5,7 @@ import { resetEnvCache } from '../config/env.js';
 import { getFeatureFlags } from '../lib/feature-flags.js';
 import { resetDatabasePool } from '../lib/db.js';
 import { resetRedisClient } from '../lib/redis.js';
+import { proxyPayPurchase, ProxyPayError } from '../services/proxy-pay.service.js';
 
 describe('feature flags', () => {
   beforeEach(() => {
@@ -122,6 +123,26 @@ describe('proxy pay API', () => {
 
     expect(response.status).toBe(404);
   });
+
+  it('requires paymentMethodToken in production', async () => {
+    process.env.NODE_ENV = 'production';
+    resetEnvCache();
+
+    await expect(
+      proxyPayPurchase(
+        {
+          merchantName: 'Starbucks',
+          mcc: '5814',
+          amount: { amountMinor: 650, currency: 'USD' },
+          userCardIds: ['chase_sapphire_preferred'],
+        },
+        'req-proxy-pay-prod',
+      ),
+    ).rejects.toMatchObject({
+      name: 'ProxyPayError',
+      code: 'PAYMENT_TOKEN_REQUIRED',
+    } satisfies Partial<ProxyPayError>);
+  });
 });
 
 describe('admin reparse API', () => {
@@ -222,5 +243,125 @@ describe('public waitlist API', () => {
       body: JSON.stringify({ email: 'founder@example.com', company: 'Acme' }),
     });
     expect(response.status).toBe(201);
+  });
+});
+
+describe('GDPR org API', () => {
+  beforeEach(() => {
+    resetEnvCache();
+    resetDatabasePool();
+    resetRedisClient();
+    process.env.NODE_ENV = 'test';
+    process.env.LOG_LEVEL = 'silent';
+    process.env.API_KEY = 'test_api_key_ci_16chars';
+  });
+
+  it('GET /v1/org/export returns data bundle', async () => {
+    const app = createApp();
+    const response = await app.request('/v1/org/export', {
+      headers: { 'X-API-Key': process.env.API_KEY! },
+    });
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data.org).toBeDefined();
+    expect(body.data.exportedAt).toBeDefined();
+  });
+
+  it('DELETE /v1/org schedules deletion', async () => {
+    const app = createApp();
+    const response = await app.request('/v1/org', {
+      method: 'DELETE',
+      headers: { 'X-API-Key': process.env.API_KEY! },
+    });
+    expect(response.status).toBe(202);
+    const body = await response.json();
+    expect(body.data.status).toBe('scheduled');
+    expect(body.data.scheduledFor).toBeDefined();
+  });
+});
+
+describe('public status API', () => {
+  beforeEach(() => {
+    resetEnvCache();
+    resetDatabasePool();
+    resetRedisClient();
+    process.env.NODE_ENV = 'test';
+    process.env.LOG_LEVEL = 'silent';
+  });
+
+  it('GET /status returns operational checks', async () => {
+    const app = createApp();
+    const response = await app.request('/status');
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.status).toBe('operational');
+    expect(body.checks.api.ok).toBe(true);
+    expect(body.checks.workers).toBeDefined();
+    expect(body.checks.slo.routeP99LimitMs).toBe(20);
+  });
+});
+
+describe('consumer auth API', () => {
+  beforeEach(() => {
+    resetEnvCache();
+    process.env.NODE_ENV = 'test';
+    process.env.LOG_LEVEL = 'silent';
+  });
+
+  it('POST /public/auth/login accepts demo credentials', async () => {
+    const app = createApp();
+    const response = await app.request('/public/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: 'demo@stipulate.io', password: 'demo-password-123' }),
+    });
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data.email).toBe('demo@stipulate.io');
+  });
+
+  it('POST /public/auth/signup creates user', async () => {
+    const app = createApp();
+    const response = await app.request('/public/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: 'newuser@example.com',
+        password: 'securepass1',
+        name: 'New User',
+      }),
+    });
+    expect(response.status).toBe(201);
+  });
+});
+
+describe('openapi spec', () => {
+  beforeEach(() => {
+    resetEnvCache();
+    process.env.NODE_ENV = 'test';
+    process.env.LOG_LEVEL = 'silent';
+    process.env.API_KEY = 'test_api_key_ci_16chars';
+  });
+
+  it('GET /v1/openapi returns YAML spec', async () => {
+    const app = createApp();
+    const response = await app.request('/v1/openapi', {
+      headers: { 'X-API-Key': process.env.API_KEY! },
+    });
+    expect(response.status).toBe(200);
+    const text = await response.text();
+    expect(text).toContain('openapi: 3.1.0');
+    expect(text).toContain('/org/export');
+  });
+
+  it('GET /v1/openapi/json returns parsed spec', async () => {
+    const app = createApp();
+    const response = await app.request('/v1/openapi/json', {
+      headers: { 'X-API-Key': process.env.API_KEY! },
+    });
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.paths['/org/export']).toBeDefined();
+    expect(body.paths['/proxy-pay']).toBeDefined();
   });
 });

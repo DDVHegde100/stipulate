@@ -21,6 +21,7 @@ export interface EvalCaseResult {
   cardId: string;
   passed: boolean;
   score: number;
+  categoryPrecision: number;
   errors: string[];
   warnings: string[];
   durationMs: number;
@@ -186,6 +187,7 @@ export async function evaluateFixture(fixture: EvalFixture): Promise<EvalCaseRes
     cardId: fixture.cardId,
     passed: errors.length === 0 && score >= 0.6,
     score,
+    categoryPrecision: categoryScore,
     errors,
     warnings,
     durationMs: Date.now() - start,
@@ -214,9 +216,13 @@ export async function runEvalSuite(
   const totalExpected = fixtures.reduce((s, f) => s + f.expected.categories.length, 0);
   const totalMatched = results.reduce((s, r, i) => {
     const fixture = fixtures[i]!;
-    const rules = r.rulesExtracted;
-    return s + Math.min(fixture.expected.categories.length, rules);
+    return s + Math.round(r.categoryPrecision * fixture.expected.categories.length);
   }, 0);
+
+  const categoryPrecision =
+    results.length === 0
+      ? 0
+      : Math.round((results.reduce((s, r) => s + r.categoryPrecision, 0) / results.length) * 1000) / 1000;
 
   return {
     runAt: new Date().toISOString(),
@@ -224,18 +230,47 @@ export async function runEvalSuite(
     passed,
     failed,
     averageScore,
-    precision: results.length ? passed / results.length : 0,
+    precision: categoryPrecision,
     recall: totalExpected ? totalMatched / totalExpected : 0,
     results,
   };
 }
 
-/** CI gate — fails if any fixture below minimum score. */
-export function assertEvalGate(report: EvalReport, minPassRate = 0.8): void {
+/** CI gate — fails if pass rate or category precision below thresholds. */
+export function assertEvalGate(
+  report: EvalReport,
+  options: {
+    minPassRate?: number;
+    minCategoryPrecision?: number;
+    minCapPrecision?: number;
+  } = {},
+): void {
+  const minPassRate = options.minPassRate ?? 0.8;
+  const minCategoryPrecision = options.minCategoryPrecision ?? 0.9;
+  const minCapPrecision = options.minCapPrecision ?? 0.85;
+
   const passRate = report.total ? report.passed / report.total : 0;
   if (passRate < minPassRate) {
     throw new Error(
       `Eval gate failed: ${report.passed}/${report.total} passed (${(passRate * 100).toFixed(0)}% < ${minPassRate * 100}%)`,
     );
+  }
+
+  if (report.precision < minCategoryPrecision) {
+    throw new Error(
+      `Category precision gate failed: ${(report.precision * 100).toFixed(0)}% < ${minCategoryPrecision * 100}%`,
+    );
+  }
+
+  const capCases = report.results.filter((r) =>
+    GOLDEN_FIXTURES.find((f) => f.id === r.fixtureId)?.sourceText.toLowerCase().includes('cap'),
+  );
+  if (capCases.length > 0) {
+    const capPassRate = capCases.filter((r) => r.passed).length / capCases.length;
+    if (capPassRate < minCapPrecision) {
+      throw new Error(
+        `Cap precision gate failed: ${(capPassRate * 100).toFixed(0)}% < ${minCapPrecision * 100}%`,
+      );
+    }
   }
 }

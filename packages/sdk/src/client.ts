@@ -7,6 +7,8 @@ import type {
   EnrichRequest,
   EnrichResponse,
   PointsValuationTable,
+  ProxyPayRequest,
+  ProxyPayResponse,
   RouteRequest,
   RouteResponse,
 } from '@stipulate/schema';
@@ -99,6 +101,29 @@ export class StipulateClient {
     return this.get('/usage');
   }
 
+  async listWebhookSubscriptions(): Promise<Array<{ id: string; url: string; events: string[]; is_active: boolean }>> {
+    return this.get('/webhooks');
+  }
+
+  async listWebhookDeliveries(limit = 50): Promise<{
+    deliveries: Array<{
+      id: string;
+      url: string;
+      event_id: string;
+      status: string;
+      attempts: number;
+      response_status: number | null;
+    }>;
+  }> {
+    return this.get(`/webhooks/deliveries?limit=${limit}`);
+  }
+
+  async getOrgAuditLog(limit = 50): Promise<{
+    events: Array<{ id: string; action: string; resource_type?: string; created_at: string }>;
+  }> {
+    return this.get(`/org/audit?limit=${limit}`);
+  }
+
   async createWebhookSubscription(input: {
     url: string;
     events: string[];
@@ -153,8 +178,8 @@ export class StipulateClient {
     return this.post('/enrich/corrections', input);
   }
 
-  async proxyPay(input: Record<string, unknown>): Promise<Record<string, unknown>> {
-    return this.post('/proxy-pay', input);
+  async proxyPay(request: ProxyPayRequest): Promise<ProxyPayResponse> {
+    return this.post<ProxyPayResponse>('/proxy-pay', request);
   }
 
   async getOpenApiSpec(): Promise<string> {

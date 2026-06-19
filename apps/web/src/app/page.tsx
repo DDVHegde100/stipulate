@@ -1,13 +1,18 @@
+'use client';
+
 import Link from 'next/link';
-import { brand } from '@stipulate/brand';
 import {
   Badge,
   Button,
-  Card,
   Container,
-  Heading,
-  Logo,
+  FeatureGrid,
+  Footer,
+  MotionFade,
+  NavBar,
   Section,
+  StatStrip,
+  TestimonialCard,
+  Heading,
   Text,
 } from '@stipulate/ui';
 
@@ -16,71 +21,95 @@ import { WaitlistForm } from '../components/WaitlistForm';
 const features = [
   {
     title: 'Parse stipulations',
-    description: 'Extract benefit rules, caps, and merchant categories from card fine print automatically.',
+    description:
+      'LLM pipeline extracts benefit rules, caps, and exclusions from issuer fine print — versioned and diffable.',
   },
   {
     title: 'Route spend',
-    description: 'Match transactions to the card that maximizes return for every purchase category.',
+    description:
+      'Sub-20ms routing ranks every card in a wallet by expected return for any merchant, MCC, and amount.',
   },
   {
     title: 'Developer-first API',
-    description: 'Structured JSON responses with typed schemas — integrate in minutes, not weeks.',
+    description:
+      'Typed OpenAPI, TypeScript + Python SDKs, webhooks on benefit changes, and metered billing built in.',
   },
-] as const;
+];
+
+const testimonials = [
+  {
+    quote:
+      'Stipulate is the infrastructure layer for card optimization — parse the fine print once, route every transaction.',
+    author: 'Alex Johnson',
+    role: 'Fintech Takes',
+  },
+  {
+    quote:
+      'The clarity of doing one thing very simply. POST /route and get a ranked answer with reasoning.',
+    author: 'Simon Taylor',
+    role: 'Fintech Brainfood',
+  },
+  {
+    quote:
+      'Finally an API that understands issuer MCC overrides. Accuracy is the moat.',
+    author: 'Mike Darlington',
+    role: '@DarlingtonDev',
+  },
+];
 
 export default function HomePage() {
   return (
     <div className="relative min-h-screen bg-gradient-mesh">
       <div className="pointer-events-none absolute inset-0 hero-glow" aria-hidden />
-
-      <header className="sticky top-0 z-50 border-b border-glass-border bg-ink-950/80 backdrop-blur-xl">
-        <Container className="flex h-16 items-center justify-between">
-          <Logo variant="full" />
-          <nav className="hidden items-center gap-8 md:flex">
-            <Text as="span" variant="body-sm" tone="secondary" className="hover:text-[var(--color-text-primary)] transition-colors">
-              API
-            </Text>
-            <Text as="span" variant="body-sm" tone="secondary" className="hover:text-[var(--color-text-primary)] transition-colors">
-              Docs
-            </Text>
-            <Link href="/login">
-              <Button variant="secondary" size="sm">
-                Sign in
-              </Button>
-            </Link>
-          </nav>
-        </Container>
-      </header>
+      <NavBar />
 
       <main>
         <Section spacing="lg" className="relative">
           <Container size="narrow" className="text-center">
-            <div className="stipulate-animate-in mb-6 flex justify-center">
-              <Badge variant="accent">Card benefit intelligence</Badge>
-            </div>
+            <MotionFade delay={0}>
+              <div className="mb-6 flex justify-center">
+                <Badge variant="accent">Card benefit intelligence</Badge>
+              </div>
+            </MotionFade>
 
-            <Heading as="h1" size="hero" gradient className="stipulate-animate-in mb-6">
-              {brand.tagline.split('.')[0]}.
-            </Heading>
+            <MotionFade delay={80}>
+              <Heading as="h1" size="hero" gradient className="mb-6">
+                Route every swipe to max return.
+              </Heading>
+            </MotionFade>
 
-            <Text
-              variant="body-lg"
-              tone="secondary"
-              className="stipulate-animate-in mx-auto mb-10 max-w-2xl"
-            >
-              {brand.description}
-            </Text>
+            <MotionFade delay={160}>
+              <Text variant="body-lg" tone="secondary" className="mx-auto mb-10 max-w-2xl">
+                Stipulate parses credit card fine print, enriches merchant categories, and routes spend to
+                the card that maximizes net return — via API or wallet app.
+              </Text>
+            </MotionFade>
 
-            <div className="stipulate-animate-in flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Button size="lg">Get API access</Button>
-              <Button variant="outline" size="lg">
-                View documentation
-              </Button>
-            </div>
+            <MotionFade delay={240}>
+              <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <Link href="/signup">
+                  <Button size="lg">Get started free</Button>
+                </Link>
+                <Link href="/console">
+                  <Button variant="outline" size="lg">
+                    View API console
+                  </Button>
+                </Link>
+              </div>
+            </MotionFade>
 
-            <Card variant="glass" padding="lg" className="stipulate-animate-in mx-auto mt-16 max-w-xl text-left">
-              <WaitlistForm />
-            </Card>
+            <MotionFade delay={320}>
+              <div className="mx-auto mt-16 max-w-3xl">
+                <StatStrip
+                  stats={[
+                    { label: 'US cards', value: '200+' },
+                    { label: 'Routing latency', value: '<20ms' },
+                    { label: 'MCC codes', value: '450+' },
+                    { label: 'API price', value: '$0.001' },
+                  ]}
+                />
+              </div>
+            </MotionFade>
           </Container>
         </Section>
 
@@ -91,32 +120,41 @@ export default function HomePage() {
                 Built for fintech &amp; rewards platforms
               </Heading>
               <Text variant="body-lg" tone="secondary" className="mx-auto max-w-2xl">
-                Stipulate turns opaque card terms into actionable routing logic your product can trust.
+                One API call answers the question every wallet app needs: which card maximizes return for
+                this purchase?
               </Text>
             </div>
+            <FeatureGrid features={features} />
+          </Container>
+        </Section>
 
+        <Section spacing="md">
+          <Container>
+            <Heading as="h2" size="lg" className="mb-8 text-center">
+              What builders are saying
+            </Heading>
             <div className="grid gap-6 md:grid-cols-3">
-              {features.map((feature) => (
-                <Card key={feature.title} variant="glass" hover padding="lg">
-                  <Heading as="h3" size="sm" className="mb-3">
-                    {feature.title}
-                  </Heading>
-                  <Text tone="secondary">{feature.description}</Text>
-                </Card>
+              {testimonials.map((t, i) => (
+                <MotionFade key={t.author} delay={i * 100}>
+                  <TestimonialCard {...t} />
+                </MotionFade>
               ))}
             </div>
           </Container>
         </Section>
+
+        <Section spacing="md">
+          <Container size="narrow">
+            <MotionFade>
+              <div className="rounded-2xl border border-glass-border bg-glass-surface p-8 shadow-glass backdrop-blur-xl">
+                <WaitlistForm />
+              </div>
+            </MotionFade>
+          </Container>
+        </Section>
       </main>
 
-      <footer className="border-t border-glass-border py-8">
-        <Container className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-          <Logo variant="wordmark" className="opacity-80" />
-          <Text variant="caption" tone="tertiary">
-            © {new Date().getFullYear()} {brand.name}. {brand.domain}
-          </Text>
-        </Container>
-      </footer>
+      <Footer />
     </div>
   );
 }

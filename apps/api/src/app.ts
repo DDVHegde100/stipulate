@@ -10,10 +10,12 @@ import { createChildLogger } from './lib/logger.js';
 import { requestId } from './middleware/request-id.js';
 import { timing } from './middleware/timing.js';
 import { healthRoutes } from './routes/health.js';
+import { statusRoutes } from './routes/status.js';
 import { v1Routes } from './routes/v1/index.js';
 import { adminRoutes } from './routes/admin/index.js';
 import { stripeWebhookHandler } from './routes/webhooks/stripe.js';
 import { waitlistHandler } from './routes/public/waitlist.js';
+import { consumerAuthHandler } from './routes/public/auth.js';
 import { captureException } from './lib/observability.js';
 
 export type AppVariables = {
@@ -73,8 +75,10 @@ export function createApp(options: CreateAppOptions = {}): Hono<AppBindings> {
   });
 
   app.route('/health', healthRoutes);
+  app.route('/status', statusRoutes);
   app.route('/webhooks/stripe', stripeWebhookHandler);
   app.route('/public/waitlist', waitlistHandler);
+  app.route('/public/auth', consumerAuthHandler);
   app.route(`/${env.API_VERSION}`, v1Routes);
   app.route('/admin', adminRoutes);
 

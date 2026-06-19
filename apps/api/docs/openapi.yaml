@@ -175,6 +175,252 @@ paths:
         '201':
           description: Correction submitted for review
 
+  /changelog:
+    get:
+      operationId: getChangelog
+      summary: Benefit change history across the catalog
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 25
+        - name: cursor
+          in: query
+          schema:
+            type: string
+        - name: card_id
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Paginated changelog events
+
+  /cards/{card_id}/benefits:
+    get:
+      operationId: getCardBenefits
+      summary: Versioned benefit rules for a card
+      parameters:
+        - name: card_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: as_of
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: version
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Benefit rules for the card
+
+  /keys:
+    get:
+      operationId: listApiKeys
+      summary: List API keys for the authenticated org
+      responses:
+        '200':
+          description: API key summaries (prefix only, no secrets)
+    post:
+      operationId: createApiKey
+      summary: Create a new API key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                scopes:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '201':
+          description: New API key created (raw key returned once)
+
+  /keys/{key_id}:
+    delete:
+      operationId: revokeApiKey
+      summary: Revoke an API key
+      parameters:
+        - name: key_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Key revoked
+
+  /billing/subscription:
+    get:
+      operationId: getSubscription
+      summary: Current org subscription and plan
+      responses:
+        '200':
+          description: Subscription summary
+
+  /billing/checkout:
+    post:
+      operationId: createCheckoutSession
+      summary: Create Stripe Checkout session for plan upgrade
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [success_url, cancel_url]
+              properties:
+                plan:
+                  type: string
+                  enum: [payg, saas]
+                success_url:
+                  type: string
+                  format: uri
+                cancel_url:
+                  type: string
+                  format: uri
+      responses:
+        '200':
+          description: Checkout session URL
+
+  /billing/portal:
+    post:
+      operationId: createBillingPortal
+      summary: Create Stripe customer portal session
+      responses:
+        '200':
+          description: Portal session URL
+
+  /spend/summary:
+    get:
+      operationId: getSpendSummary
+      summary: Cap spend summary for a user wallet
+      parameters:
+        - name: user_ref
+          in: query
+          schema:
+            type: string
+        - name: card_ids
+          in: query
+          required: true
+          schema:
+            type: string
+            description: Comma-separated card IDs
+      responses:
+        '200':
+          description: Spend by category and card
+
+  /proxy-pay:
+    post:
+      operationId: proxyPay
+      summary: Route purchase and return tokenized payment intent
+      description: Requires FEATURE_PROXY_PAY. Returns a sandbox payment intent stub.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [amount, userCardIds]
+              properties:
+                merchantName:
+                  type: string
+                mcc:
+                  type: string
+                amount:
+                  $ref: '#/components/schemas/Money'
+                userCardIds:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Proxy pay routing result with payment intent
+        '404':
+          description: Proxy pay feature disabled
+        '422':
+          description: paymentMethodToken required in production
+
+  /webhooks/deliveries:
+    get:
+      operationId: listWebhookDeliveries
+      summary: Recent webhook delivery attempts for the org
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            maximum: 100
+            default: 50
+      responses:
+        '200':
+          description: Delivery log entries
+
+  /org/audit:
+    get:
+      operationId: getOrgAuditLog
+      summary: Immutable audit log of org configuration changes
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            maximum: 100
+            default: 50
+      responses:
+        '200':
+          description: Audit events (API keys, webhooks)
+
+  /org/export:
+    get:
+      operationId: exportOrgData
+      summary: GDPR data export for the authenticated org
+      responses:
+        '200':
+          description: JSON bundle of org data
+
+  /org:
+    delete:
+      operationId: deleteOrg
+      summary: Schedule org deletion (30-day grace period)
+      responses:
+        '202':
+          description: Deletion scheduled
+
+  /openapi:
+    get:
+      operationId: getOpenApiSpec
+      summary: OpenAPI 3.1 specification (YAML)
+      security: []
+      responses:
+        '200':
+          description: OpenAPI YAML document
+          content:
+            text/yaml:
+              schema:
+                type: string
+
+  /openapi/json:
+    get:
+      operationId: getOpenApiJson
+      summary: OpenAPI 3.1 specification (JSON)
+      security: []
+      responses:
+        '200':
+          description: OpenAPI JSON document
+
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -268,9 +514,6 @@ components:
           type: array
           items:
             type: string
-        reasoning:
-          type: string
-
         reasoning:
           type: string
         factors:

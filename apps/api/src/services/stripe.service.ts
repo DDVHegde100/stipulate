@@ -91,6 +91,42 @@ export async function createPortalSession(orgId: string, returnUrl: string): Pro
   return { url: session.url };
 }
 
+/** Create a Stripe PaymentIntent for proxy-pay purchases. */
+export async function createProxyPayPaymentIntent(input: {
+  amountMinor: number;
+  currency: string;
+  paymentMethodId: string;
+  metadata: Record<string, string>;
+}): Promise<{ id: string; status: string; clientSecret?: string }> {
+  if (process.env.NODE_ENV === 'test') {
+    return { id: 'pi_test_proxy_pay', status: 'requires_confirmation', clientSecret: 'pi_test_secret' };
+  }
+
+  const body: Record<string, string> = {
+    amount: String(input.amountMinor),
+    currency: input.currency.toLowerCase(),
+    payment_method: input.paymentMethodId,
+    confirm: 'false',
+    capture_method: 'manual',
+    'automatic_payment_methods[enabled]': 'false',
+  };
+
+  for (const [key, value] of Object.entries(input.metadata)) {
+    body[`metadata[${key}]`] = value;
+  }
+
+  const intent = await stripeRequest<{ id: string; status: string; client_secret?: string }>(
+    '/payment_intents',
+    body,
+  );
+
+  return {
+    id: intent.id,
+    status: intent.status,
+    clientSecret: intent.client_secret,
+  };
+}
+
 /** Handle Stripe webhook events. */
 export async function handleStripeWebhookEvent(event: {
   id: string;

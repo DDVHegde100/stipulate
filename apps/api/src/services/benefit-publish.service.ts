@@ -7,6 +7,7 @@ import * as webhookRepo from '../repositories/webhook.repository.js';
 import { withTransaction } from '../lib/db.js';
 import { invalidateBenefitIndex } from '../lib/cache-invalidation.js';
 import { getFeatureFlags } from '../lib/feature-flags.js';
+import { notifyConsumersOfBenefitChange } from './benefit-alert.service.js';
 
 /** Publish normalized rules from an approved ingestion job to the catalog. */
 export async function publishIngestionBenefits(jobId: string): Promise<void> {
@@ -99,6 +100,12 @@ export async function publishIngestionBenefits(jobId: string): Promise<void> {
   }
 
   void invalidateBenefitIndex([job.cardId]);
+
+  void notifyConsumersOfBenefitChange({
+    cardId: job.cardId,
+    changeSummary: `Published ${rules.length} rules for ${job.cardId}`,
+    severity: 'material',
+  });
 
   await ingestionRepo.updateIngestionJob(jobId, {
     status: 'published',

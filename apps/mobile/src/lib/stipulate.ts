@@ -3,7 +3,13 @@ import Constants from 'expo-constants';
 const extra = Constants.expoConfig?.extra as { apiUrl?: string; apiKey?: string } | undefined;
 
 const API_BASE = extra?.apiUrl ?? 'http://localhost:3000/v1';
-const API_KEY = extra?.apiKey ?? '';
+const API_KEY = extra?.apiKey ?? 'stip_dev_local_key_change_in_production';
+
+function apiHeaders(): Record<string, string> {
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (API_KEY) headers['X-API-Key'] = API_KEY;
+  return headers;
+}
 
 export interface RouteApiResponse {
   bestCardId: string;
@@ -24,8 +30,7 @@ export async function routePurchase(input: {
   userCardIds: string[];
   mcc?: string;
 }): Promise<RouteApiResponse> {
-  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-  if (API_KEY) headers['X-API-Key'] = API_KEY;
+  const headers = apiHeaders();
 
   const response = await fetch(`${API_BASE}/route`, {
     method: 'POST',
@@ -54,8 +59,7 @@ export async function enrichMerchant(input: { merchantName: string; mcc?: string
   mcc?: string;
   confidence: number;
 }> {
-  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-  if (API_KEY) headers['X-API-Key'] = API_KEY;
+  const headers = apiHeaders();
 
   const response = await fetch(`${API_BASE}/enrich`, {
     method: 'POST',
@@ -81,8 +85,8 @@ export async function fetchSpendSummary(input: {
     user_ref: input.userRef,
     card_ids: input.cardIds.join(','),
   });
-  const headers: Record<string, string> = {};
-  if (API_KEY) headers['X-API-Key'] = API_KEY;
+  const headers = apiHeaders();
+  delete headers['Content-Type'];
 
   const response = await fetch(`${API_BASE}/spend/summary?${params}`, { headers });
   if (!response.ok) return [];
@@ -94,12 +98,41 @@ export async function fetchSpendSummary(input: {
 }
 
 export async function listCatalogCards(): Promise<Array<{ card_id: string; name: string }>> {
-  const headers: Record<string, string> = {};
-  if (API_KEY) headers['X-API-Key'] = API_KEY;
+  const headers = apiHeaders();
+  delete headers['Content-Type'];
 
   const response = await fetch(`${API_BASE}/cards?limit=25`, { headers });
   if (!response.ok) return [];
 
   const envelope = await response.json() as { data: { cards: Array<{ card_id: string; name: string }> } };
   return envelope.data.cards;
+}
+
+export interface ChangelogEntry {
+  id: string;
+  card_id: string;
+  card_name?: string;
+  version: number;
+  previous_version?: number;
+  change_summary: string;
+  severity: string;
+  published_at: string;
+  changes: Array<{ field?: string; old_value?: unknown; new_value?: unknown }>;
+}
+
+export async function fetchChangelog(input?: {
+  limit?: number;
+  cardId?: string;
+}): Promise<ChangelogEntry[]> {
+  const params = new URLSearchParams({ limit: String(input?.limit ?? 20) });
+  if (input?.cardId) params.set('card_id', input.cardId);
+
+  const headers = apiHeaders();
+  delete headers['Content-Type'];
+
+  const response = await fetch(`${API_BASE}/changelog?${params}`, { headers });
+  if (!response.ok) return [];
+
+  const envelope = (await response.json()) as { data: { entries: ChangelogEntry[] } };
+  return envelope.data.entries ?? [];
 }

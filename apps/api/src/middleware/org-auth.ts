@@ -46,7 +46,7 @@ export const orgAuth = createMiddleware<AppBindings>(async (c, next) => {
     c.set('authenticated', true);
     c.set('orgId', '00000000-0000-4000-8000-000000000001');
     c.set('orgPlan', 'saas');
-    c.set('scopes', ['route:read', 'enrich:read', 'admin:read']);
+    c.set('scopes', ['route:read', 'enrich:read', 'admin:read', 'webhooks:write']);
     c.set('rateLimitPerMinute', 600);
     await next();
     return;

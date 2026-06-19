@@ -69,6 +69,9 @@ jobs:
       - name: Run typecheck
         run: pnpm typecheck
 
+      - name: Mobile typecheck
+        run: pnpm --filter @stipulate/mobile typecheck
+
   test:
     name: test
     runs-on: ubuntu-latest
@@ -120,6 +123,9 @@ jobs:
 
       - name: Run tests
         run: pnpm test
+
+      - name: Parser eval gate
+        run: pnpm --filter @stipulate/parser eval:gate
 
   e2e:
     name: e2e

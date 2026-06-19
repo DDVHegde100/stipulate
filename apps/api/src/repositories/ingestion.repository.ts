@@ -147,6 +147,19 @@ export async function fetchQueuedJobs(limit = 10): Promise<IngestionJobRow[]> {
   return listIngestionJobs({ status: 'queued', limit });
 }
 
+/** Count ingestion jobs by status (for status page). */
+export async function countJobsByStatus(status: IngestionStatus): Promise<number> {
+  if (useMemory()) {
+    return [...memoryStore.values()].filter((j) => j.status === status).length;
+  }
+
+  const result = await query<{ count: string }>(
+    `SELECT COUNT(*)::text AS count FROM ingestion_jobs WHERE status = $1`,
+    [status],
+  );
+  return Number(result.rows[0]?.count ?? 0);
+}
+
 export async function updateIngestionJob(
   id: string,
   patch: Partial<{

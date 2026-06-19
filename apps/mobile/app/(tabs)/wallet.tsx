@@ -4,11 +4,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { GlassCard } from '@/components/GlassCard';
 import { Logo } from '@/components/Logo';
+import { SectionHeader } from '@/components/SectionHeader';
+import { useAuth } from '@/context/AuthContext';
 import { useWallet } from '@/hooks/useWallet';
 import { listCatalogCards } from '@/lib/stipulate';
 import { colors } from '@/theme/colors';
 
 export default function WalletScreen() {
+  const { user } = useAuth();
   const { cards, loaded, addCard, removeCard } = useWallet();
   const [catalog, setCatalog] = useState<Array<{ card_id: string; name: string }>>([]);
 
@@ -21,7 +24,13 @@ export default function WalletScreen() {
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.header}>
           <Logo size={40} />
-          <Text style={styles.title}>Your wallet</Text>
+          <View style={styles.headerText}>
+            <SectionHeader
+              overline="Your wallet"
+              title={`${cards.length} card${cards.length !== 1 ? 's' : ''} linked`}
+              subtitle={user?.name ?? user?.email}
+            />
+          </View>
         </View>
 
         <GlassCard>
@@ -64,8 +73,8 @@ export default function WalletScreen() {
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: colors.background },
   content: { padding: 20, gap: 16 },
-  header: { flexDirection: 'row', alignItems: 'center', gap: 14, marginBottom: 8 },
-  title: { color: colors.text, fontSize: 22, fontWeight: '600' },
+  header: { flexDirection: 'row', alignItems: 'flex-start', gap: 14, marginBottom: 8 },
+  headerText: { flex: 1 },
   cardLabel: {
     color: colors.textAccent,
     fontSize: 12,

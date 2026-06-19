@@ -93,6 +93,16 @@ class StipulateClient:
         query = urllib.parse.urlencode({"user_ref": user_ref, "card_ids": ",".join(card_ids)})
         return self._get(f"/spend/summary?{query}")
 
+    def list_webhook_deliveries(self, limit: Optional[int] = None) -> Mapping[str, Any]:
+        params = {"limit": str(limit)} if limit is not None else {}
+        query = f"?{urllib.parse.urlencode(params)}" if params else ""
+        return self._get(f"/webhooks/deliveries{query}")
+
+    def get_org_audit_log(self, limit: Optional[int] = None) -> Mapping[str, Any]:
+        params = {"limit": str(limit)} if limit is not None else {}
+        query = f"?{urllib.parse.urlencode(params)}" if params else ""
+        return self._get(f"/org/audit{query}")
+
     def _delete(self, path: str) -> Mapping[str, Any]:
         url = f"{self.base_url}{path}"
         request = urllib.request.Request(

@@ -6,6 +6,7 @@ import {
 } from '@stipulate/parser';
 import * as reparseRepo from '../repositories/reparse.repository.js';
 import { ingestionService } from './ingestion.service.js';
+import { notifyConsumersOfBenefitChange } from './benefit-alert.service.js';
 
 const ISSUER_MAP: Record<string, string> = {
   chase_sapphire_preferred: 'Chase',
@@ -48,6 +49,13 @@ export async function runScheduledReparse(options: {
 
       const target = targets.find((t) => t.cardId === result.cardId);
       if (target) {
+        void notifyConsumersOfBenefitChange({
+          cardId: target.cardId,
+          cardName: target.productName,
+          changeSummary: 'Issuer benefit guide changed — rules are being re-ingested',
+          severity: 'material',
+        });
+
         await ingestionService.createIngestionJob({
           cardId: target.cardId,
           sourceUrl: target.sourceUrl,

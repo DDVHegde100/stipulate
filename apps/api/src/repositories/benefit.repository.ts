@@ -128,6 +128,7 @@ export async function listChangelog(options: {
   limit: number;
   cursor?: string;
   cardId?: string;
+  since?: string;
 }): Promise<{ rows: ChangelogRow[]; hasMore: boolean }> {
   const params: unknown[] = [options.limit + 1];
   let where = 'WHERE 1=1';
@@ -135,6 +136,11 @@ export async function listChangelog(options: {
   if (options.cardId) {
     params.push(options.cardId);
     where += ` AND c.card_id = $${params.length}`;
+  }
+
+  if (options.since) {
+    params.push(options.since);
+    where += ` AND bv.created_at >= $${params.length}::timestamptz`;
   }
 
   if (options.cursor) {

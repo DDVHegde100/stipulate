@@ -59,3 +59,13 @@ jobs:
           generate_release_notes: true
           draft: false
           prerelease: false
+
+      - name: Post-deploy smoke tests
+        run: |
+          API_URL="${{ vars.PRODUCTION_API_URL }}"
+          if [ -z "$API_URL" ]; then
+            API_URL="https://api.stipulate.io"
+          fi
+          echo "Smoke testing $API_URL"
+          curl -fsS "$API_URL/status" | grep -q '"status"'
+          curl -fsS "$API_URL/v1/openapi" | head -n 1 | grep -qE 'openapi|info'
