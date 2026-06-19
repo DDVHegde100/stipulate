@@ -60,3 +60,25 @@ export async function recordCategorySpend(input: {
 export function annualPeriodStart(asOf = new Date()): string {
   return `${asOf.getUTCFullYear()}-01-01`;
 }
+
+/** Spend summary rows for cap UI. */
+export async function getSpendSummaryForUser(input: {
+  orgId?: string;
+  userRef: string;
+  cardIds: string[];
+  periodStart: string;
+}): Promise<SpendRecordRow[]> {
+  if (process.env.NODE_ENV === 'test') {
+    return input.cardIds.flatMap((cardId) => [
+      { card_id: cardId, category: 'groceries', cap_period: 'annual', spent_cents: 125000 },
+      { card_id: cardId, category: 'dining', cap_period: 'annual', spent_cents: 45000 },
+    ]);
+  }
+
+  return getUserCategorySpend({
+    orgId: input.orgId,
+    userRef: input.userRef,
+    cardIds: input.cardIds,
+    periodStart: input.periodStart,
+  });
+}

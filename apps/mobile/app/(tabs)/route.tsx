@@ -8,7 +8,7 @@ import { PurchaseForm, type PurchaseInput } from '@/components/PurchaseForm';
 import { RouteResult } from '@/components/RouteResult';
 import { useEnrich } from '@/hooks/useEnrich';
 import { useWallet } from '@/hooks/useWallet';
-import { routePurchase } from '@/lib/stipulate';
+import { routePurchase, fetchSpendSummary } from '@/lib/stipulate';
 import { colors } from '@/theme/colors';
 
 const DEFAULT_PURCHASE: PurchaseInput = {
@@ -24,6 +24,22 @@ export default function RouteScreen() {
   const [recommendation, setRecommendation] = useState<RouteRecommendation | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [capRows, setCapRows] = useState<Array<{ label: string; spentMinor: number; capMinor: number }>>([]);
+
+  useEffect(() => {
+    if (!loaded || cardIds.length === 0) return;
+    void fetchSpendSummary({ userRef: 'mobile-wallet', cardIds })
+      .then((caps) =>
+        setCapRows(
+          caps.slice(0, 3).map((cap) => ({
+            label: `${cap.category} (${cap.cardId})`,
+            spentMinor: cap.spentMinor,
+            capMinor: cap.category === 'groceries' ? 2_500_000 : 1_000_000,
+          })),
+        ),
+      )
+      .catch(() => {});
+  }, [loaded, cardIds]);
 
   const fetchRoute = useCallback(
     async (input: PurchaseInput = purchase) => {
@@ -98,7 +114,12 @@ export default function RouteScreen() {
 
         {recommendation && !loading && <RouteResult recommendation={recommendation} />}
 
-        <CapProgress label="Grocery cap (demo)" spentMinor={125000} capMinor={2500000} />
+        {capRows.map((cap) => (
+          <CapProgress key={cap.label} label={cap.label} spentMinor={cap.spentMinor} capMinor={cap.capMinor} />
+        ))}
+        {capRows.length === 0 && (
+          <CapProgress label="Grocery cap" spentMinor={0} capMinor={2_500_000} />
+        )}
       </ScrollView>
     </SafeAreaView>
   );
