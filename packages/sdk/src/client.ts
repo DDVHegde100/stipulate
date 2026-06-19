@@ -103,8 +103,58 @@ export class StipulateClient {
     url: string;
     events: string[];
     secret?: string;
-  }): Promise<{ id: string; url: string }> {
+  }): Promise<{ id: string; url: string; secret?: string }> {
     return this.post('/webhooks', input);
+  }
+
+  async deleteWebhookSubscription(id: string): Promise<{ revoked: boolean }> {
+    return this.delete(`/webhooks/${encodeURIComponent(id)}`);
+  }
+
+  async listApiKeys(): Promise<Array<{ id: string; prefix: string; name: string; is_active: boolean }>> {
+    return this.get('/keys');
+  }
+
+  async createApiKey(input: { name: string; scopes?: string[] }): Promise<{ apiKey: string; prefix: string }> {
+    return this.post('/keys', input);
+  }
+
+  async revokeApiKey(id: string): Promise<{ revoked: boolean }> {
+    return this.delete(`/keys/${encodeURIComponent(id)}`);
+  }
+
+  async getSpendSummary(query: { userRef: string; cardIds: string[] }): Promise<{
+    caps: Array<{ cardId: string; category: string; spentMinor: number }>;
+  }> {
+    const params = new URLSearchParams({
+      user_ref: query.userRef,
+      card_ids: query.cardIds.join(','),
+    });
+    return this.get(`/spend/summary?${params}`);
+  }
+
+  async createBillingCheckout(input: {
+    plan: 'payg' | 'saas';
+    successUrl: string;
+    cancelUrl: string;
+  }): Promise<{ url: string }> {
+    return this.post('/billing/checkout', {
+      plan: input.plan,
+      success_url: input.successUrl,
+      cancel_url: input.cancelUrl,
+    });
+  }
+
+  async createBillingPortal(returnUrl: string): Promise<{ url: string }> {
+    return this.post(`/billing/portal?return_url=${encodeURIComponent(returnUrl)}`, {});
+  }
+
+  async submitEnrichCorrection(input: Record<string, unknown>): Promise<Record<string, unknown>> {
+    return this.post('/enrich/corrections', input);
+  }
+
+  async proxyPay(input: Record<string, unknown>): Promise<Record<string, unknown>> {
+    return this.post('/proxy-pay', input);
   }
 
   async getOpenApiSpec(): Promise<string> {
@@ -149,6 +199,30 @@ export class StipulateClient {
         'X-API-Key': this.apiKey,
       },
       body: JSON.stringify(body),
+      signal: AbortSignal.timeout(this.timeoutMs),
+    });
+
+    const json = (await response.json()) as StipulateApiEnvelope<T> & {
+      error?: { code: string; message: string };
+      requestId?: string;
+    };
+
+    if (!response.ok) {
+      throw new StipulateError(
+        json.error?.message ?? `HTTP ${response.status}`,
+        response.status,
+        json.error?.code,
+        json.requestId,
+      );
+    }
+
+    return json.data;
+  }
+
+  private async delete<T>(path: string): Promise<T> {
+    const response = await this.fetchFn(`${this.baseUrl}${path}`, {
+      method: 'DELETE',
+      headers: { 'X-API-Key': this.apiKey },
       signal: AbortSignal.timeout(this.timeoutMs),
     });
 
