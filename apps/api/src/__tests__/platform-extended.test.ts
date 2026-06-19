@@ -150,3 +150,77 @@ describe('admin reparse API', () => {
     expect(body.data.summary.total).toBeGreaterThan(0);
   });
 });
+
+describe('org self-service keys API', () => {
+  beforeEach(() => {
+    resetEnvCache();
+    resetDatabasePool();
+    resetRedisClient();
+    process.env.NODE_ENV = 'test';
+    process.env.LOG_LEVEL = 'silent';
+    process.env.API_KEY = 'test_api_key_ci_16chars';
+  });
+
+  it('GET /v1/keys lists org keys', async () => {
+    const app = createApp();
+    const response = await app.request('/v1/keys', {
+      headers: { 'X-API-Key': process.env.API_KEY! },
+    });
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(Array.isArray(body.data)).toBe(true);
+  });
+
+  it('POST /v1/keys creates a new key', async () => {
+    const app = createApp();
+    const response = await app.request('/v1/keys', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': process.env.API_KEY!,
+      },
+      body: JSON.stringify({ name: 'ci-test' }),
+    });
+    expect(response.status).toBe(201);
+    const body = await response.json();
+    expect(body.data.apiKey).toContain('stip_');
+  });
+});
+
+describe('spend summary API', () => {
+  beforeEach(() => {
+    resetEnvCache();
+    resetDatabasePool();
+    resetRedisClient();
+    process.env.NODE_ENV = 'test';
+    process.env.LOG_LEVEL = 'silent';
+    delete process.env.API_KEY;
+  });
+
+  it('GET /v1/spend/summary returns cap rows', async () => {
+    const app = createApp();
+    const response = await app.request(
+      '/v1/spend/summary?user_ref=mobile-wallet&card_ids=amex_gold,chase_sapphire_preferred',
+    );
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data.caps.length).toBeGreaterThan(0);
+  });
+});
+
+describe('public waitlist API', () => {
+  beforeEach(() => {
+    resetEnvCache();
+    process.env.NODE_ENV = 'test';
+  });
+
+  it('POST /public/waitlist accepts email signup', async () => {
+    const app = createApp();
+    const response = await app.request('/public/waitlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: 'founder@example.com', company: 'Acme' }),
+    });
+    expect(response.status).toBe(201);
+  });
+});

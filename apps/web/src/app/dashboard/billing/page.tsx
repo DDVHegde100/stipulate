@@ -29,6 +29,14 @@ export default function BillingPage() {
     window.location.href = session.url;
   }
 
+  async function openPortal() {
+    const session = await apiFetch<{ url: string }>(
+      `/billing/portal?return_url=${encodeURIComponent(`${window.location.origin}/dashboard/billing`)}`,
+      { method: 'POST', body: '{}' },
+    );
+    window.location.href = session.url;
+  }
+
   return (
     <div className="space-y-6">
       <Heading as="h1" size="lg">
@@ -40,8 +48,11 @@ export default function BillingPage() {
         </Text>
         <p className="text-2xl font-semibold capitalize text-white">{subscription?.plan ?? 'free'}</p>
         <Text tone="secondary">Status: {subscription?.status ?? 'active'}</Text>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           <Button onClick={() => void openCheckout()}>Upgrade to PAYG</Button>
+          <Button variant="secondary" onClick={() => void openPortal()}>
+            Manage billing
+          </Button>
         </div>
       </Card>
     </div>
