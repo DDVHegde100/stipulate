@@ -77,6 +77,31 @@ class StipulateClient:
     def create_webhook(self, payload: Mapping[str, Any]) -> Mapping[str, Any]:
         return self._post("/webhooks", payload)
 
+    def delete_webhook(self, webhook_id: str) -> Mapping[str, Any]:
+        return self._delete(f"/webhooks/{webhook_id}")
+
+    def list_api_keys(self) -> Mapping[str, Any]:
+        return self._get("/keys")
+
+    def create_api_key(self, payload: Mapping[str, Any]) -> Mapping[str, Any]:
+        return self._post("/keys", payload)
+
+    def revoke_api_key(self, key_id: str) -> Mapping[str, Any]:
+        return self._delete(f"/keys/{key_id}")
+
+    def get_spend_summary(self, user_ref: str, card_ids: list[str]) -> Mapping[str, Any]:
+        query = urllib.parse.urlencode({"user_ref": user_ref, "card_ids": ",".join(card_ids)})
+        return self._get(f"/spend/summary?{query}")
+
+    def _delete(self, path: str) -> Mapping[str, Any]:
+        url = f"{self.base_url}{path}"
+        request = urllib.request.Request(
+            url,
+            method="DELETE",
+            headers={"X-API-Key": self.api_key},
+        )
+        return self._execute(request)
+
     def _get(self, path: str) -> Mapping[str, Any]:
         url = f"{self.base_url}{path}"
         request = urllib.request.Request(
