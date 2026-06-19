@@ -12,12 +12,10 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
-  webServer: process.env.CI
-    ? undefined
-    : {
-        command: 'pnpm --filter @stipulate/web dev',
-        url: 'http://localhost:3001',
-        reuseExistingServer: true,
-        timeout: 120_000,
-      },
+  webServer: {
+    command: 'pnpm --filter @stipulate/web start -- -p 3001',
+    url: 'http://localhost:3001',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120_000,
+  },
 });
