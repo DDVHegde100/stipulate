@@ -16,6 +16,7 @@
     "db:seed": "tsx scripts/seed-cards.ts",
     "db:seed-valuations": "tsx scripts/seed-valuations.ts",
     "schedule:reparse": "tsx scripts/schedule-reparse.ts",
+    "worker:supervisor": "tsx scripts/worker-supervisor.ts",
     "benchmark:route": "tsx scripts/benchmark-route.ts",
     "webhooks:deliver": "tsx scripts/webhook-worker.ts",
     "ingestion:worker": "tsx scripts/ingestion-worker.ts",

@@ -24,8 +24,12 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @stipulate/api build
 
-      - name: Deploy ingestion worker placeholder
-        run: echo "Deploy ingestion:worker and webhooks:deliver to staging runtime"
-
-      - name: Deploy SQS worker placeholder
-        run: echo "Deploy ingestion:sqs-worker when AWS credentials configured"
+      - name: Deploy worker supervisor to Fly.io
+        run: |
+          if [ -n "${{ secrets.FLY_API_TOKEN }}" ]; then
+            flyctl deploy --config apps/api/fly.worker.toml --dockerfile apps/api/Dockerfile --remote-only --app stipulate-workers-staging
+          else
+            echo "FLY_API_TOKEN not configured — skipping worker deploy"
+          fi
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
