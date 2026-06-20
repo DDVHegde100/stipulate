@@ -16,6 +16,23 @@ env:
   NODE_ENV: test
 
 jobs:
+  catalog-validate:
+    name: catalog validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm catalog:validate
+      - run: pnpm --filter @stipulate/schema catalog:validate data/cards/catalog-core50.json
+
   lint:
     name: lint
     runs-on: ubuntu-latest
@@ -48,6 +65,7 @@ jobs:
     name: typecheck
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    needs: [catalog-validate]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -76,6 +94,7 @@ jobs:
     name: test
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    needs: [catalog-validate]
     services:
       postgres:
         image: postgres:16-alpine
@@ -126,6 +145,55 @@ jobs:
 
       - name: Parser eval gate
         run: pnpm --filter @stipulate/parser eval:gate
+
+  api-smoke:
+    name: api smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [catalog-validate]
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: stipulate
+          POSTGRES_PASSWORD: stipulate_test
+          POSTGRES_DB: stipulate_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://stipulate:stipulate_test@localhost:5432/stipulate_test
+      REDIS_URL: redis://localhost:6379
+      API_KEY: test_api_key_ci
+      NODE_ENV: test
+      LOG_LEVEL: silent
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @stipulate/api db:migrate
+      - run: pnpm --filter @stipulate/api db:seed ../../packages/schema/data/cards/catalog-core50.json
+      - run: pnpm --filter @stipulate/api db:seed-benefits
+      - run: pnpm --filter @stipulate/api smoke
 
   e2e:
     name: e2e

@@ -24,6 +24,7 @@
     "ingestion:worker": "tsx scripts/ingestion-worker.ts",
     "ingestion:sqs-worker": "tsx scripts/sqs-ingestion-worker.ts",
     "db:seed-benefits": "tsx scripts/seed-benefits-from-fixtures.ts",
+    "smoke": "tsx scripts/smoke-api.ts",
     "reconcile:stripe": "tsx scripts/reconcile-stripe-usage.ts",
     "bootstrap:org": "tsx scripts/bootstrap-org.ts"
   },

@@ -1,26 +1,35 @@
 #!/usr/bin/env tsx
 /**
  * Seed cards table from catalog JSON into Postgres.
- * Usage: pnpm --filter @stipulate/api db:seed
+ * Usage: pnpm --filter @stipulate/api db:seed [catalog-path]
  */
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { getPool, disconnectDatabase, withTransaction } from '../src/lib/db.js';
-import { ISSUER_SLUG_MAP } from '@stipulate/schema';
-import type { CardCatalog } from '@stipulate/schema';
+import {
+  ISSUER_SLUG_MAP,
+  parseCatalogJson,
+  validateCatalog,
+  assertValidCatalog,
+} from '@stipulate/schema';
+import { disconnectDatabase, withTransaction } from '../src/lib/db.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+const DEFAULT_CATALOG = join(__dirname, '../../../packages/schema/data/cards/catalog-full.json');
+
 async function main(): Promise<void> {
-  const catalogPath =
-    process.argv[2] ??
-    join(__dirname, '../../../packages/schema/data/cards/catalog-core50.json');
+  const catalogPath = process.argv[2] ?? DEFAULT_CATALOG;
+  const raw = JSON.parse(readFileSync(catalogPath, 'utf-8')) as unknown;
 
-  const raw = readFileSync(catalogPath, 'utf-8');
-  const catalog = JSON.parse(raw) as CardCatalog;
+  const report = validateCatalog(raw, { path: catalogPath });
+  console.log(`Validating catalog (${report.cardCount} cards, ${report.issuerCount} issuers)`);
+  assertValidCatalog(report);
 
+  const catalog = parseCatalogJson(raw);
   console.log(`Seeding ${catalog.cards.length} cards from ${catalogPath}`);
+
+  let inserted = 0;
 
   await withTransaction(async (client) => {
     for (const card of catalog.cards) {
@@ -38,13 +47,15 @@ async function main(): Promise<void> {
       if (!issuerId) throw new Error(`Failed to resolve issuer: ${card.issuer}`);
 
       await client.query(
-        `INSERT INTO cards (card_id, issuer_id, name, network, annual_fee_cents, metadata, benefit_guide_url)
-         VALUES ($1, $2, $3, $4, $5, $6, $7)
+        `INSERT INTO cards (card_id, issuer_id, name, network, annual_fee_cents, metadata, benefit_guide_url, is_active)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
          ON CONFLICT (card_id) DO UPDATE SET
            name = EXCLUDED.name,
            network = EXCLUDED.network,
            annual_fee_cents = EXCLUDED.annual_fee_cents,
            metadata = EXCLUDED.metadata,
+           benefit_guide_url = EXCLUDED.benefit_guide_url,
+           is_active = EXCLUDED.is_active,
            updated_at = NOW()`,
         [
           card.id,
@@ -54,12 +65,15 @@ async function main(): Promise<void> {
           card.annualFee?.amountMinor ?? 0,
           JSON.stringify(card.metadata ?? {}),
           card.benefitGuideUrl ?? null,
+          card.isActive,
         ],
       );
+
+      inserted++;
     }
   });
 
-  console.log(`Seeded ${catalog.cards.length} cards successfully.`);
+  console.log(`Seeded ${inserted} cards successfully.`);
   await disconnectDatabase();
 }
 

@@ -223,14 +223,34 @@ export async function publishBenefitVersion(
     version: number;
     snapshot: unknown;
     changeSummary: string;
+    ruleCount?: number;
   },
 ): Promise<void> {
   await client.query(
-    `INSERT INTO benefit_versions (card_id, version, snapshot, change_summary)
-     VALUES ($1, $2, $3, $4)
+    `INSERT INTO benefit_versions (card_id, version, snapshot, change_summary, rule_count)
+     VALUES ($1, $2, $3, $4, $5)
      ON CONFLICT (card_id, version) DO UPDATE SET
        snapshot = EXCLUDED.snapshot,
-       change_summary = EXCLUDED.change_summary`,
-    [input.cardUuid, input.version, JSON.stringify(input.snapshot), input.changeSummary],
+       change_summary = EXCLUDED.change_summary,
+       rule_count = EXCLUDED.rule_count`,
+    [
+      input.cardUuid,
+      input.version,
+      JSON.stringify(input.snapshot),
+      input.changeSummary,
+      input.ruleCount ?? null,
+    ],
   );
+}
+
+/** List public card ids that have at least one benefit rule row. */
+export async function listCardsWithBenefitRules(): Promise<string[]> {
+  const result = await query<{ card_id: string }>(
+    `SELECT DISTINCT c.card_id
+     FROM benefit_rules br
+     JOIN cards c ON c.id = br.card_id
+     WHERE c.is_active = TRUE
+     ORDER BY c.card_id ASC`,
+  );
+  return result.rows.map((r) => r.card_id);
 }

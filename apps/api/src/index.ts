@@ -20,7 +20,10 @@ async function bootstrap(): Promise<void> {
   if (env.NODE_ENV !== 'test') {
     prewarmRoutingCache()
       .then((manifest) => {
-        logger.info({ warmedAt: manifest.warmedAt, keys: manifest.cardBundleKeys.length }, 'Routing cache prewarmed');
+        logger.info(
+          { warmedAt: manifest.warmedAt, source: manifest.source, cardCount: manifest.cardCount },
+          'Routing cache prewarmed',
+        );
       })
       .catch((err) => {
         logger.warn({ err }, 'Routing cache prewarm skipped');
