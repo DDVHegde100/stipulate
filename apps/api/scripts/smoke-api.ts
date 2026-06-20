@@ -11,7 +11,7 @@ import { connectRedis, disconnectRedis } from '../src/lib/redis.js';
 async function main(): Promise<void> {
   process.env.NODE_ENV = 'test';
   process.env.LOG_LEVEL = 'silent';
-  process.env.API_KEY = process.env.API_KEY ?? 'test_api_key_ci';
+  process.env.API_KEY = process.env.API_KEY ?? 'test_api_key_ci_16chars';
 
   const pool = getPool();
   await runMigrations(pool);
