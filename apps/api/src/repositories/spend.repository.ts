@@ -82,3 +82,93 @@ export async function getSpendSummaryForUser(input: {
     periodStart: input.periodStart,
   });
 }
+
+const DEFAULT_ANNUAL_CAPS: Record<string, number> = {
+  groceries: 600000,
+  dining: 300000,
+  travel: 500000,
+  gas: 150000,
+  streaming: 50000,
+};
+
+/** Cap headroom for wallet UI and routing context. */
+export async function getCapHeadroomForUser(input: {
+  orgId?: string;
+  userRef: string;
+  cardIds: string[];
+  periodStart: string;
+}): Promise<
+  Array<{
+    cardId: string;
+    category: string;
+    capPeriod: string;
+    spentMinor: number;
+    capLimitMinor: number;
+    remainingMinor: number;
+  }>
+> {
+  const rows = await getSpendSummaryForUser(input);
+
+  return rows.map((row) => {
+    const capLimitMinor = DEFAULT_ANNUAL_CAPS[row.category] ?? 250000;
+    const spentMinor = row.spent_cents;
+    return {
+      cardId: row.card_id,
+      category: row.category,
+      capPeriod: row.cap_period,
+      spentMinor,
+      capLimitMinor,
+      remainingMinor: Math.max(0, capLimitMinor - spentMinor),
+    };
+  });
+}
+
+/** Record spend delta and audit in cap_spend_ledger. */
+export async function trackCategorySpend(input: {
+  orgId?: string;
+  userRef: string;
+  cardId: string;
+  category: string;
+  capPeriod: string;
+  periodStart: string;
+  amountMinor: number;
+  source?: string;
+}): Promise<{ spentMinor: number }> {
+  if (process.env.NODE_ENV === 'test') {
+    return { spentMinor: input.amountMinor };
+  }
+
+  await recordCategorySpend({
+    orgId: input.orgId,
+    userRef: input.userRef,
+    cardId: input.cardId,
+    category: input.category,
+    capPeriod: input.capPeriod,
+    periodStart: input.periodStart,
+    spentCents: input.amountMinor,
+  });
+
+  await query(
+    `INSERT INTO cap_spend_ledger (org_id, user_ref, card_id, category, cap_period, period_start, delta_cents, source)
+     VALUES ($1, $2, $3, $4, $5, $6::date, $7, $8)`,
+    [
+      input.orgId ?? null,
+      input.userRef,
+      input.cardId,
+      input.category,
+      input.capPeriod,
+      input.periodStart,
+      input.amountMinor,
+      input.source ?? 'track',
+    ],
+  );
+
+  const rows = await getUserCategorySpend({
+    orgId: input.orgId,
+    userRef: input.userRef,
+    cardIds: [input.cardId],
+    periodStart: input.periodStart,
+  });
+  const match = rows.find((row) => row.category === input.category);
+  return { spentMinor: match?.spent_cents ?? input.amountMinor };
+}

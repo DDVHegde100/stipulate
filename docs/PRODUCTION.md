@@ -34,7 +34,9 @@ pnpm test
 pnpm --filter @stipulate/schema exec tsx scripts/validate-catalog.ts
 pnpm db:migrate
 pnpm --filter @stipulate/api db:seed
-pnpm --filter @stipulate/api db:seed-benefits
+pnpm --filter @stipulate/api db:seed-benefits --top75
+# For full catalog coverage in production:
+# pnpm --filter @stipulate/api db:seed-benefits --top150
 pnpm build
 ```
 

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Button, GlassPanel, Heading, Input, Text } from '@stipulate/ui';
 
 import { getStoredUser } from '../../../lib/consumer-auth';
+import { PlaidConnectPanel } from '../../../components/PlaidConnectPanel';
 import {
   addWalletCard,
   fetchCatalog,
@@ -56,6 +57,8 @@ export default function WalletPage() {
         </div>
         <Button onClick={() => setShowAdd(!showAdd)}>{showAdd ? 'Done' : '+ Add card'}</Button>
       </div>
+
+      <PlaidConnectPanel onWalletChange={setCards} />
 
       {showAdd && (
         <GlassPanel>

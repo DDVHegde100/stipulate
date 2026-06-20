@@ -48,10 +48,24 @@ export function createApp(options: CreateAppOptions = {}): Hono<AppBindings> {
   app.use(
     '*',
     cors({
-      origin: env.CORS_ORIGINS.includes('*') ? '*' : env.CORS_ORIGINS,
+      origin: (origin) => {
+        if (env.CORS_ORIGINS.includes('*')) return origin ?? '*';
+        if (!origin) return env.CORS_ORIGINS[0] ?? '';
+        return env.CORS_ORIGINS.includes(origin) ? origin : env.CORS_ORIGINS[0] ?? '';
+      },
       allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-      allowHeaders: ['Content-Type', 'Authorization', 'X-API-Key', 'X-Request-Id'],
-      exposeHeaders: ['X-Request-Id', 'X-Response-Time'],
+      allowHeaders: [
+        'Content-Type',
+        'Authorization',
+        'X-API-Key',
+        'X-Request-Id',
+        'X-User-Id',
+        'X-Consumer-User-Id',
+        'X-User-Ref',
+        'Cookie',
+      ],
+      exposeHeaders: ['X-Request-Id', 'X-Response-Time', 'Set-Cookie'],
+      credentials: true,
       maxAge: 86_400,
     }),
   );
