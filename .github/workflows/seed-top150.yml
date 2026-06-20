@@ -1,0 +1,35 @@
+name: Seed Top 150 Benefits
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "seed-top150" to confirm production benefit seed'
+        required: true
+
+jobs:
+  seed:
+    if: github.event.inputs.confirm == 'seed-top150'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @stipulate/api db:migrate
+      - run: pnpm --filter @stipulate/api db:seed ../../packages/schema/data/cards/catalog-full.json
+      - run: pnpm --filter @stipulate/api db:seed-benefits --top150
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          REDIS_URL: ${{ secrets.REDIS_URL }}
+          NODE_ENV: production
