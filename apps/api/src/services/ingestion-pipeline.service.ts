@@ -11,24 +11,41 @@ import {
 import type { NormalizedBenefitRule } from '@stipulate/parser';
 import { createChildLogger } from '../lib/logger.js';
 import * as ingestionRepo from '../repositories/ingestion.repository.js';
+import { query } from '../lib/db.js';
 
 const log = createChildLogger({ component: 'ingestion-pipeline' });
 
-const CARD_ISSUER_MAP: Record<string, { issuer: string; productName: string }> = {
-  chase_sapphire_preferred: { issuer: 'Chase', productName: 'Sapphire Preferred' },
-  amex_gold: { issuer: 'American Express', productName: 'Gold Card' },
-  capital_one_venture: { issuer: 'Capital One', productName: 'Venture' },
-};
+async function resolveCardMeta(cardId: string): Promise<{ issuer: string; productName: string }> {
+  try {
+    const result = await query<{ name: string; issuer_name: string | null }>(
+      `SELECT c.name, i.name AS issuer_name
+       FROM cards c
+       LEFT JOIN issuers i ON i.id = c.issuer_id
+       WHERE c.card_id = $1
+       LIMIT 1`,
+      [cardId],
+    );
+
+    const row = result.rows[0];
+    if (row) {
+      return {
+        issuer: row.issuer_name ?? 'Unknown',
+        productName: row.name,
+      };
+    }
+  } catch {
+    // fall through when DB unavailable
+  }
+
+  return { issuer: 'Unknown', productName: cardId };
+}
 
 /** Run extract → parse → normalize pipeline for a queued ingestion job. */
 export async function processIngestionJob(jobId: string): Promise<void> {
   const job = await ingestionRepo.getIngestionJobById(jobId);
   if (!job || job.status !== 'queued') return;
 
-  const meta = CARD_ISSUER_MAP[job.cardId] ?? {
-    issuer: 'Unknown',
-    productName: job.cardId,
-  };
+  const meta = await resolveCardMeta(job.cardId);
 
   try {
     await ingestionRepo.updateIngestionJob(jobId, { status: 'extracting' });

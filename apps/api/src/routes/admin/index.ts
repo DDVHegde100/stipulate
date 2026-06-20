@@ -48,6 +48,7 @@ adminRoutes.get('/', (c) => {
       catalog: {
         coverage: 'GET /admin/catalog/coverage',
         gaps: 'GET /admin/catalog/coverage/gaps',
+        enqueueGaps: 'POST /admin/catalog/enqueue-gaps',
       },
       parse: {
         card: 'POST /admin/cards/:cardId/parse',

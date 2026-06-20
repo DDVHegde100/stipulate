@@ -171,3 +171,12 @@ export {
   type ProxyPayRequest,
   type ProxyPayResponse,
 } from "./proxy-pay.js";
+
+export {
+  RotatingCategoryStateTypeSchema,
+  RotatingCategoryStateSchema,
+  UpsertRotatingCategoryStateSchema,
+  type RotatingCategoryStateType,
+  type RotatingCategoryState,
+  type UpsertRotatingCategoryState,
+} from "./rotating-category.js";

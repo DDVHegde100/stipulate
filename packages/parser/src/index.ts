@@ -173,6 +173,13 @@ export {
 export { EXTENDED_FIXTURES } from "./eval/fixtures-extended.js";
 export { TOP25_FIXTURES } from "./eval/fixtures-top25.js";
 export {
+  buildFixtureFromCatalog,
+  buildFixturesForCards,
+  mergeCatalogFixtures,
+  type CatalogCardRef,
+} from "./eval/fixtures-catalog.js";
+export { buildTop75Fixtures, buildTop150Fixtures } from "./eval/fixtures-top75.js";
+export {
   batchParseBenefits,
   type BatchParseTarget,
   type BatchParseItemResult,
