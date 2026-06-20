@@ -12,7 +12,7 @@ describe('wallet category state API', () => {
     resetRedisClient();
     process.env.NODE_ENV = 'test';
     process.env.LOG_LEVEL = 'silent';
-    process.env.API_KEY = 'test_api_key_ci';
+    process.env.API_KEY = 'test_api_key_ci_16chars';
   });
 
   it('POST /v1/wallet/category-state stores rotating category', async () => {

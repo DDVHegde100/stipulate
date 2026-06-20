@@ -121,7 +121,7 @@ jobs:
     env:
       DATABASE_URL: postgresql://stipulate:stipulate_test@localhost:5432/stipulate_test
       REDIS_URL: redis://localhost:6379
-      API_KEY: test_api_key_ci
+      API_KEY: test_api_key_ci_16chars
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -177,7 +177,7 @@ jobs:
     env:
       DATABASE_URL: postgresql://stipulate:stipulate_test@localhost:5432/stipulate_test
       REDIS_URL: redis://localhost:6379
-      API_KEY: test_api_key_ci
+      API_KEY: test_api_key_ci_16chars
       NODE_ENV: test
       LOG_LEVEL: silent
     steps:
