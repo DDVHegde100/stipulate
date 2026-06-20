@@ -1,0 +1,40 @@
+# Production-like local stack (Postgres + Redis only, no LocalStack)
+# Usage: docker compose -f docker-compose.prod.yml up -d
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: stipulate-postgres-prod
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: stipulate
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-stipulate_prod_change_me}
+      POSTGRES_DB: stipulate
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U stipulate -d stipulate']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: stipulate-redis-prod
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_prod_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  postgres_prod_data:
+  redis_prod_data:

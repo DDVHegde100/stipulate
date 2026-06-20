@@ -172,3 +172,9 @@ export {
 
 export { EXTENDED_FIXTURES } from "./eval/fixtures-extended.js";
 export { TOP25_FIXTURES } from "./eval/fixtures-top25.js";
+export {
+  batchParseBenefits,
+  type BatchParseTarget,
+  type BatchParseItemResult,
+  type BatchParseReport,
+} from "./batch/runner.js";

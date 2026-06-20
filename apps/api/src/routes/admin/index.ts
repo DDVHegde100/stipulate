@@ -7,6 +7,8 @@ import { ingestionHandler } from './ingestion.js';
 import { correctionsHandler } from './corrections.js';
 import { orgsHandler } from './orgs.js';
 import { reparseHandler } from './reparse.js';
+import { catalogHandler } from './catalog.js';
+import { parseHandler } from './parse.js';
 
 export const adminRoutes = new Hono<AppBindings>();
 
@@ -15,6 +17,8 @@ adminRoutes.route('/ingestion', ingestionHandler);
 adminRoutes.route('/corrections', correctionsHandler);
 adminRoutes.route('/orgs', orgsHandler);
 adminRoutes.route('/reparse', reparseHandler);
+adminRoutes.route('/catalog', catalogHandler);
+adminRoutes.route('/cards', parseHandler);
 
 adminRoutes.get('/', (c) => {
   return c.json({
@@ -37,6 +41,16 @@ adminRoutes.get('/', (c) => {
         get: 'GET /admin/orgs/:slug',
         createKey: 'POST /admin/orgs/:slug/keys',
         listKeys: 'GET /admin/orgs/:slug/keys',
+      },
+      reparse: {
+        trigger: 'POST /admin/reparse/trigger',
+      },
+      catalog: {
+        coverage: 'GET /admin/catalog/coverage',
+        gaps: 'GET /admin/catalog/coverage/gaps',
+      },
+      parse: {
+        card: 'POST /admin/cards/:cardId/parse',
       },
     },
   });

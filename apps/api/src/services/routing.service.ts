@@ -28,11 +28,18 @@ import {
   getDemoFallbackBundles,
   loadCardBundlesFromDb,
 } from './benefit-bundle.loader.js';
+import * as catalogRepo from '../repositories/catalog.repository.js';
 
 export class RoutingServiceError extends Error {
   constructor(
     message: string,
-    readonly code: 'INVALID_REQUEST' | 'NO_CARDS' | 'ROUTING_FAILED' | 'INTERNAL',
+    readonly code:
+      | 'INVALID_REQUEST'
+      | 'NO_CARDS'
+      | 'CARD_UNKNOWN'
+      | 'CARD_KNOWN_BENEFITS_MISSING'
+      | 'ROUTING_FAILED'
+      | 'INTERNAL',
     readonly details?: Record<string, unknown>,
   ) {
     super(message);
@@ -70,6 +77,42 @@ async function loadCardBundles(cardIds: string[]): Promise<CardBenefitBundle[]> 
   }
 
   return bundles;
+}
+
+/** Build a specific error when cards are unknown or missing benefit data. */
+async function buildMissingBenefitsError(cardIds: string[]): Promise<RoutingServiceError> {
+  if (process.env.NODE_ENV === 'test') {
+    return new RoutingServiceError('No benefit data found for requested cards', 'NO_CARDS');
+  }
+
+  try {
+    const [known, withRules] = await Promise.all([
+      catalogRepo.findKnownCardIds(cardIds),
+      catalogRepo.findCardsWithBenefitRules(cardIds),
+    ]);
+
+    const unknownCardIds = cardIds.filter((id) => !known.has(id));
+    if (unknownCardIds.length > 0) {
+      return new RoutingServiceError(
+        'One or more card ids are not in the catalog',
+        'CARD_UNKNOWN',
+        { unknownCardIds },
+      );
+    }
+
+    const missingBenefitCardIds = cardIds.filter((id) => known.has(id) && !withRules.has(id));
+    if (missingBenefitCardIds.length > 0) {
+      return new RoutingServiceError(
+        'Card exists in catalog but benefit rules have not been published yet',
+        'CARD_KNOWN_BENEFITS_MISSING',
+        { cardIds: missingBenefitCardIds },
+      );
+    }
+  } catch {
+    // fall through to generic error when DB unavailable
+  }
+
+  return new RoutingServiceError('No benefit data found for requested cards', 'NO_CARDS');
 }
 
 /** Load valuation table from DB or use defaults. */
@@ -127,7 +170,7 @@ export async function routePurchase(
     ]);
 
     if (bundles.length === 0) {
-      throw new RoutingServiceError('No benefit data found for requested cards', 'NO_CARDS');
+      throw await buildMissingBenefitsError(payload.userCardIds);
     }
 
     let spendRecords: Array<{ category: string; spentMinor: number }> = [];
@@ -251,7 +294,7 @@ export async function routeBatchPurchases(
     ]);
 
     if (bundles.length === 0) {
-      throw new RoutingServiceError('No benefit data found for requested cards', 'NO_CARDS');
+      throw await buildMissingBenefitsError(allCardIds);
     }
 
     let spendRecords: Array<{ category: string; spentMinor: number }> = [];

@@ -68,7 +68,13 @@ routeHandler.post('/', async (c) => {
 
     if (error instanceof RoutingServiceError) {
       const status =
-        error.code === 'INVALID_REQUEST' ? 422 : error.code === 'NO_CARDS' ? 400 : 500;
+        error.code === 'INVALID_REQUEST' || error.code === 'CARD_KNOWN_BENEFITS_MISSING'
+          ? 422
+          : error.code === 'NO_CARDS'
+            ? 400
+            : error.code === 'CARD_UNKNOWN'
+              ? 404
+              : 500;
 
       return c.json(
         {
