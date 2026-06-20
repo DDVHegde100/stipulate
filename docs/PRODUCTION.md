@@ -5,6 +5,7 @@ Use this checklist before pointing production traffic at the API or marketing si
 ## Required infrastructure
 
 - [ ] PostgreSQL 16+ with automated backups
+- [ ] Plaid sandbox keys for bank linking (`PLAID_CLIENT_ID`, `PLAID_SECRET`)
 - [ ] Redis 7+ for routing cache and rate limits
 - [ ] S3 (or compatible) for benefit PDFs and parser artifacts
 - [ ] SQS (or compatible) for async parser jobs (optional for v1)

@@ -19,6 +19,8 @@ import { keysHandler } from './keys.js';
 import { spendHandler } from './spend.js';
 import { orgHandler } from './org.js';
 import { walletHandler } from './wallet.js';
+import { walletCardsHandler } from './wallet-cards.js';
+import { plaidHandler } from './plaid.js';
 
 export const v1Routes = new Hono<AppBindings>();
 
@@ -41,6 +43,8 @@ v1Routes.route('/keys', keysHandler);
 v1Routes.route('/spend', spendHandler);
 v1Routes.route('/org', orgHandler);
 v1Routes.route('/wallet', walletHandler);
+v1Routes.route('/wallet', walletCardsHandler);
+v1Routes.route('/plaid', plaidHandler);
 
 v1Routes.get('/', (c) => {
   return c.json({
