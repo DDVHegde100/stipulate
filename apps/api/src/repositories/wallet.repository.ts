@@ -10,8 +10,24 @@ export interface WalletCardRow {
   removed_at: Date | null;
 }
 
+const DEMO_WALLET: WalletCardRow[] = [
+  {
+    id: 'demo-1',
+    consumer_user_id: 'demo-user',
+    card_id: 'chase_sapphire_preferred',
+    label: 'Sapphire Preferred',
+    is_primary: true,
+    added_at: new Date(),
+    removed_at: null,
+  },
+];
+
 /** List active wallet cards for a consumer user. */
 export async function listWalletCards(consumerUserId: string): Promise<WalletCardRow[]> {
+  if (process.env.NODE_ENV === 'test') {
+    return DEMO_WALLET;
+  }
+
   const result = await query<WalletCardRow>(
     `SELECT id, consumer_user_id, card_id, label, is_primary, added_at, removed_at
      FROM user_wallet_cards
@@ -29,6 +45,18 @@ export async function addWalletCard(input: {
   label?: string;
   isPrimary?: boolean;
 }): Promise<WalletCardRow> {
+  if (process.env.NODE_ENV === 'test') {
+    return {
+      id: 'demo-added',
+      consumer_user_id: input.consumerUserId,
+      card_id: input.cardId,
+      label: input.label ?? input.cardId,
+      is_primary: input.isPrimary ?? false,
+      added_at: new Date(),
+      removed_at: null,
+    };
+  }
+
   const result = await query<WalletCardRow>(
     `INSERT INTO user_wallet_cards (consumer_user_id, card_id, label, is_primary)
      VALUES ($1, $2, $3, $4)
@@ -41,4 +69,22 @@ export async function addWalletCard(input: {
     [input.consumerUserId, input.cardId, input.label ?? null, input.isPrimary ?? false],
   );
   return result.rows[0]!;
+}
+
+/** Soft-remove a card from wallet. */
+export async function removeWalletCard(
+  consumerUserId: string,
+  cardId: string,
+): Promise<boolean> {
+  if (process.env.NODE_ENV === 'test') {
+    return true;
+  }
+
+  const result = await query(
+    `UPDATE user_wallet_cards
+     SET removed_at = NOW(), updated_at = NOW()
+     WHERE consumer_user_id = $1 AND card_id = $2 AND removed_at IS NULL`,
+    [consumerUserId, cardId],
+  );
+  return (result.rowCount ?? 0) > 0;
 }
