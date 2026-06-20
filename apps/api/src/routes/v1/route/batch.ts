@@ -56,12 +56,19 @@ batchRouteHandler.post('/', async (c) => {
     }, { latencyMs: Date.now() - start, status: 'error' });
 
     if (error instanceof RoutingServiceError) {
+      const status =
+        error.code === 'INVALID_REQUEST' || error.code === 'CARD_KNOWN_BENEFITS_MISSING'
+          ? 422
+          : error.code === 'CARD_UNKNOWN'
+            ? 404
+            : 400;
+
       return c.json(
         {
           error: { code: error.code, message: error.message, details: error.details },
           requestId,
         },
-        error.code === 'INVALID_REQUEST' ? 422 : 400,
+        status,
       );
     }
 

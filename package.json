@@ -25,6 +25,7 @@
     "clean": "turbo run clean && rm -rf node_modules",
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
+    "docker:prod": "docker compose -f docker-compose.prod.yml up -d",
     "docker:logs": "docker compose logs -f",
     "db:migrate": "turbo run db:migrate --filter=@stipulate/api",
     "catalog:validate": "pnpm --filter @stipulate/schema catalog:validate",
