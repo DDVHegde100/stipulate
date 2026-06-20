@@ -7,6 +7,7 @@ import {
   annualPeriodStart,
   getCapHeadroomForUser,
   getSpendSummaryForUser,
+  importStatementSpend,
   trackCategorySpend,
 } from '../../repositories/spend.repository.js';
 import { resolveConsumerUserId } from '../../lib/consumer-context.js';
@@ -147,6 +148,83 @@ spendHandler.post('/track', async (c) => {
       category: parsed.data.category,
       periodStart,
       spentMinor: result.spentMinor,
+    },
+    requestId: c.get('requestId'),
+  });
+});
+
+const ImportSpendSchema = z.object({
+  userRef: z.string().min(1).optional(),
+  csv: z.string().min(1).optional(),
+  rows: z
+    .array(
+      z.object({
+        cardId: z.string().min(1),
+        category: z.string().min(1),
+        amountMinor: z.number().int().positive(),
+        capPeriod: z.string().optional(),
+      }),
+    )
+    .optional(),
+});
+
+function parseSpendCsv(csv: string): Array<{
+  cardId: string;
+  category: string;
+  amountMinor: number;
+}> {
+  return csv
+    .trim()
+    .split('\n')
+    .slice(1)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [cardId, category, amountMinor] = line.split(',').map((part) => part.trim());
+      return {
+        cardId,
+        category,
+        amountMinor: Number.parseInt(amountMinor ?? '0', 10),
+      };
+    })
+    .filter((row) => row.cardId && row.category && row.amountMinor > 0);
+}
+
+spendHandler.post('/import', async (c) => {
+  const orgId = c.get('orgId');
+  const body: unknown = await c.req.json().catch(() => {
+    throw new HTTPException(400, { message: 'Request body must be valid JSON' });
+  });
+
+  const parsed = ImportSpendSchema.safeParse(body);
+  if (!parsed.success) {
+    return c.json(
+      { error: { code: 'VALIDATION_ERROR', details: parsed.error.flatten() }, requestId: c.get('requestId') },
+      422,
+    );
+  }
+
+  const sessionUser = await resolveConsumerUserId(c);
+  const userRef = parsed.data.userRef ?? sessionUser ?? 'default';
+  const rows =
+    parsed.data.rows ??
+    (parsed.data.csv ? parseSpendCsv(parsed.data.csv) : []);
+
+  if (rows.length === 0) {
+    throw new HTTPException(400, { message: 'rows or csv is required' });
+  }
+
+  const result = await importStatementSpend({
+    orgId,
+    userRef,
+    rows,
+  });
+
+  return c.json({
+    data: {
+      userRef,
+      imported: result.imported,
+      totalMinor: result.totalMinor,
     },
     requestId: c.get('requestId'),
   });
