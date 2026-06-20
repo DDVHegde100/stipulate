@@ -172,3 +172,39 @@ export async function trackCategorySpend(input: {
   const match = rows.find((row) => row.category === input.category);
   return { spentMinor: match?.spent_cents ?? input.amountMinor };
 }
+
+export interface StatementSpendRow {
+  cardId: string;
+  category: string;
+  amountMinor: number;
+  capPeriod?: string;
+}
+
+/** Import statement spend rows in batch for cap reconciliation. */
+export async function importStatementSpend(input: {
+  orgId?: string;
+  userRef: string;
+  rows: StatementSpendRow[];
+  periodStart?: string;
+}): Promise<{ imported: number; totalMinor: number }> {
+  const periodStart = input.periodStart ?? annualPeriodStart();
+  let imported = 0;
+  let totalMinor = 0;
+
+  for (const row of input.rows) {
+    await trackCategorySpend({
+      orgId: input.orgId,
+      userRef: input.userRef,
+      cardId: row.cardId,
+      category: row.category,
+      capPeriod: row.capPeriod ?? 'annual',
+      periodStart,
+      amountMinor: row.amountMinor,
+      source: 'statement_import',
+    });
+    imported++;
+    totalMinor += row.amountMinor;
+  }
+
+  return { imported, totalMinor };
+}

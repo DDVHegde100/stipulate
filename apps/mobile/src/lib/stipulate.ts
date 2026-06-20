@@ -5,10 +5,18 @@ const extra = Constants.expoConfig?.extra as { apiUrl?: string; apiKey?: string 
 const API_BASE = extra?.apiUrl ?? 'http://localhost:3000/v1';
 const API_KEY = extra?.apiKey ?? 'stip_dev_local_key_change_in_production';
 
-function apiHeaders(): Record<string, string> {
+function apiHeaders(consumerUserId?: string): Record<string, string> {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
   if (API_KEY) headers['X-API-Key'] = API_KEY;
+  if (consumerUserId) headers['X-Consumer-User-Id'] = consumerUserId;
   return headers;
+}
+
+function apiFetchInit(consumerUserId?: string): RequestInit {
+  return {
+    headers: apiHeaders(consumerUserId),
+    credentials: 'include',
+  };
 }
 
 export interface RouteApiResponse {
@@ -100,10 +108,9 @@ export async function fetchSpendSummary(input: {
 export async function fetchWalletCards(input: {
   consumerUserId: string;
 }): Promise<Array<{ cardId: string; label: string; addedAt: string }>> {
-  const headers = apiHeaders();
-  headers['X-Consumer-User-Id'] = input.consumerUserId;
-
-  const response = await fetch(`${API_BASE}/wallet/cards`, { headers });
+  const response = await fetch(`${API_BASE}/wallet/cards`, {
+    ...apiFetchInit(input.consumerUserId),
+  });
   if (!response.ok) return [];
 
   const envelope = (await response.json()) as {
@@ -117,12 +124,9 @@ export async function addWalletCardRemote(input: {
   cardId: string;
   label: string;
 }): Promise<boolean> {
-  const headers = apiHeaders();
-  headers['X-Consumer-User-Id'] = input.consumerUserId;
-
   const response = await fetch(`${API_BASE}/wallet/cards`, {
     method: 'POST',
-    headers,
+    ...apiFetchInit(input.consumerUserId),
     body: JSON.stringify({ cardId: input.cardId, label: input.label }),
   });
   return response.ok;
@@ -132,13 +136,13 @@ export async function removeWalletCardRemote(input: {
   consumerUserId: string;
   cardId: string;
 }): Promise<boolean> {
-  const headers = apiHeaders();
-  headers['X-Consumer-User-Id'] = input.consumerUserId;
+  const headers = apiHeaders(input.consumerUserId);
   delete headers['Content-Type'];
 
   const response = await fetch(`${API_BASE}/wallet/cards/${encodeURIComponent(input.cardId)}`, {
     method: 'DELETE',
     headers,
+    credentials: 'include',
   });
   return response.ok;
 }

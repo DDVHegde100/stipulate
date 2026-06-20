@@ -51,4 +51,27 @@ describe('spend track and caps API', () => {
     expect(body.data.caps[0].remainingMinor).toBeGreaterThanOrEqual(0);
     expect(body.data.caps[0].capLimitMinor).toBeGreaterThan(0);
   });
+
+  it('POST /v1/spend/import accepts statement rows', async () => {
+    const app = createApp();
+    const response = await app.request('/v1/spend/import', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': process.env.API_KEY!,
+      },
+      body: JSON.stringify({
+        userRef: 'import-user',
+        rows: [
+          { cardId: 'amex_gold', category: 'groceries', amountMinor: 9900 },
+          { cardId: 'amex_gold', category: 'dining', amountMinor: 4500 },
+        ],
+      }),
+    });
+
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data.imported).toBe(2);
+    expect(body.data.totalMinor).toBe(14400);
+  });
 });

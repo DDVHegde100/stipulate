@@ -45,6 +45,7 @@ export async function signup(input: {
   const response = await fetch(`${publicApiBase()}/public/auth/signup`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
     body: JSON.stringify(input),
   });
   const json = (await response.json()) as { data: ConsumerUser; error?: { message: string } };
@@ -57,6 +58,7 @@ export async function login(input: { email: string; password: string }): Promise
   const response = await fetch(`${publicApiBase()}/public/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
     body: JSON.stringify(input),
   });
   const json = (await response.json()) as { data: ConsumerUser; error?: { message: string } };
@@ -81,6 +83,7 @@ export async function updateProfile(
       'Content-Type': 'application/json',
       'X-User-Id': userId,
     },
+    credentials: 'include',
     body: JSON.stringify(patch),
   });
   const json = (await response.json()) as { data: ConsumerUser; error?: { message: string } };
