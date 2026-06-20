@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Button, Card, GlassPanel, Heading, Input, Text } from '@stipulate/ui';
 
 import { getStoredUser, updateProfile } from '../../../lib/consumer-auth';
+import { PlaidConnectPanel } from '../../../components/PlaidConnectPanel';
 
 const TIMEZONES = ['UTC', 'America/New_York', 'America/Chicago', 'America/Los_Angeles', 'Europe/London'];
 
@@ -115,6 +116,8 @@ export default function SettingsPage() {
           {saved ? 'Saved!' : loading ? 'Saving…' : 'Save changes'}
         </Button>
       </GlassPanel>
+
+      <PlaidConnectPanel />
 
       <Card className="p-6">
         <Heading as="h2" size="sm" className="mb-2">

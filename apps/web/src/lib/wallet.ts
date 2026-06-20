@@ -22,6 +22,13 @@ function walletHeaders(userId?: string): Record<string, string> {
   return headers;
 }
 
+function walletFetchInit(userId?: string): RequestInit {
+  return {
+    headers: walletHeaders(userId),
+    credentials: 'include',
+  };
+}
+
 export function getWalletCards(): WalletCard[] {
   if (typeof window === 'undefined') return [];
   const raw = localStorage.getItem(WALLET_KEY);
@@ -43,9 +50,7 @@ export async function loadWalletCards(userId?: string): Promise<WalletCard[]> {
 
   if (userId) {
     try {
-      const response = await fetch(`${apiBase()}/wallet/cards`, {
-        headers: walletHeaders(userId),
-      });
+      const response = await fetch(`${apiBase()}/wallet/cards`, walletFetchInit(userId));
       if (response.ok) {
         const json = (await response.json()) as {
           data: { cards: Array<{ cardId: string; label: string }> };
@@ -74,7 +79,7 @@ export async function addWalletCard(
     try {
       const response = await fetch(`${apiBase()}/wallet/cards`, {
         method: 'POST',
-        headers: walletHeaders(userId),
+        ...walletFetchInit(userId),
         body: JSON.stringify({ cardId, label }),
       });
       if (response.ok) {
@@ -97,7 +102,7 @@ export async function removeWalletCard(cardId: string, userId?: string): Promise
     try {
       const response = await fetch(`${apiBase()}/wallet/cards/${encodeURIComponent(cardId)}`, {
         method: 'DELETE',
-        headers: walletHeaders(userId),
+        ...walletFetchInit(userId),
       });
       if (response.ok) {
         return loadWalletCards(userId);

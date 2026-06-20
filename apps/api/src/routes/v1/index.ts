@@ -113,6 +113,16 @@ v1Routes.get('/', (c) => {
         path: '/v1/plaid/link-token',
         description: 'Create a Plaid Link token for bank connection',
       },
+      spendTrack: {
+        method: 'POST',
+        path: '/v1/spend/track',
+        description: 'Record category spend for cap tracking',
+      },
+      spendCaps: {
+        method: 'GET',
+        path: '/v1/spend/caps',
+        description: 'Cap utilization and remaining headroom by card',
+      },
     },
   });
 });

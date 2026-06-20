@@ -66,6 +66,33 @@ async function main(): Promise<void> {
 
   console.log('Wallet and Plaid smoke passed');
 
+  const spendTrack = await app.request('/v1/spend/track', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-Key': process.env.API_KEY,
+    },
+    body: JSON.stringify({
+      userRef: 'smoke-user',
+      cardId: 'chase_sapphire_preferred',
+      category: 'dining',
+      amountMinor: 1500,
+    }),
+  });
+  if (spendTrack.status !== 200) {
+    throw new Error(`Spend track smoke failed: ${spendTrack.status}`);
+  }
+
+  const spendCaps = await app.request(
+    '/v1/spend/caps?user_ref=smoke-user&card_ids=chase_sapphire_preferred',
+    { headers: { 'X-API-Key': process.env.API_KEY } },
+  );
+  if (spendCaps.status !== 200) {
+    throw new Error(`Spend caps smoke failed: ${spendCaps.status}`);
+  }
+
+  console.log('Spend track and caps smoke passed');
+
   await Promise.allSettled([disconnectRedis()]);
 }
 

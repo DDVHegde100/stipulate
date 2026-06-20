@@ -6,11 +6,15 @@ import type { AppBindings } from '../../app.js';
 import {
   createConsumerUser,
   findConsumerByEmail,
+  findConsumerById,
   publicUserShape,
   verifyConsumerLogin,
   updateConsumerUser,
   updateExpoPushToken,
 } from '../../repositories/consumer-user.repository.js';
+import { createConsumerSession, revokeConsumerSession } from '../../repositories/consumer-session.repository.js';
+import { resolveConsumerUserId } from '../../lib/consumer-context.js';
+import { clearSessionCookie, setSessionCookie } from '../../lib/session-cookie.js';
 
 const SignupSchema = z.object({
   email: z.string().email(),
@@ -57,6 +61,8 @@ consumerAuthHandler.post('/signup', async (c) => {
   }
 
   const user = await createConsumerUser(parsed.data);
+  const session = await createConsumerSession(user.id);
+  setSessionCookie(c, session.token, session.expiresAt);
   return c.json({ data: publicUserShape(user), requestId: c.get('requestId') }, 201);
 });
 
@@ -78,12 +84,52 @@ consumerAuthHandler.post('/login', async (c) => {
     throw new HTTPException(401, { message: 'Invalid email or password' });
   }
 
+  const session = await createConsumerSession(user.id);
+  setSessionCookie(c, session.token, session.expiresAt);
   return c.json({ data: publicUserShape(user), requestId: c.get('requestId') });
 });
 
+consumerAuthHandler.get('/me', async (c) => {
+  const userId = await resolveConsumerUserId(c);
+  if (!userId) throw new HTTPException(401, { message: 'Not authenticated' });
+
+  const user = await findConsumerById(userId);
+  if (!user) throw new HTTPException(404, { message: 'User not found' });
+
+  return c.json({ data: publicUserShape(user), requestId: c.get('requestId') });
+});
+
+consumerAuthHandler.post('/refresh', async (c) => {
+  const userId = await resolveConsumerUserId(c);
+  if (!userId) throw new HTTPException(401, { message: 'Not authenticated' });
+
+  const user = await findConsumerById(userId);
+  if (!user) throw new HTTPException(404, { message: 'User not found' });
+
+  const cookies = c.req.header('Cookie') ?? '';
+  const match = cookies.match(/stipulate_session=([^;]+)/);
+  if (match?.[1]) {
+    await revokeConsumerSession(decodeURIComponent(match[1]));
+  }
+
+  const session = await createConsumerSession(user.id);
+  setSessionCookie(c, session.token, session.expiresAt);
+  return c.json({ data: publicUserShape(user), requestId: c.get('requestId') });
+});
+
+consumerAuthHandler.post('/logout', async (c) => {
+  const cookies = c.req.header('Cookie') ?? '';
+  const match = cookies.match(/stipulate_session=([^;]+)/);
+  if (match?.[1]) {
+    await revokeConsumerSession(decodeURIComponent(match[1]));
+  }
+  clearSessionCookie(c);
+  return c.json({ data: { loggedOut: true }, requestId: c.get('requestId') });
+});
+
 consumerAuthHandler.patch('/profile', async (c) => {
-  const userId = c.req.header('X-User-Id');
-  if (!userId) throw new HTTPException(401, { message: 'X-User-Id header required' });
+  const userId = (await resolveConsumerUserId(c)) ?? c.req.header('X-User-Id');
+  if (!userId) throw new HTTPException(401, { message: 'Authentication required' });
 
   const body: unknown = await c.req.json().catch(() => ({}));
   const parsed = ProfilePatchSchema.safeParse(body);
@@ -105,8 +151,8 @@ const PushTokenSchema = z.object({
 });
 
 consumerAuthHandler.post('/push-token', async (c) => {
-  const userId = c.req.header('X-User-Id');
-  if (!userId) throw new HTTPException(401, { message: 'X-User-Id header required' });
+  const userId = (await resolveConsumerUserId(c)) ?? c.req.header('X-User-Id');
+  if (!userId) throw new HTTPException(401, { message: 'Authentication required' });
 
   const body: unknown = await c.req.json().catch(() => ({}));
   const parsed = PushTokenSchema.safeParse(body);

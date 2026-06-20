@@ -4,13 +4,12 @@ import type { AppBindings } from '../../app.js';
 import * as cardRepo from '../../repositories/card.repository.js';
 import * as plaidRepo from '../../repositories/plaid.repository.js';
 import { suggestCatalogCardId } from '../../services/card-mapping.service.js';
+import { resolveConsumerUserId } from '../../lib/consumer-context.js';
 
 export const plaidHandler = new Hono<AppBindings>();
 
-function resolveConsumerUserId(c: {
-  req: { header: (name: string) => string | undefined };
-}): string {
-  return c.req.header('X-Consumer-User-Id') ?? c.req.header('X-User-Ref') ?? 'default';
+async function resolveUserRef(c: Parameters<typeof resolveConsumerUserId>[0]): Promise<string> {
+  return (await resolveConsumerUserId(c)) ?? 'default';
 }
 
 /** Create a Plaid Link token (sandbox stub until Plaid keys configured). */
@@ -57,7 +56,7 @@ plaidHandler.post('/exchange', async (c) => {
     );
   }
 
-  const consumerUserId = resolveConsumerUserId(c);
+  const consumerUserId = await resolveUserRef(c);
   const institutionName = body.institutionName ?? 'Chase';
   const { cards: catalogCards } = await cardRepo.listCards({ limit: 210 });
   const catalogRefs = catalogCards.map((card) => ({
@@ -124,7 +123,7 @@ plaidHandler.post('/exchange', async (c) => {
 
 /** List linked bank accounts with catalog card mapping suggestions. */
 plaidHandler.get('/accounts', async (c) => {
-  const consumerUserId = resolveConsumerUserId(c);
+  const consumerUserId = await resolveUserRef(c);
   const accounts = await plaidRepo.listLinkedAccounts(consumerUserId);
 
   return c.json({

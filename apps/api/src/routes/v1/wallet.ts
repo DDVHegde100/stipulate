@@ -6,6 +6,7 @@ import type { AppBindings } from '../../app.js';
 import { UpsertRotatingCategoryStateSchema } from '@stipulate/schema';
 import * as rotatingRepo from '../../repositories/rotating-category.repository.js';
 import * as walletRepo from '../../repositories/wallet.repository.js';
+import { resolveConsumerUserId } from '../../lib/consumer-context.js';
 
 const AddWalletCardSchema = z.object({
   cardId: z.string().min(1),
@@ -15,15 +16,8 @@ const AddWalletCardSchema = z.object({
 
 export const walletHandler = new Hono<AppBindings>();
 
-function resolveConsumerUserId(c: {
-  req: { header: (name: string) => string | undefined; query: (name: string) => string | undefined };
-}): string {
-  return (
-    c.req.header('X-Consumer-User-Id') ??
-    c.req.header('X-User-Ref') ??
-    c.req.query('userRef') ??
-    'default'
-  );
+async function resolveUserRef(c: Parameters<typeof resolveConsumerUserId>[0]): Promise<string> {
+  return (await resolveConsumerUserId(c)) ?? 'default';
 }
 
 walletHandler.get('/category-state', async (c) => {
@@ -98,7 +92,7 @@ walletHandler.post('/category-state', async (c) => {
 });
 
 walletHandler.get('/cards', async (c) => {
-  const userRef = resolveConsumerUserId(c);
+  const userRef = await resolveUserRef(c);
   const rows = await walletRepo.listWalletCards(userRef);
 
   return c.json({
@@ -130,7 +124,7 @@ walletHandler.post('/cards', async (c) => {
     );
   }
 
-  const userRef = resolveConsumerUserId(c);
+  const userRef = await resolveUserRef(c);
   const row = await walletRepo.addWalletCard({
     consumerUserId: userRef,
     cardId: parsed.data.cardId,
@@ -153,7 +147,7 @@ walletHandler.post('/cards', async (c) => {
 });
 
 walletHandler.delete('/cards/:cardId', async (c) => {
-  const userRef = resolveConsumerUserId(c);
+  const userRef = await resolveUserRef(c);
   const removed = await walletRepo.removeWalletCard(userRef, c.req.param('cardId'));
 
   if (!removed) {
