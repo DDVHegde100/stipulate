@@ -29,6 +29,8 @@ import {
   loadCardBundlesFromDb,
 } from './benefit-bundle.loader.js';
 import * as catalogRepo from '../repositories/catalog.repository.js';
+import * as rotatingRepo from '../repositories/rotating-category.repository.js';
+import { applyRotatingCategoryOverrides } from './rotating-category.service.js';
 
 export class RoutingServiceError extends Error {
   constructor(
@@ -193,9 +195,23 @@ export async function routePurchase(
       spendRecords.map((r) => ({ category: r.category, spentMinor: r.spentMinor })),
     );
 
+    let routingBundles = bundles;
+    try {
+      const rotatingStates = await rotatingRepo.listActiveRotatingStates({
+        orgId: context.orgId,
+        userRef: payload.userRef,
+        cardIds: payload.userCardIds,
+      });
+      const merchantCategory =
+        resolveMerchant(payload.merchantName ?? '', { mcc: payload.mcc }).category ?? 'other';
+      routingBundles = applyRotatingCategoryOverrides(bundles, rotatingStates, merchantCategory);
+    } catch {
+      // rotating category overrides optional when DB unavailable
+    }
+
     const response = routeTransaction(
       payload,
-      bundles,
+      routingBundles,
       {
         valuation,
         capContext,

@@ -18,6 +18,7 @@ import { proxyPayHandler } from './proxy-pay.js';
 import { keysHandler } from './keys.js';
 import { spendHandler } from './spend.js';
 import { orgHandler } from './org.js';
+import { walletHandler } from './wallet.js';
 
 export const v1Routes = new Hono<AppBindings>();
 
@@ -39,6 +40,7 @@ v1Routes.route('/proxy-pay', proxyPayHandler);
 v1Routes.route('/keys', keysHandler);
 v1Routes.route('/spend', spendHandler);
 v1Routes.route('/org', orgHandler);
+v1Routes.route('/wallet', walletHandler);
 
 v1Routes.get('/', (c) => {
   return c.json({
@@ -93,6 +95,11 @@ v1Routes.get('/', (c) => {
         method: 'GET',
         path: '/v1/changelog',
         description: 'Benefit change history across the catalog',
+      },
+      walletCategoryState: {
+        method: 'POST',
+        path: '/v1/wallet/category-state',
+        description: 'Set rotating or custom-cash top category for a card',
       },
     },
   });
