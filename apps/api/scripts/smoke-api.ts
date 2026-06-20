@@ -45,6 +45,27 @@ async function main(): Promise<void> {
 
   console.log(`Smoke passed: best card = ${body.data.bestCardId}`);
 
+  const wallet = await app.request('/v1/wallet/cards', {
+    headers: { 'X-API-Key': process.env.API_KEY },
+  });
+  if (wallet.status !== 200) {
+    throw new Error(`Wallet smoke failed: ${wallet.status}`);
+  }
+
+  const plaid = await app.request('/v1/plaid/link-token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-Key': process.env.API_KEY,
+    },
+    body: JSON.stringify({}),
+  });
+  if (plaid.status !== 200) {
+    throw new Error(`Plaid smoke failed: ${plaid.status}`);
+  }
+
+  console.log('Wallet and Plaid smoke passed');
+
   await Promise.allSettled([disconnectRedis()]);
 }
 

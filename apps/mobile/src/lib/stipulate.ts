@@ -97,6 +97,52 @@ export async function fetchSpendSummary(input: {
   return envelope.data.caps;
 }
 
+export async function fetchWalletCards(input: {
+  consumerUserId: string;
+}): Promise<Array<{ cardId: string; label: string; addedAt: string }>> {
+  const headers = apiHeaders();
+  headers['X-Consumer-User-Id'] = input.consumerUserId;
+
+  const response = await fetch(`${API_BASE}/wallet/cards`, { headers });
+  if (!response.ok) return [];
+
+  const envelope = (await response.json()) as {
+    data: { cards: Array<{ cardId: string; label: string; addedAt: string }> };
+  };
+  return envelope.data.cards ?? [];
+}
+
+export async function addWalletCardRemote(input: {
+  consumerUserId: string;
+  cardId: string;
+  label: string;
+}): Promise<boolean> {
+  const headers = apiHeaders();
+  headers['X-Consumer-User-Id'] = input.consumerUserId;
+
+  const response = await fetch(`${API_BASE}/wallet/cards`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ cardId: input.cardId, label: input.label }),
+  });
+  return response.ok;
+}
+
+export async function removeWalletCardRemote(input: {
+  consumerUserId: string;
+  cardId: string;
+}): Promise<boolean> {
+  const headers = apiHeaders();
+  headers['X-Consumer-User-Id'] = input.consumerUserId;
+  delete headers['Content-Type'];
+
+  const response = await fetch(`${API_BASE}/wallet/cards/${encodeURIComponent(input.cardId)}`, {
+    method: 'DELETE',
+    headers,
+  });
+  return response.ok;
+}
+
 export async function listCatalogCards(): Promise<Array<{ card_id: string; name: string }>> {
   const headers = apiHeaders();
   delete headers['Content-Type'];
