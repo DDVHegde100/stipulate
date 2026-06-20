@@ -25,7 +25,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "generate:json-schema": "tsx scripts/generate-json-schema.ts",
-    "generate:catalog": "tsx scripts/generate-catalog.ts"
+    "generate:catalog": "tsx scripts/generate-catalog.ts",
+    "catalog:validate": "tsx scripts/validate-catalog.ts"
   },
   "dependencies": {
     "zod": "^3.24.2",

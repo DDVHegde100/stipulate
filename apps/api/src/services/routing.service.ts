@@ -1,13 +1,11 @@
 import {
   RouteRequestSchema,
   BatchRouteRequestSchema,
-  BenefitRuleSchema,
   PointsValuationTableSchema,
   type RouteRequest,
   type RouteResponse,
   type BatchRouteRequest,
   type BatchRouteResponse,
-  type BenefitRule,
   type PointsValuationTable,
 } from '@stipulate/schema';
 import {
@@ -19,7 +17,6 @@ import {
   type CardBenefitBundle,
 } from '@stipulate/routing';
 import { resolveMerchant } from '@stipulate/mcc';
-import * as benefitRepo from '../repositories/benefit.repository.js';
 import * as valuationRepo from '../repositories/valuation.repository.js';
 import * as spendRepo from '../repositories/spend.repository.js';
 import * as routingRepo from '../repositories/routing.repository.js';
@@ -27,6 +24,10 @@ import {
   getCachedBenefitIndex,
   setCachedBenefitIndex,
 } from '../cache/routing-cache.js';
+import {
+  getDemoFallbackBundles,
+  loadCardBundlesFromDb,
+} from './benefit-bundle.loader.js';
 
 export class RoutingServiceError extends Error {
   constructor(
@@ -41,7 +42,7 @@ export class RoutingServiceError extends Error {
 
 export { RouteRequestSchema, BatchRouteRequestSchema };
 
-/** Load benefit rules for requested cards from DB or demo fallback. */
+/** Load benefit rules for requested cards from cache, DB, or demo fallback. */
 async function loadCardBundles(cardIds: string[]): Promise<CardBenefitBundle[]> {
   if (process.env.NODE_ENV === 'test') {
     return cardIds
@@ -52,51 +53,16 @@ async function loadCardBundles(cardIds: string[]): Promise<CardBenefitBundle[]> 
   const cached = await getCachedBenefitIndex<CardBenefitBundle[]>(cardIds);
   if (cached) return cached;
 
-  const bundles: CardBenefitBundle[] = [];
-  const asOf = new Date().toISOString().slice(0, 10);
+  let bundles: CardBenefitBundle[] = [];
 
-  for (const cardId of cardIds) {
-    if (process.env.NODE_ENV === 'test') {
-      const demo = DEMO_CARD_BUNDLES.find((b) => b.cardId === cardId);
-      if (demo) {
-        bundles.push(demo);
-        continue;
-      }
-    }
+  try {
+    bundles = await loadCardBundlesFromDb(cardIds);
+  } catch {
+    bundles = [];
+  }
 
-    try {
-      const card = await benefitRepo.findCardUuid(cardId);
-      if (!card) continue;
-
-      const rows = await benefitRepo.getBenefitRules(card.uuid, asOf);
-      if (rows.length === 0) continue;
-
-      const rules: BenefitRule[] = rows.map((row) =>
-        BenefitRuleSchema.parse({
-          id: row.id,
-          cardId: row.card_id,
-          name: `${row.multiplier}x ${row.category}`,
-          category: row.category,
-          multiplier: parseFloat(row.multiplier),
-          rewardType: row.reward_type,
-          caps: row.cap_amount_cents
-            ? [{
-                id: `cap-${row.id}`,
-                period: row.cap_period ?? 'annual',
-                limit: { amountMinor: row.cap_amount_cents, currency: 'USD' },
-              }]
-            : [],
-          exclusions: Array.isArray(row.exclusions) ? row.exclusions : [],
-        }),
-      );
-
-      bundles.push({ cardId, rules });
-    } catch {
-      if (process.env.NODE_ENV === 'test') {
-        const demoFallback = DEMO_CARD_BUNDLES.find((b) => b.cardId === cardId);
-        if (demoFallback) bundles.push(demoFallback);
-      }
-    }
+  if (bundles.length === 0 && process.env.NODE_ENV === 'development') {
+    bundles = getDemoFallbackBundles(cardIds);
   }
 
   if (bundles.length > 0) {

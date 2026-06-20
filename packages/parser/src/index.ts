@@ -169,3 +169,6 @@ export {
   type EvalCaseResult,
   type EvalReport,
 } from "./eval/harness.js";
+
+export { EXTENDED_FIXTURES } from "./eval/fixtures-extended.js";
+export { TOP25_FIXTURES } from "./eval/fixtures-top25.js";

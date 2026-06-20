@@ -118,6 +118,14 @@ export {
   type CardSeedEntry,
 } from "./catalog-seed.js";
 export {
+  parseCatalogJson,
+  validateCatalog,
+  validateCatalogFile,
+  assertValidCatalog,
+  type CatalogValidationIssue,
+  type CatalogValidationReport,
+} from "./catalog-validate.js";
+export {
   PointsProgramSchema,
   PointsValuationTableSchema,
   ValuationOverrideSchema,
