@@ -8,7 +8,8 @@ import { getStoredUser, updateProfile } from '../../lib/consumer-auth';
 import {
   addWalletCard,
   fetchCatalog,
-  getWalletCards,
+  loadWalletCards,
+  type WalletCard,
 } from '../../lib/wallet';
 
 const STEPS = ['Welcome', 'Add cards', 'Notifications'] as const;
@@ -18,7 +19,7 @@ export default function OnboardingPage() {
   const [step, setStep] = useState(0);
   const [catalog, setCatalog] = useState<Array<{ card_id: string; name: string }>>([]);
   const [search, setSearch] = useState('');
-  const [cards, setCards] = useState(getWalletCards());
+  const [cards, setCards] = useState<WalletCard[]>([]);
   const [emailNotifs, setEmailNotifs] = useState(true);
   const [loading, setLoading] = useState(false);
 
@@ -31,6 +32,7 @@ export default function OnboardingPage() {
     if (user.onboardingComplete) {
       router.replace('/app/wallet');
     }
+    void loadWalletCards(user.id).then(setCards);
     void fetchCatalog().then(setCatalog);
   }, [router]);
 
@@ -105,7 +107,7 @@ export default function OnboardingPage() {
                   key={card.card_id}
                   type="button"
                   className="flex w-full items-center justify-between rounded-xl border border-glass-border px-4 py-3 text-left text-sm hover:bg-glass-surface"
-                  onClick={() => setCards(addWalletCard(card.card_id, card.name))}
+                  onClick={() => void addWalletCard(card.card_id, card.name, getStoredUser()?.id).then(setCards)}
                 >
                   <span className="text-white">{card.name}</span>
                   <span className="text-accent-400">+ Add</span>

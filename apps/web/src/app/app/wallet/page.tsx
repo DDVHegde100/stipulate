@@ -7,7 +7,7 @@ import { getStoredUser } from '../../../lib/consumer-auth';
 import {
   addWalletCard,
   fetchCatalog,
-  getWalletCards,
+  loadWalletCards,
   removeWalletCard,
   type WalletCard,
 } from '../../../lib/wallet';
@@ -26,7 +26,8 @@ export default function WalletPage() {
   const [showAdd, setShowAdd] = useState(false);
 
   useEffect(() => {
-    setCards(getWalletCards());
+    const user = getStoredUser();
+    void loadWalletCards(user?.id).then(setCards);
     void fetchCatalog().then(setCatalog);
   }, []);
 
@@ -70,7 +71,10 @@ export default function WalletPage() {
                 key={card.card_id}
                 type="button"
                 className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm hover:bg-glass-hover"
-                onClick={() => setCards(addWalletCard(card.card_id, card.name))}
+                onClick={() => {
+                  const user = getStoredUser();
+                  void addWalletCard(card.card_id, card.name, user?.id).then(setCards);
+                }}
               >
                 <span className="text-white">{card.name}</span>
                 <span className="text-accent-400">Add</span>
@@ -97,7 +101,10 @@ export default function WalletPage() {
                 <button
                   type="button"
                   className="text-xs text-red-400 hover:underline"
-                  onClick={() => setCards(removeWalletCard(card.cardId))}
+                  onClick={() => {
+                    const user = getStoredUser();
+                    void removeWalletCard(card.cardId, user?.id).then(setCards);
+                  }}
                 >
                   Remove
                 </button>
