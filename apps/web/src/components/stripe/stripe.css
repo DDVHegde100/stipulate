@@ -1,0 +1,631 @@
+/* Stipulate marketing design system: dark forest green + fur textures */
+
+.stripe {
+  --s-green: #1b4332;
+  --s-green-deep: #0f2922;
+  --s-green-hover: #14532d;
+  --s-green-light: #2d6a4f;
+  --s-green-mist: #40916c;
+  --s-green-glow: rgba(27, 67, 50, 0.22);
+  --s-navy: #0a2540;
+  --s-text: #425466;
+  --s-muted: #8898aa;
+  --s-line: #e6ebf1;
+  --s-bg: #ffffff;
+  --s-surface: #f6f9fc;
+  --s-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --s-font: var(--font-stripe), 'Inter', system-ui, sans-serif;
+  --fur-x: 0px;
+  --fur-y: 0px;
+  font-family: var(--s-font);
+  color: var(--s-navy);
+  background: var(--s-bg);
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+.stripe a {
+  text-decoration: none;
+}
+
+/* ── Typography ── */
+.stripe .h-hero {
+  font-size: clamp(2.625rem, 5.8vw, 4.5rem);
+  font-weight: 500;
+  line-height: 1.04;
+  letter-spacing: -0.038em;
+  color: var(--s-navy);
+}
+
+.stripe .h-hero em,
+.stripe .h-section em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--s-green);
+}
+
+.stripe .h-section {
+  font-size: clamp(1.875rem, 3.8vw, 3rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.032em;
+  color: var(--s-navy);
+}
+
+.stripe .body-lg {
+  font-size: clamp(1.0625rem, 2vw, 1.3125rem);
+  line-height: 1.65;
+  color: var(--s-text);
+}
+
+.stripe .eyebrow {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--s-green);
+}
+
+/* ── Layout ── */
+.stripe .wrap {
+  margin-inline: auto;
+  max-width: 1080px;
+  padding-inline: 24px;
+}
+
+@media (min-width: 768px) {
+  .stripe .wrap {
+    padding-inline: 32px;
+  }
+}
+
+.stripe .section {
+  padding-block: 80px;
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .stripe .section {
+    padding-block: 112px;
+  }
+}
+
+.stripe .section--surface {
+  background: var(--s-surface);
+}
+
+.stripe .section--dark {
+  background: linear-gradient(165deg, #0a1f17 0%, #132e26 45%, #0f2922 100%);
+  color: #fff;
+}
+
+/* ── Gradient mesh (Stripe-style infusion on white) ── */
+.stripe .hero-bg {
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+}
+
+.stripe .gradient-mesh-wrap {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.stripe .gradient-mesh {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.55;
+  animation: mesh-float 18s ease-in-out infinite alternate;
+}
+
+.stripe .gradient-mesh--a {
+  width: 55%;
+  height: 45%;
+  top: -15%;
+  left: 20%;
+  background: radial-gradient(circle, rgba(45, 106, 79, 0.35), transparent 70%);
+}
+
+.stripe .gradient-mesh--b {
+  width: 40%;
+  height: 40%;
+  top: 5%;
+  right: -5%;
+  background: radial-gradient(circle, rgba(82, 183, 136, 0.2), transparent 70%);
+  animation-delay: -6s;
+}
+
+.stripe .gradient-mesh--c {
+  width: 35%;
+  height: 50%;
+  bottom: -10%;
+  left: -5%;
+  background: radial-gradient(circle, rgba(27, 67, 50, 0.18), transparent 70%);
+  animation-delay: -12s;
+}
+
+.stripe .gradient-spiral-wrap {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.stripe .gradient-spiral {
+  position: absolute;
+  width: 140%;
+  height: 140%;
+  top: -30%;
+  left: -20%;
+  background: conic-gradient(
+    from 210deg at 45% 30%,
+    transparent 0deg,
+    rgba(45, 106, 79, 0.14) 40deg,
+    rgba(82, 183, 136, 0.08) 90deg,
+    transparent 140deg,
+    rgba(27, 67, 50, 0.1) 220deg,
+    transparent 360deg
+  );
+  animation: spiral-drift 45s linear infinite;
+  opacity: 0.7;
+}
+
+.stripe .gradient-spiral--b {
+  animation-direction: reverse;
+  animation-duration: 60s;
+  opacity: 0.45;
+  filter: blur(40px);
+}
+
+.stripe .gradient-card-infusion {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.stripe .gradient-card-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(48px);
+}
+
+.stripe .gradient-card-blob--a {
+  width: 70%;
+  height: 60%;
+  top: -20%;
+  right: -15%;
+  background: radial-gradient(circle, rgba(45, 106, 79, 0.2), transparent 65%);
+}
+
+.stripe .gradient-card-blob--b {
+  width: 50%;
+  height: 50%;
+  bottom: -15%;
+  left: -10%;
+  background: radial-gradient(circle, rgba(82, 183, 136, 0.12), transparent 65%);
+}
+
+@keyframes mesh-float {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(3%, -2%) scale(1.05); }
+}
+
+@keyframes spiral-drift {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fur-shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes fur-pile {
+  0%, 100% { transform: translate(var(--fur-x), var(--fur-y)) scale(1); }
+  50% { transform: translate(calc(var(--fur-x) + 1px), calc(var(--fur-y) - 1px)) scale(1.002); }
+}
+
+/* ── Fur texture system ── */
+.stripe .fur-btn,
+.stripe .fur-chip,
+.stripe .fur-bar,
+.stripe .fur-logo {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.stripe .fur-btn::before,
+.stripe .fur-chip::before,
+.stripe .fur-bar::before,
+.stripe .fur-logo::before {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  background-image:
+    repeating-linear-gradient(
+      92deg,
+      transparent 0px,
+      rgba(255, 255, 255, 0.04) 1px,
+      transparent 2px,
+      transparent 4px
+    ),
+    repeating-linear-gradient(
+      8deg,
+      transparent 0px,
+      rgba(0, 0, 0, 0.06) 1px,
+      transparent 3px,
+      transparent 6px
+    ),
+    radial-gradient(ellipse 80% 50% at 30% 20%, rgba(255, 255, 255, 0.08), transparent 50%),
+    linear-gradient(
+      145deg,
+      rgba(64, 145, 108, 0.15) 0%,
+      transparent 40%,
+      rgba(0, 0, 0, 0.12) 100%
+    );
+  background-size: 8px 8px, 12px 12px, 100% 100%, 200% 200%;
+  animation: fur-shimmer 8s ease-in-out infinite;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+  z-index: 1;
+  transform: translate(var(--fur-x), var(--fur-y));
+  transition: transform 0.15s var(--s-ease);
+}
+
+.stripe .fur-btn::after,
+.stripe .fur-chip::after,
+.stripe .fur-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 2;
+  filter: url(#fur-noise);
+  animation: fur-pile 6s ease-in-out infinite;
+}
+
+.stripe .fur-btn > *,
+.stripe .fur-chip > *,
+.stripe .fur-logo > * {
+  position: relative;
+  z-index: 3;
+}
+
+/* ── Buttons ── */
+.stripe .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 11px 22px;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 999px;
+  transition: box-shadow 0.25s var(--s-ease), transform 0.2s var(--s-ease);
+  white-space: nowrap;
+  border: none;
+  cursor: pointer;
+}
+
+.stripe .btn--primary {
+  color: #f0fdf4;
+  background:
+    linear-gradient(165deg, #2d6a4f 0%, #1b4332 35%, #0f2922 70%, #163d30 100%);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.12),
+    0 4px 14px var(--s-green-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.stripe .btn--primary:hover {
+  box-shadow:
+    0 4px 20px rgba(27, 67, 50, 0.45),
+    0 8px 28px rgba(15, 41, 34, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+.stripe .btn--secondary {
+  color: var(--s-navy);
+  background: #fff;
+  border: 1px solid var(--s-line);
+}
+
+.stripe .btn--secondary:hover {
+  background: var(--s-surface);
+  border-color: #cdd5df;
+}
+
+.stripe .link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--s-green);
+  transition: gap 0.2s var(--s-ease), color 0.2s;
+}
+
+.stripe .link:hover {
+  color: var(--s-green-hover);
+  gap: 8px;
+}
+
+/* ── Cards & panels ── */
+.stripe .panel {
+  background: #fff;
+  border: 1px solid var(--s-line);
+  border-radius: 8px;
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.03),
+    0 4px 12px rgba(50, 50, 93, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.stripe .panel--hover {
+  transition: box-shadow 0.35s var(--s-ease), transform 0.35s var(--s-ease);
+}
+
+.stripe .panel--hover:hover {
+  box-shadow:
+    0 8px 24px rgba(27, 67, 50, 0.08),
+    0 20px 48px rgba(50, 50, 93, 0.06);
+  transform: translateY(-2px);
+}
+
+.stripe .panel--infusion {
+  overflow: hidden;
+}
+
+.stripe .mockup-wrap {
+  position: relative;
+}
+
+.stripe .mockup-wrap .gradient-card-infusion {
+  z-index: 0;
+}
+
+.stripe .mockup {
+  position: relative;
+  z-index: 1;
+  border: 1px solid var(--s-line);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow:
+    0 50px 100px -24px rgba(27, 67, 50, 0.12),
+    0 18px 36px -18px rgba(50, 50, 93, 0.1),
+    0 0 0 1px rgba(50, 50, 93, 0.04);
+  overflow: hidden;
+}
+
+/* ── Credit card mini ── */
+.stripe .credit-card-mini {
+  position: relative;
+  aspect-ratio: 1.586 / 1;
+  width: 100%;
+  max-width: 200px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.18),
+    0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.stripe .credit-card-mini__sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.15) 50%, transparent 60%);
+}
+
+.stripe .credit-card-mini__content {
+  position: relative;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px;
+}
+
+.stripe .mockup-cards-float {
+  display: flex;
+  gap: 8px;
+  padding: 16px;
+  align-items: flex-end;
+}
+
+.stripe .mockup-cards-float .credit-card-mini:nth-child(2) {
+  transform: translateY(-8px) rotate(3deg);
+  max-width: 170px;
+}
+
+.stripe .mockup-cards-float .credit-card-mini:nth-child(1) {
+  transform: rotate(-4deg);
+}
+
+/* ── Nav ── */
+.stripe .nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.stripe .nav.is-scrolled {
+  border-color: var(--s-line);
+  box-shadow: 0 1px 3px rgba(50, 50, 93, 0.06);
+}
+
+.stripe .nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 68px;
+}
+
+.stripe .nav__links {
+  display: none;
+  align-items: center;
+  gap: 28px;
+}
+
+@media (min-width: 960px) {
+  .stripe .nav__links {
+    display: flex;
+  }
+}
+
+.stripe .nav__links a {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--s-text);
+  transition: color 0.15s;
+}
+
+.stripe .nav__links a:hover {
+  color: var(--s-green);
+}
+
+.stripe .fur-logo {
+  display: flex;
+  height: 28px;
+  width: 28px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: linear-gradient(145deg, #2d6a4f, #1b4332 50%, #0f2922);
+  color: #f0fdf4;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* ── Stats ── */
+.stripe .stat-num {
+  font-size: clamp(2.25rem, 4vw, 3.25rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--s-navy);
+  font-variant-numeric: tabular-nums;
+}
+
+.stripe .stat-label {
+  margin-top: 10px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--s-text);
+}
+
+/* ── Fur progress bar ── */
+.stripe .fur-bar {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #1b4332, #2d6a4f 50%, #1b4332);
+  background-size: 200% 100%;
+  animation: fur-shimmer 4s ease-in-out infinite;
+}
+
+/* ── Fur chip (badges, tags) ── */
+.stripe .fur-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background: linear-gradient(145deg, #2d6a4f, #1b4332);
+  color: #f0fdf4;
+  font-weight: 600;
+}
+
+/* ── Product UI chrome ── */
+.stripe .ui-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: var(--s-surface);
+  border-bottom: 1px solid var(--s-line);
+}
+
+.stripe .ui-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.stripe .ui-dot--r { background: #ff5f57; }
+.stripe .ui-dot--y { background: #febc2e; }
+.stripe .ui-dot--g { background: #28c840; }
+
+.stripe .win-row {
+  border-color: rgba(27, 67, 50, 0.28) !important;
+  background: rgba(27, 67, 50, 0.04) !important;
+}
+
+.stripe .win-badge {
+  background: linear-gradient(145deg, #2d6a4f, #1b4332) !important;
+  color: #f0fdf4 !important;
+}
+
+.stripe .text-accent {
+  color: var(--s-green) !important;
+}
+
+/* ── Footer ── */
+.stripe .footer {
+  border-top: 1px solid var(--s-line);
+  padding-block: 64px 32px;
+}
+
+.stripe .footer__col h4 {
+  margin-bottom: 16px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--s-muted);
+}
+
+.stripe .footer__col a {
+  display: block;
+  padding-block: 4px;
+  font-size: 14px;
+  color: var(--s-text);
+  transition: color 0.15s;
+}
+
+.stripe .footer__col a:hover {
+  color: var(--s-green);
+}
+
+.stripe .section--dark .link {
+  color: #95d5b2;
+}
+
+.stripe .section--dark .link:hover {
+  color: #b7e4c7;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stripe .gradient-mesh,
+  .stripe .gradient-spiral,
+  .stripe .fur-btn::before,
+  .stripe .fur-btn::after,
+  .stripe .fur-bar {
+    animation: none;
+  }
+
+  .stripe .panel--hover:hover,
+  .stripe .btn--primary:hover {
+    transform: none;
+  }
+}
