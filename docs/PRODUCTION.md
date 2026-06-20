@@ -20,6 +20,7 @@ Copy `.env.production.example` to your secret manager. Never commit real values.
 | `REDIS_URL` | Yes | Redis connection string |
 | `API_KEY` | Dev only | Replace with org-scoped DB keys in production |
 | `STRIPE_SECRET_KEY` | Billing | SaaS and consumer subscriptions |
+| `STRIPE_PRICE_ID_CONSUMER` | Billing | Consumer premium checkout price |
 | `STRIPE_WEBHOOK_SECRET` | Billing | Webhook signature verification |
 | `OPENAI_API_KEY` | Parser | Benefit guide extraction |
 | `SENTRY_DSN` | Recommended | Error tracking |

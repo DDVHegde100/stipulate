@@ -74,6 +74,37 @@ export async function createCheckoutSession(input: {
   return { url: session.url, sessionId: session.id };
 }
 
+/** Create a Stripe Checkout session for consumer premium. */
+export async function createConsumerCheckoutSession(input: {
+  consumerUserId: string;
+  successUrl: string;
+  cancelUrl: string;
+}): Promise<{ url: string; sessionId: string }> {
+  if (process.env.NODE_ENV === 'test') {
+    return { url: 'https://checkout.stripe.com/consumer-test', sessionId: 'cs_consumer_test' };
+  }
+
+  const priceId = process.env.STRIPE_PRICE_ID_CONSUMER;
+  if (!priceId) throw new Error('STRIPE_PRICE_ID_CONSUMER is not configured');
+
+  const customer = await stripeRequest<{ id: string }>('/customers', {
+    'metadata[consumer_user_id]': input.consumerUserId,
+  });
+
+  const session = await stripeRequest<{ id: string; url: string }>('/checkout/sessions', {
+    mode: 'subscription',
+    customer: customer.id,
+    'line_items[0][price]': priceId,
+    'line_items[0][quantity]': '1',
+    success_url: input.successUrl,
+    cancel_url: input.cancelUrl,
+    'metadata[consumer_user_id]': input.consumerUserId,
+    'metadata[plan]': 'consumer_premium',
+  });
+
+  return { url: session.url, sessionId: session.id };
+}
+
 /** Create a billing portal session for self-serve management. */
 export async function createPortalSession(orgId: string, returnUrl: string): Promise<{ url: string }> {
   if (process.env.NODE_ENV === 'test') {

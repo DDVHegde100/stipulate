@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Button, Card, GlassPanel, Heading, Input, Text } from '@stipulate/ui';
 
 import { getStoredUser, updateProfile } from '../../../lib/consumer-auth';
+import { startConsumerCheckout } from '../../../lib/consumer-billing';
 import { PlaidConnectPanel } from '../../../components/PlaidConnectPanel';
 
 const TIMEZONES = ['UTC', 'America/New_York', 'America/Chicago', 'America/Los_Angeles', 'Europe/London'];
@@ -17,6 +18,7 @@ export default function SettingsPage() {
   const [pushAlerts, setPushAlerts] = useState(user?.notificationPrefs.push ?? false);
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [billingLoading, setBillingLoading] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -126,11 +128,30 @@ export default function SettingsPage() {
         <Text tone="secondary" className="mb-4">
           Upgrade to Consumer Premium for full analytics and alerts.
         </Text>
-        <Link href="/dashboard/billing">
-          <Button variant="outline" size="sm">
-            Manage billing
+        <div className="flex flex-wrap gap-3">
+          <Button
+            size="sm"
+            disabled={billingLoading}
+            onClick={() => {
+              setBillingLoading(true);
+              void startConsumerCheckout({
+                successUrl: `${window.location.origin}/app/settings?billing=success`,
+                cancelUrl: `${window.location.origin}/app/settings?billing=cancel`,
+              })
+                .then((session) => {
+                  window.location.href = session.url;
+                })
+                .catch(() => setBillingLoading(false));
+            }}
+          >
+            {billingLoading ? 'Redirecting…' : 'Upgrade with Stripe'}
           </Button>
-        </Link>
+          <Link href="/dashboard/billing">
+            <Button variant="outline" size="sm">
+              Developer billing
+            </Button>
+          </Link>
+        </div>
       </Card>
     </div>
   );

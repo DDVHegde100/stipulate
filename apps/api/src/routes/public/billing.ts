@@ -1,0 +1,44 @@
+import { Hono } from 'hono';
+import { HTTPException } from 'hono/http-exception';
+import { z } from 'zod';
+
+import type { AppBindings } from '../../app.js';
+import { resolveConsumerUserId } from '../../lib/consumer-context.js';
+import { getFeatureFlags } from '../../lib/feature-flags.js';
+import { createConsumerCheckoutSession } from '../../services/stripe.service.js';
+
+const CheckoutSchema = z.object({
+  successUrl: z.string().url(),
+  cancelUrl: z.string().url(),
+});
+
+export const consumerBillingHandler = new Hono<AppBindings>();
+
+consumerBillingHandler.post('/checkout', async (c) => {
+  if (!getFeatureFlags().stripeBilling) {
+    throw new HTTPException(503, { message: 'Billing is not configured' });
+  }
+
+  const userId = await resolveConsumerUserId(c);
+  if (!userId) throw new HTTPException(401, { message: 'Authentication required' });
+
+  const body: unknown = await c.req.json().catch(() => {
+    throw new HTTPException(400, { message: 'Request body must be valid JSON' });
+  });
+
+  const parsed = CheckoutSchema.safeParse(body);
+  if (!parsed.success) {
+    return c.json(
+      { error: { code: 'VALIDATION_ERROR', details: parsed.error.flatten() }, requestId: c.get('requestId') },
+      422,
+    );
+  }
+
+  const session = await createConsumerCheckoutSession({
+    consumerUserId: userId,
+    successUrl: parsed.data.successUrl,
+    cancelUrl: parsed.data.cancelUrl,
+  });
+
+  return c.json({ data: session, requestId: c.get('requestId') });
+});

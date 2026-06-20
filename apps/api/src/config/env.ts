@@ -54,6 +54,10 @@ const envSchema = z
     FEATURE_BENEFIT_WEBHOOKS: z.string().optional(),
     RESEND_API_KEY: z.string().optional(),
     RESEND_FROM_EMAIL: z.string().optional(),
+    PLAID_CLIENT_ID: z.string().optional(),
+    PLAID_SECRET: z.string().optional(),
+    PLAID_ENV: z.enum(['sandbox', 'development', 'production']).default('sandbox'),
+    STRIPE_PRICE_ID_CONSUMER: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     if (data.NODE_ENV === 'production' && !data.API_KEY) {

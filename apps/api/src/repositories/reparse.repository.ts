@@ -68,3 +68,38 @@ export async function completeReparseRun(
     [runId, stats.checked, stats.changed, stats.failed],
   );
 }
+
+export interface ReparseRunRow {
+  id: string;
+  started_at: Date;
+  completed_at: Date | null;
+  cards_checked: number;
+  cards_changed: number;
+  cards_failed: number;
+  status: string;
+}
+
+export async function listReparseRuns(limit = 20): Promise<ReparseRunRow[]> {
+  if (process.env.NODE_ENV === 'test') {
+    return [
+      {
+        id: 'reparse-test-run',
+        started_at: new Date(),
+        completed_at: new Date(),
+        cards_checked: 50,
+        cards_changed: 2,
+        cards_failed: 0,
+        status: 'completed',
+      },
+    ];
+  }
+
+  const result = await query<ReparseRunRow>(
+    `SELECT id, started_at, completed_at, cards_checked, cards_changed, cards_failed, status
+     FROM reparse_runs
+     ORDER BY started_at DESC
+     LIMIT $1`,
+    [limit],
+  );
+  return result.rows;
+}

@@ -44,6 +44,7 @@ adminRoutes.get('/', (c) => {
       },
       reparse: {
         trigger: 'POST /admin/reparse/trigger',
+        runs: 'GET /admin/reparse/runs',
       },
       catalog: {
         coverage: 'GET /admin/catalog/coverage',

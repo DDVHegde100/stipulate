@@ -17,7 +17,8 @@
     "@stipulate/ui": "workspace:*",
     "next": "^15.2.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-plaid-link": "^4.1.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.51.0",

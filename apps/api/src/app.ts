@@ -16,6 +16,7 @@ import { adminRoutes } from './routes/admin/index.js';
 import { stripeWebhookHandler } from './routes/webhooks/stripe.js';
 import { waitlistHandler } from './routes/public/waitlist.js';
 import { consumerAuthHandler } from './routes/public/auth.js';
+import { consumerBillingHandler } from './routes/public/billing.js';
 import { captureException } from './lib/observability.js';
 
 export type AppVariables = {
@@ -93,6 +94,7 @@ export function createApp(options: CreateAppOptions = {}): Hono<AppBindings> {
   app.route('/webhooks/stripe', stripeWebhookHandler);
   app.route('/public/waitlist', waitlistHandler);
   app.route('/public/auth', consumerAuthHandler);
+  app.route('/public/billing', consumerBillingHandler);
   app.route(`/${env.API_VERSION}`, v1Routes);
   app.route('/admin', adminRoutes);
 

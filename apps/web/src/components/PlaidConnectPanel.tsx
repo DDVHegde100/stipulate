@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { usePlaidLink } from 'react-plaid-link';
 import { Button, GlassPanel, Text } from '@stipulate/ui';
 
 import { getStoredUser } from '../lib/consumer-auth';
@@ -16,17 +17,72 @@ interface PlaidConnectPanelProps {
   onWalletChange?: (cards: WalletCard[]) => void;
 }
 
+function PlaidLinkLauncher({
+  linkToken,
+  onSuccess,
+  onExit,
+}: {
+  linkToken: string;
+  onSuccess: (publicToken: string, institutionName?: string) => Promise<void>;
+  onExit: () => void;
+}) {
+  const { open, ready } = usePlaidLink({
+    token: linkToken,
+    onSuccess: (publicToken, metadata) => {
+      void onSuccess(publicToken, metadata.institution?.name);
+    },
+    onExit,
+  });
+
+  useEffect(() => {
+    if (ready) open();
+  }, [ready, open]);
+
+  return null;
+}
+
 export function PlaidConnectPanel({ onWalletChange }: PlaidConnectPanelProps) {
   const [linkedAccounts, setLinkedAccounts] = useState<PlaidLinkedAccount[]>([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [liveLinkToken, setLiveLinkToken] = useState<string | null>(null);
 
   useEffect(() => {
     const user = getStoredUser();
     if (!user) return;
     void fetchPlaidLinkedAccounts(user.id).then(setLinkedAccounts);
   }, []);
+
+  const refreshAccounts = useCallback(async () => {
+    const user = getStoredUser();
+    if (!user) return;
+    const accounts = await fetchPlaidLinkedAccounts(user.id);
+    setLinkedAccounts(accounts);
+  }, []);
+
+  const handlePlaidSuccess = useCallback(
+    async (publicToken: string, institutionName?: string) => {
+      const user = getStoredUser();
+      if (!user) return;
+
+      try {
+        const result = await exchangePlaidPublicToken({
+          publicToken,
+          institutionName,
+          consumerUserId: user.id,
+        });
+        setMessage(`Linked ${result.accountsLinked} account(s).`);
+        await refreshAccounts();
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Bank linking failed');
+      } finally {
+        setLoading(false);
+        setLiveLinkToken(null);
+      }
+    },
+    [refreshAccounts],
+  );
 
   async function connectBank() {
     const user = getStoredUser();
@@ -48,15 +104,14 @@ export function PlaidConnectPanel({ onWalletChange }: PlaidConnectPanelProps) {
           consumerUserId: user.id,
         });
         setMessage(`Linked ${result.accountsLinked} account(s) from ${link.mode} mode.`);
-      } else {
-        setMessage(link.message ?? 'Plaid Link will open when production keys are configured.');
+        await refreshAccounts();
+        setLoading(false);
+        return;
       }
 
-      const accounts = await fetchPlaidLinkedAccounts(user.id);
-      setLinkedAccounts(accounts);
+      setLiveLinkToken(link.linkToken);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Bank linking failed');
-    } finally {
       setLoading(false);
     }
   }
@@ -72,6 +127,17 @@ export function PlaidConnectPanel({ onWalletChange }: PlaidConnectPanelProps) {
 
   return (
     <GlassPanel className="space-y-4">
+      {liveLinkToken && (
+        <PlaidLinkLauncher
+          linkToken={liveLinkToken}
+          onSuccess={handlePlaidSuccess}
+          onExit={() => {
+            setLoading(false);
+            setLiveLinkToken(null);
+          }}
+        />
+      )}
+
       <div>
         <Text variant="overline" tone="secondary">
           Bank linking
