@@ -5,6 +5,8 @@ import { checkDatabaseHealth } from '../lib/db.js';
 import { pingRedis } from '../lib/redis.js';
 import { loadEnv } from '../config/env.js';
 import { getFeatureFlags } from '../lib/feature-flags.js';
+import { isEmailProviderConfigured, getEmailDeliveryStats } from '../services/email.service.js';
+import { isPlaidConfigured } from '../services/plaid.service.js';
 import * as ingestionRepo from '../repositories/ingestion.repository.js';
 import { getSloSnapshot, getRouteP99LimitMs } from '../lib/slo-tracker.js';
 
@@ -33,6 +35,12 @@ statusRoutes.get('/', async (c) => {
           proxyPay: flags.proxyPay,
           benefitWebhooks: flags.benefitWebhooks,
           stripeBilling: flags.stripeBilling,
+        },
+        integrations: {
+          emailAlerts: isEmailProviderConfigured(),
+          pushAlerts: true,
+          plaid: isPlaidConfigured(),
+          emailDelivery: getEmailDeliveryStats(),
         },
       },
       timestamp: new Date().toISOString(),
@@ -63,6 +71,12 @@ statusRoutes.get('/', async (c) => {
       proxyPay: flags.proxyPay,
       benefitWebhooks: flags.benefitWebhooks,
       stripeBilling: flags.stripeBilling,
+    },
+    integrations: {
+      emailAlerts: isEmailProviderConfigured(),
+      pushAlerts: true,
+      plaid: isPlaidConfigured(),
+      emailDelivery: getEmailDeliveryStats(),
     },
   };
 

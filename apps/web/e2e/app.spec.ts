@@ -79,3 +79,17 @@ test('settings page shows billing and privacy sections', async ({ page }) => {
   await expect(page.getByRole('heading', { name: /^Delete account$/i })).toBeVisible();
   await expect(page.getByRole('button', { name: /schedule account deletion/i })).toBeVisible();
 });
+
+test('cards page renders issuing shell', async ({ page }) => {
+  await seedConsumerSession(page);
+  await page.goto('/app/cards');
+  await expect(page.getByRole('heading', { name: /virtual cards/i })).toBeVisible();
+  await expect(page.getByRole('button', { name: /issue virtual card/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /authorization ledger/i })).toBeVisible();
+});
+
+test('analytics page shows premium gate for free users', async ({ page }) => {
+  await seedConsumerSession(page);
+  await page.goto('/app/analytics');
+  await expect(page.getByRole('heading', { name: /consumer premium required/i })).toBeVisible();
+});

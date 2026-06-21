@@ -1,5 +1,6 @@
 import { createChildLogger } from '../lib/logger.js';
 import { listConsumersForCard } from '../repositories/consumer-user.repository.js';
+import { isConsumerPremium } from '../repositories/consumer-billing.repository.js';
 import { sendTransactionalEmail } from './email.service.js';
 import { sendPushNotifications } from './push-notification.service.js';
 
@@ -10,9 +11,10 @@ export async function notifyConsumersOfBenefitChange(input: {
   cardName?: string;
   changeSummary: string;
   severity: string;
-}): Promise<{ notified: number; pushed: number }> {
+}): Promise<{ notified: number; pushed: number; skippedPush: number }> {
   const users = await listConsumersForCard(input.cardId);
   let notified = 0;
+  let skippedPush = 0;
   const label = input.cardName ?? input.cardId;
 
   for (const user of users) {
@@ -31,20 +33,29 @@ export async function notifyConsumersOfBenefitChange(input: {
     }
   }
 
-  const pushTokens = users
-    .filter((u) => u.notification_prefs.push && u.expo_push_token)
-    .map((u) => u.expo_push_token!);
+  const premiumPushTokens: string[] = [];
+  for (const user of users) {
+    if (!user.notification_prefs.push || !user.expo_push_token) continue;
+
+    const premium = await isConsumerPremium(user.id);
+    if (!premium) {
+      skippedPush += 1;
+      continue;
+    }
+
+    premiumPushTokens.push(user.expo_push_token);
+  }
 
   const pushed = await sendPushNotifications({
-    tokens: pushTokens,
+    tokens: premiumPushTokens,
     title: `Benefit change · ${label}`,
     body: input.changeSummary,
     data: { cardId: input.cardId, severity: input.severity },
   });
 
   log.info(
-    { cardId: input.cardId, notified, pushed, eligible: users.length },
+    { cardId: input.cardId, notified, pushed, skippedPush, eligible: users.length },
     'Benefit alert notifications dispatched',
   );
-  return { notified, pushed };
+  return { notified, pushed, skippedPush };
 }

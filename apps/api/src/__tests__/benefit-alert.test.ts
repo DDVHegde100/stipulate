@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { resetEnvCache } from '../config/env.js';
 import { notifyConsumersOfBenefitChange } from '../services/benefit-alert.service.js';
 import * as consumerRepo from '../repositories/consumer-user.repository.js';
+import { upsertConsumerSubscription } from '../repositories/consumer-billing.repository.js';
 
 describe('benefit alert emails', () => {
   beforeEach(() => {
@@ -34,7 +35,7 @@ describe('benefit alert emails', () => {
     expect(result.pushed).toBe(0);
   });
 
-  it('sends push notifications when push alerts are enabled', async () => {
+  it('sends push notifications for premium users with push enabled', async () => {
     vi.spyOn(consumerRepo, 'listConsumersForCard').mockResolvedValue([
       {
         id: '00000000-0000-4000-8000-000000000001',
@@ -49,6 +50,13 @@ describe('benefit alert emails', () => {
       },
     ]);
 
+    await upsertConsumerSubscription({
+      consumerUserId: '00000000-0000-4000-8000-000000000001',
+      stripeCustomerId: 'cus_test_premium',
+      plan: 'consumer_premium',
+      status: 'active',
+    });
+
     const result = await notifyConsumersOfBenefitChange({
       cardId: 'chase_sapphire_preferred',
       cardName: 'Sapphire Preferred',
@@ -58,5 +66,31 @@ describe('benefit alert emails', () => {
 
     expect(result.notified).toBe(0);
     expect(result.pushed).toBe(1);
+    expect(result.skippedPush).toBe(0);
+  });
+
+  it('skips push when consumer is not premium', async () => {
+    vi.spyOn(consumerRepo, 'listConsumersForCard').mockResolvedValue([
+      {
+        id: '00000000-0000-4000-8000-000000000002',
+        email: 'free@stipulate.io',
+        name: 'Free User',
+        password_hash: null,
+        timezone: 'UTC',
+        onboarding_complete: true,
+        wallet_card_ids: ['chase_sapphire_preferred'],
+        notification_prefs: { email: false, push: true },
+        expo_push_token: 'ExponentPushToken[free]',
+      },
+    ]);
+
+    const result = await notifyConsumersOfBenefitChange({
+      cardId: 'chase_sapphire_preferred',
+      changeSummary: 'Travel credit increased',
+      severity: 'material',
+    });
+
+    expect(result.pushed).toBe(0);
+    expect(result.skippedPush).toBe(1);
   });
 });

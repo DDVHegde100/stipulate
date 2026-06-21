@@ -2,15 +2,28 @@ import { createChildLogger } from '../lib/logger.js';
 
 const log = createChildLogger({ component: 'email' });
 
+let emailsAttempted = 0;
+let emailsDelivered = 0;
+
+export function isEmailProviderConfigured(): boolean {
+  return Boolean(process.env.RESEND_API_KEY);
+}
+
+export function getEmailDeliveryStats(): { attempted: number; delivered: number } {
+  return { attempted: emailsAttempted, delivered: emailsDelivered };
+}
+
 /** Send transactional email via Resend HTTP API (best-effort). */
 export async function sendTransactionalEmail(input: {
   to: string;
   subject: string;
   html: string;
 }): Promise<boolean> {
+  emailsAttempted += 1;
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey || process.env.NODE_ENV === 'test') {
     log.info({ to: input.to, subject: input.subject }, 'Email skipped (no provider or test mode)');
+    emailsDelivered += 1;
     return true;
   }
 
@@ -34,6 +47,7 @@ export async function sendTransactionalEmail(input: {
       return false;
     }
 
+    emailsDelivered += 1;
     return true;
   } catch (error) {
     log.warn({ err: error }, 'Failed to send email');

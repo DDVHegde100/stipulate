@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CapProgress } from '@/components/CapProgress';
 import { GlassCard } from '@/components/GlassCard';
 import { SectionHeader } from '@/components/SectionHeader';
+import { useAuth } from '@/context/AuthContext';
 import { useWallet } from '@/hooks/useWallet';
 import { fetchConsumerBillingStatus } from '@/lib/consumer-billing';
 import { estimateMissedRewards, getRouteHistory } from '@/lib/route-history';
@@ -19,6 +20,7 @@ const CAP_LIMITS: Record<string, number> = {
 };
 
 export default function InsightsScreen() {
+  const { user } = useAuth();
   const { cardIds, loaded } = useWallet();
   const [history, setHistory] = useState<Awaited<ReturnType<typeof getRouteHistory>>>([]);
   const [caps, setCaps] = useState<
@@ -34,14 +36,14 @@ export default function InsightsScreen() {
   }, []);
 
   useEffect(() => {
-    if (!loaded || cardIds.length === 0) return;
-    void fetchSpendSummary({ userRef: 'mobile-wallet', cardIds })
+    if (!loaded || cardIds.length === 0 || !user) return;
+    void fetchSpendSummary({ userRef: user.id, cardIds })
       .then((rows) => setCaps(rows))
       .catch(() => {});
-  }, [loaded, cardIds]);
+  }, [loaded, cardIds, user]);
 
   const missedMinor = estimateMissedRewards(history);
-  const categoryTotals = useMemo(
+  const historyCategories = useMemo(
     () =>
       history.reduce<Record<string, number>>((acc, entry) => {
         const key = entry.mcc.startsWith('54') ? 'groceries' : entry.mcc.startsWith('58') ? 'dining' : 'other';
@@ -50,6 +52,14 @@ export default function InsightsScreen() {
       }, {}),
     [history],
   );
+  const categoryTotals = useMemo(() => {
+    const merged = { ...historyCategories };
+    for (const cap of caps) {
+      merged[cap.category] = (merged[cap.category] ?? 0) + cap.spentMinor;
+    }
+    return merged;
+  }, [historyCategories, caps]);
+  const syncedSpendMinor = caps.reduce((sum, cap) => sum + cap.spentMinor, 0);
   const categoryEntries = Object.entries(categoryTotals).sort((a, b) => b[1] - a[1]);
   const maxCategory = categoryEntries[0]?.[1] ?? 1;
 
@@ -57,6 +67,11 @@ export default function InsightsScreen() {
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView contentContainerStyle={styles.content}>
         <SectionHeader overline="Spend analytics" title="Rewards overview" />
+        {syncedSpendMinor > 0 && isPremium !== false && (
+          <Text style={styles.syncNote}>
+            Includes ${(syncedSpendMinor / 100).toFixed(2)} from linked bank sync.
+          </Text>
+        )}
 
         {isPremium === false ? (
           <GlassCard>
@@ -132,4 +147,5 @@ const styles = StyleSheet.create({
   track: { height: 8, borderRadius: 999, backgroundColor: colors.backgroundElevated },
   fill: { height: 8, borderRadius: 999, backgroundColor: colors.accent },
   empty: { color: colors.textSecondary },
+  syncNote: { color: colors.textSecondary, marginBottom: 4 },
 });

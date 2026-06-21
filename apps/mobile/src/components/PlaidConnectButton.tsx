@@ -76,7 +76,12 @@ export function PlaidConnectButton({ consumerUserId, onLinked, onError }: PlaidC
   }
 
   return (
-    <Pressable style={styles.button} onPress={() => void handlePress()} disabled={loading}>
+    <Pressable
+      style={styles.button}
+      testID="plaid-connect-button"
+      onPress={() => void handlePress()}
+      disabled={loading}
+    >
       <Text style={styles.text}>{loading ? 'Connecting…' : 'Connect bank account'}</Text>
     </Pressable>
   );
