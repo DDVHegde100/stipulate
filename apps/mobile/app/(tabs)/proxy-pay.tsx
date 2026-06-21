@@ -62,7 +62,7 @@ export default function ProxyPayScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top']}>
+    <SafeAreaView style={styles.safeArea} edges={['top']} testID="proxy-pay-screen">
       <ScrollView contentContainerStyle={styles.content}>
         <SectionHeader
           overline="Proxy pay"

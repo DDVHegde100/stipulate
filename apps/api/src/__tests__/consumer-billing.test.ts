@@ -115,4 +115,47 @@ describe('consumer billing API', () => {
     expect(subscription?.subscription_plan).toBe('free');
     expect(subscription?.subscription_status).toBe('canceled');
   });
+
+  it('POST /public/billing/portal returns portal url for subscribed customer', async () => {
+    await handleStripeWebhookEvent({
+      id: 'evt_consumer_portal_1',
+      type: 'checkout.session.completed',
+      data: {
+        object: {
+          customer: 'cus_consumer_portal',
+          subscription: 'sub_consumer_portal',
+          metadata: {
+            consumer_user_id: '00000000-0000-4000-8000-000000000001',
+            plan: 'consumer_premium',
+          },
+        },
+      },
+    });
+
+    const app = createApp();
+    const login = await app.request('/public/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: 'demo@stipulate.io',
+        password: 'demo-password-123',
+      }),
+    });
+    const cookie = login.headers.get('Set-Cookie') ?? '';
+
+    const response = await app.request('/public/billing/portal', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: cookie.split(';')[0] ?? '',
+      },
+      body: JSON.stringify({
+        returnUrl: 'https://stipulate.io/app/settings',
+      }),
+    });
+
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data.url).toContain('billing.stripe.com');
+  });
 });

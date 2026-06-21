@@ -1,0 +1,26 @@
+name: Mobile E2E
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'apps/mobile/**'
+
+jobs:
+  detox:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Typecheck mobile app
+        run: pnpm --filter @stipulate/mobile typecheck
+      - name: Detox build (optional local verification)
+        run: pnpm --filter @stipulate/mobile test:e2e:build
+        continue-on-error: true

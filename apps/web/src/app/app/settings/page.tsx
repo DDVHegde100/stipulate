@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Button, Card, GlassPanel, Heading, Input, Text } from '@stipulate/ui';
 
 import { getStoredUser, updateProfile } from '../../../lib/consumer-auth';
-import { fetchConsumerBillingStatus, startConsumerCheckout } from '../../../lib/consumer-billing';
+import { fetchConsumerBillingStatus, startConsumerCheckout, startConsumerPortal } from '../../../lib/consumer-billing';
 import { PlaidConnectPanel } from '../../../components/PlaidConnectPanel';
 
 const TIMEZONES = ['UTC', 'America/New_York', 'America/Chicago', 'America/Los_Angeles', 'Europe/London'];
@@ -168,6 +168,23 @@ export default function SettingsPage() {
               Plan: {billingStatus.plan}
             </Text>
           )}
+          {billingStatus?.isPremium ? (
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={billingLoading}
+              onClick={() => {
+                setBillingLoading(true);
+                void startConsumerPortal({ returnUrl: `${window.location.origin}/app/settings` })
+                  .then((session) => {
+                    window.location.href = session.url;
+                  })
+                  .catch(() => setBillingLoading(false));
+              }}
+            >
+              {billingLoading ? 'Opening…' : 'Manage subscription'}
+            </Button>
+          ) : null}
           <Link href="/dashboard/billing">
             <Button variant="outline" size="sm">
               Developer billing

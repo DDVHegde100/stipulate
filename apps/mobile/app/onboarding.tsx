@@ -74,7 +74,7 @@ export default function OnboardingScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} testID="onboarding-screen">
       <ScrollView contentContainerStyle={styles.content}>
         <SectionHeader
           overline="Onboarding"
@@ -130,9 +130,9 @@ export default function OnboardingScreen() {
             </View>
             <View style={styles.switchRow}>
               <Text style={styles.body}>Push benefit change alerts</Text>
-              <Switch value={pushNotifs} onValueChange={setPushNotifs} />
+              <Switch testID="onboarding-push-toggle" value={pushNotifs} onValueChange={setPushNotifs} />
             </View>
-            <Pressable style={styles.button} onPress={() => void finish()} disabled={loading}>
+            <Pressable style={styles.button} testID="onboarding-finish" onPress={() => void finish()} disabled={loading}>
               {loading ? (
                 <ActivityIndicator color="#fff" />
               ) : (

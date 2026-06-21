@@ -1,6 +1,7 @@
 import { router } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import {
+  Linking,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -15,6 +16,7 @@ import { GlassCard } from '@/components/GlassCard';
 import { SectionHeader } from '@/components/SectionHeader';
 import { useAuth } from '@/context/AuthContext';
 import { useWallet } from '@/hooks/useWallet';
+import { fetchConsumerBillingStatus, startConsumerCheckout } from '@/lib/consumer-billing';
 import { listCatalogCards } from '@/lib/stipulate';
 import { syncPushToken } from '@/lib/push-notifications';
 import { colors } from '@/theme/colors';
@@ -34,9 +36,16 @@ export default function ProfileScreen() {
   const [catalog, setCatalog] = useState<Array<{ card_id: string; name: string }>>([]);
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [billingStatus, setBillingStatus] = useState<Awaited<ReturnType<typeof fetchConsumerBillingStatus>> | null>(
+    null,
+  );
+  const [billingLoading, setBillingLoading] = useState(false);
 
   useEffect(() => {
     void listCatalogCards().then(setCatalog);
+    void fetchConsumerBillingStatus()
+      .then(setBillingStatus)
+      .catch(() => setBillingStatus(null));
   }, []);
 
   useEffect(() => {
@@ -91,6 +100,35 @@ export default function ProfileScreen() {
           <Pressable style={styles.button} onPress={() => void handleSave()} disabled={saving}>
             <Text style={styles.buttonText}>{saved ? 'Saved!' : saving ? 'Saving…' : 'Save changes'}</Text>
           </Pressable>
+        </GlassCard>
+
+        <GlassCard>
+          <Text style={styles.cardLabel}>Billing</Text>
+          {billingStatus?.isPremium ? (
+            <Text style={styles.gapDesc}>Consumer Premium is active.</Text>
+          ) : (
+            <Text style={styles.gapDesc}>Upgrade for full analytics and benefit alerts.</Text>
+          )}
+          {!billingStatus?.isPremium ? (
+            <Pressable
+              style={styles.button}
+              disabled={billingLoading}
+              onPress={() => {
+                setBillingLoading(true);
+                void startConsumerCheckout({
+                  successUrl: 'https://stipulate.io/app/settings',
+                  cancelUrl: 'https://stipulate.io/app/settings',
+                })
+                  .then((session) => Linking.openURL(session.url))
+                  .catch(() => setBillingLoading(false))
+                  .finally(() => setBillingLoading(false));
+              }}
+            >
+              <Text style={styles.buttonText}>
+                {billingLoading ? 'Opening checkout…' : 'Upgrade with Stripe'}
+              </Text>
+            </Pressable>
+          ) : null}
         </GlassCard>
 
         <GlassCard>

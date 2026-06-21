@@ -63,6 +63,7 @@ export default function SignupScreen() {
             <Text style={styles.label}>Email</Text>
             <TextInput
               style={styles.input}
+              testID="signup-email"
               value={email}
               onChangeText={setEmail}
               autoCapitalize="none"
@@ -73,6 +74,7 @@ export default function SignupScreen() {
             <Text style={styles.label}>Password</Text>
             <TextInput
               style={styles.input}
+              testID="signup-password"
               value={password}
               onChangeText={setPassword}
               secureTextEntry
@@ -80,7 +82,7 @@ export default function SignupScreen() {
               placeholderTextColor={colors.textTertiary}
             />
             {error ? <Text style={styles.error}>{error}</Text> : null}
-            <Pressable style={styles.button} onPress={() => void handleSubmit()} disabled={loading}>
+            <Pressable style={styles.button} testID="signup-submit" onPress={() => void handleSubmit()} disabled={loading}>
               {loading ? (
                 <ActivityIndicator color="#fff" />
               ) : (

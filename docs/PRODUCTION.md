@@ -84,6 +84,8 @@ Configure a single Stripe webhook endpoint pointing at `/webhooks/stripe` with a
 | `customer.subscription.deleted` | Downgrade canceled consumer plans |
 | `issuing_card.updated` | Sync virtual card freeze/close from Stripe Issuing |
 | `issuing_cardholder.updated` | Sync cardholder KYC and suspension state |
+| `issuing_authorization.created` | Record virtual card authorizations |
+| `issuing_authorization.updated` | Update authorization approval/reversal state |
 
 Physical card shipping uses a separate callback at `/webhooks/issuing/shipping` with `ISSUING_WEBHOOK_SECRET`.
 
