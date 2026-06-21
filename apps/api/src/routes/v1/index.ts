@@ -20,6 +20,7 @@ import { spendHandler } from './spend.js';
 import { orgHandler } from './org.js';
 import { walletHandler } from './wallet.js';
 import { plaidHandler } from './plaid.js';
+import { issuingHandler } from './issuing.js';
 
 export const v1Routes = new Hono<AppBindings>();
 
@@ -43,6 +44,7 @@ v1Routes.route('/spend', spendHandler);
 v1Routes.route('/org', orgHandler);
 v1Routes.route('/wallet', walletHandler);
 v1Routes.route('/plaid', plaidHandler);
+v1Routes.route('/issuing', issuingHandler);
 
 v1Routes.get('/', (c) => {
   return c.json({
@@ -122,6 +124,21 @@ v1Routes.get('/', (c) => {
         method: 'GET',
         path: '/v1/spend/caps',
         description: 'Cap utilization and remaining headroom by card',
+      },
+      plaidSyncTransactions: {
+        method: 'POST',
+        path: '/v1/plaid/sync-transactions',
+        description: 'Import recent bank transactions into cap spend tracking',
+      },
+      issuingCardholders: {
+        method: 'POST',
+        path: '/v1/issuing/cardholders',
+        description: 'Create a sandbox cardholder for virtual card issuance',
+      },
+      issuingVirtualCards: {
+        method: 'POST',
+        path: '/v1/issuing/cards/virtual',
+        description: 'Issue a sandbox virtual card for a cardholder',
       },
     },
   });

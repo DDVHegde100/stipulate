@@ -12,6 +12,7 @@ import {
   isPlaidConfigured,
 } from '../../services/plaid.service.js';
 import { resolveConsumerUserId } from '../../lib/consumer-context.js';
+import { syncPlaidTransactionsForConsumer } from '../../services/plaid-transaction-sync.service.js';
 
 export const plaidHandler = new Hono<AppBindings>();
 
@@ -215,6 +216,23 @@ plaidHandler.get('/accounts', async (c) => {
         mappingSource: account.mapping_source,
       })),
     },
+    requestId: c.get('requestId'),
+  });
+});
+
+/** Sync recent Plaid transactions into cap spend tracking. */
+plaidHandler.post('/sync-transactions', async (c) => {
+  const consumerUserId = await resolveUserRef(c);
+  const days = Number(c.req.query('days') ?? 30);
+
+  const result = await syncPlaidTransactionsForConsumer({
+    consumerUserId,
+    orgId: c.get('orgId'),
+    days: Number.isFinite(days) ? days : 30,
+  });
+
+  return c.json({
+    data: result,
     requestId: c.get('requestId'),
   });
 });

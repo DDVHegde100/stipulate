@@ -131,3 +131,59 @@ export async function fetchPlaidInstitution(accessToken: string): Promise<{
     institutionName: institution.institution.name,
   };
 }
+
+const PLAID_CATEGORY_MAP: Record<string, string> = {
+  FOOD_AND_DRINK: 'dining',
+  FOOD_AND_DRINK_GROCERIES: 'groceries',
+  TRAVEL: 'travel',
+  TRANSPORTATION: 'gas',
+  GENERAL_MERCHANDISE: 'other',
+};
+
+export function mapPlaidCategory(primary?: string | null, detailed?: string | null): string {
+  if (detailed && PLAID_CATEGORY_MAP[detailed]) return PLAID_CATEGORY_MAP[detailed];
+  if (primary && PLAID_CATEGORY_MAP[primary]) return PLAID_CATEGORY_MAP[primary];
+  return 'other';
+}
+
+export interface PlaidTransactionRow {
+  accountId: string;
+  amountMinor: number;
+  category: string;
+  date: string;
+}
+
+/** Fetch recent transactions from Plaid for cap sync. */
+export async function fetchRecentPlaidTransactions(
+  accessToken: string,
+  days = 30,
+): Promise<PlaidTransactionRow[]> {
+  const end = new Date();
+  const start = new Date(end.getTime() - days * 24 * 60 * 60 * 1000);
+
+  const result = await plaidRequest<{
+    transactions: Array<{
+      account_id: string;
+      amount: number;
+      date: string;
+      personal_finance_category?: { primary?: string; detailed?: string };
+    }>;
+  }>('/transactions/get', {
+    access_token: accessToken,
+    start_date: start.toISOString().slice(0, 10),
+    end_date: end.toISOString().slice(0, 10),
+    options: { count: 100, offset: 0 },
+  });
+
+  return result.transactions
+    .filter((txn) => txn.amount > 0)
+    .map((txn) => ({
+      accountId: txn.account_id,
+      amountMinor: Math.round(txn.amount * 100),
+      category: mapPlaidCategory(
+        txn.personal_finance_category?.primary,
+        txn.personal_finance_category?.detailed,
+      ),
+      date: txn.date,
+    }));
+}

@@ -175,3 +175,32 @@ export async function listLinkedAccounts(consumerUserId: string): Promise<
     institutionName: row.institution_name,
   }));
 }
+
+function decryptAccessToken(encrypted: string): string {
+  if (encrypted.startsWith('stub:')) {
+    return Buffer.from(encrypted.slice(5), 'base64url').toString('utf8');
+  }
+  return encrypted;
+}
+
+/** Load active Plaid item for a consumer user. */
+export async function getActivePlaidItem(consumerUserId: string): Promise<PlaidItemRow | null> {
+  if (process.env.NODE_ENV === 'test') {
+    return testItems.get(consumerUserId) ?? null;
+  }
+
+  const result = await query<PlaidItemRow>(
+    `SELECT id, consumer_user_id, org_id, item_id, institution_id, institution_name,
+            access_token_encrypted, status
+     FROM plaid_items
+     WHERE consumer_user_id = $1::uuid AND status = 'active'
+     ORDER BY created_at DESC
+     LIMIT 1`,
+    [consumerUserId],
+  );
+  return result.rows[0] ?? null;
+}
+
+export function decodePlaidAccessToken(item: PlaidItemRow): string {
+  return decryptAccessToken(item.access_token_encrypted);
+}
