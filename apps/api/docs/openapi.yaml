@@ -616,6 +616,15 @@ paths:
         '200':
           description: Consumer data export JSON
 
+  /public/auth/delete:
+    post:
+      operationId: scheduleConsumerDeletion
+      summary: Schedule consumer account deletion after a 30-day grace period
+      security: []
+      responses:
+        '202':
+          description: Deletion scheduled and session cleared
+
   /openapi:
     get:
       operationId: getOpenApiSpec

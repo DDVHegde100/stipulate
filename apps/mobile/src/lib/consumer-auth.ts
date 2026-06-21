@@ -91,3 +91,47 @@ export async function updateProfile(
   await storeUser(json.data);
   return json.data;
 }
+
+export async function downloadConsumerExport(): Promise<Record<string, unknown>> {
+  const user = await getStoredUser();
+  if (!user) throw new Error('Not signed in');
+
+  const response = await fetch(`${publicApiBase()}/public/auth/export`, {
+    headers: { 'X-User-Id': user.id },
+    credentials: 'include',
+  });
+
+  const json = (await response.json()) as {
+    data: Record<string, unknown>;
+    error?: { message: string };
+  };
+
+  if (!response.ok) {
+    throw new Error(json.error?.message ?? `HTTP ${response.status}`);
+  }
+
+  return json.data;
+}
+
+export async function scheduleConsumerDeletion(): Promise<{ scheduledFor: string }> {
+  const user = await getStoredUser();
+  if (!user) throw new Error('Not signed in');
+
+  const response = await fetch(`${publicApiBase()}/public/auth/delete`, {
+    method: 'POST',
+    headers: { 'X-User-Id': user.id },
+    credentials: 'include',
+  });
+
+  const json = (await response.json()) as {
+    data: { scheduledFor: string };
+    error?: { message: string };
+  };
+
+  if (!response.ok) {
+    throw new Error(json.error?.message ?? `HTTP ${response.status}`);
+  }
+
+  await clearUser();
+  return { scheduledFor: json.data.scheduledFor };
+}

@@ -1,16 +1,18 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button, Card, GlassPanel, Heading, Input, Text } from '@stipulate/ui';
 
-import { getStoredUser, updateProfile, downloadConsumerExport } from '../../../lib/consumer-auth';
+import { getStoredUser, updateProfile, downloadConsumerExport, scheduleConsumerDeletion, clearUser } from '../../../lib/consumer-auth';
 import { fetchConsumerBillingStatus, startConsumerCheckout, startConsumerPortal } from '../../../lib/consumer-billing';
 import { PlaidConnectPanel } from '../../../components/PlaidConnectPanel';
 
 const TIMEZONES = ['UTC', 'America/New_York', 'America/Chicago', 'America/Los_Angeles', 'Europe/London'];
 
 export default function SettingsPage() {
+  const router = useRouter();
   const user = getStoredUser();
   const [name, setName] = useState(user?.name ?? '');
   const [timezone, setTimezone] = useState(user?.timezone ?? 'UTC');
@@ -20,6 +22,8 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(false);
   const [billingLoading, setBillingLoading] = useState(false);
   const [exportLoading, setExportLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [billingStatus, setBillingStatus] = useState<{ plan: string; status: string; isPremium: boolean } | null>(
     null,
   );
@@ -222,6 +226,42 @@ export default function SettingsPage() {
         >
           {exportLoading ? 'Preparing…' : 'Download my data'}
         </Button>
+      </Card>
+
+      <Card className="border-red-500/20 p-6">
+        <Heading as="h2" size="sm" className="mb-2 text-red-400">
+          Delete account
+        </Heading>
+        <Text tone="secondary" className="mb-4">
+          Permanently delete your consumer account after a 30-day grace period. You will be signed out
+          immediately.
+        </Text>
+        {!deleteConfirm ? (
+          <Button variant="outline" size="sm" onClick={() => setDeleteConfirm(true)}>
+            Schedule account deletion
+          </Button>
+        ) : (
+          <div className="flex flex-wrap gap-3">
+            <Button
+              size="sm"
+              disabled={deleteLoading}
+              onClick={() => {
+                setDeleteLoading(true);
+                void scheduleConsumerDeletion()
+                  .then(() => {
+                    clearUser();
+                    router.replace('/login');
+                  })
+                  .catch(() => setDeleteLoading(false));
+              }}
+            >
+              {deleteLoading ? 'Scheduling…' : 'Confirm deletion'}
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => setDeleteConfirm(false)}>
+              Cancel
+            </Button>
+          </div>
+        )}
       </Card>
     </div>
   );

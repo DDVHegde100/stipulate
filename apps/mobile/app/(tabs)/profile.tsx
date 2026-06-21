@@ -1,9 +1,11 @@
 import { router } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import {
+  Alert,
   Linking,
   Pressable,
   ScrollView,
+  Share,
   StyleSheet,
   Switch,
   Text,
@@ -13,10 +15,12 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { GlassCard } from '@/components/GlassCard';
+import { PremiumGate } from '@/components/PremiumGate';
 import { SectionHeader } from '@/components/SectionHeader';
 import { useAuth } from '@/context/AuthContext';
 import { useWallet } from '@/hooks/useWallet';
 import { fetchConsumerBillingStatus, startConsumerCheckout } from '@/lib/consumer-billing';
+import { downloadConsumerExport, scheduleConsumerDeletion } from '@/lib/consumer-auth';
 import { listCatalogCards } from '@/lib/stipulate';
 import { syncPushToken } from '@/lib/push-notifications';
 import { colors } from '@/theme/colors';
@@ -40,6 +44,8 @@ export default function ProfileScreen() {
     null,
   );
   const [billingLoading, setBillingLoading] = useState(false);
+  const [exportLoading, setExportLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   useEffect(() => {
     void listCatalogCards().then(setCatalog);
@@ -132,17 +138,82 @@ export default function ProfileScreen() {
         </GlassCard>
 
         <GlassCard>
-          <Text style={styles.cardLabel}>Card discovery</Text>
-          {gaps.map((gap) => (
-            <View key={gap.suggest} style={styles.gapRow}>
-              <Text style={styles.gapCategory}>{gap.category} gap</Text>
-              <Text style={styles.gapTitle}>{catalogById[gap.suggest] ?? gap.suggest}</Text>
-              <Text style={styles.gapDesc}>{gap.description}</Text>
-            </View>
-          ))}
-          {gaps.length === 0 && (
-            <Text style={styles.empty}>Your wallet covers the top recommendations.</Text>
-          )}
+          <PremiumGate feature="Card discovery recommendations">
+            <Text style={styles.cardLabel}>Card discovery</Text>
+            {gaps.map((gap) => (
+              <View key={gap.suggest} style={styles.gapRow}>
+                <Text style={styles.gapCategory}>{gap.category} gap</Text>
+                <Text style={styles.gapTitle}>{catalogById[gap.suggest] ?? gap.suggest}</Text>
+                <Text style={styles.gapDesc}>{gap.description}</Text>
+              </View>
+            ))}
+            {gaps.length === 0 && (
+              <Text style={styles.empty}>Your wallet covers the top recommendations.</Text>
+            )}
+          </PremiumGate>
+        </GlassCard>
+
+        <GlassCard>
+          <Text style={styles.cardLabel}>Privacy</Text>
+          <Text style={styles.gapDesc}>
+            Download a JSON bundle of your profile, wallet, linked accounts, and subscription data.
+          </Text>
+          <Pressable
+            style={styles.button}
+            disabled={exportLoading}
+            onPress={() => {
+              setExportLoading(true);
+              void downloadConsumerExport()
+                .then((bundle) =>
+                  Share.share({
+                    message: JSON.stringify(bundle, null, 2),
+                    title: 'Stipulate data export',
+                  }),
+                )
+                .catch(() => Alert.alert('Export failed', 'Try again later.'))
+                .finally(() => setExportLoading(false));
+            }}
+          >
+            <Text style={styles.buttonText}>
+              {exportLoading ? 'Preparing export…' : 'Download my data'}
+            </Text>
+          </Pressable>
+        </GlassCard>
+
+        <GlassCard>
+          <Text style={[styles.cardLabel, styles.dangerLabel]}>Delete account</Text>
+          <Text style={styles.gapDesc}>
+            Permanently delete your account after a 30-day grace period. You will be signed out
+            immediately.
+          </Text>
+          <Pressable
+            style={styles.dangerButton}
+            disabled={deleteLoading}
+            onPress={() => {
+              Alert.alert(
+                'Schedule account deletion?',
+                'Your data will be purged after 30 days. This cannot be undone.',
+                [
+                  { text: 'Cancel', style: 'cancel' },
+                  {
+                    text: 'Delete account',
+                    style: 'destructive',
+                    onPress: () => {
+                      setDeleteLoading(true);
+                      void scheduleConsumerDeletion()
+                        .then(() => router.replace('/login'))
+                        .catch(() => Alert.alert('Deletion failed', 'Try again later.'))
+                        .finally(() => setDeleteLoading(false));
+                    },
+                  },
+                ],
+              );
+            }}
+          >
+            <Text style={styles.dangerButtonText}>
+              {deleteLoading ? 'Scheduling…' : 'Schedule account deletion'}
+            </Text>
+          </Pressable>
         </GlassCard>
 
         <Pressable
@@ -194,6 +265,16 @@ const styles = StyleSheet.create({
   gapTitle: { color: colors.text, fontSize: 16, fontWeight: '600', marginTop: 4 },
   gapDesc: { color: colors.textSecondary, fontSize: 14, marginTop: 4 },
   empty: { color: colors.textSecondary },
+  dangerLabel: { color: '#f87171' },
+  dangerButton: {
+    marginTop: 16,
+    borderWidth: 1,
+    borderColor: '#f87171',
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  dangerButtonText: { color: '#f87171', fontWeight: '600' },
   logout: { alignItems: 'center', paddingVertical: 12 },
   logoutText: { color: '#f87171', fontWeight: '600' },
 });

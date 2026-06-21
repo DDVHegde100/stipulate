@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Button, GlassPanel, Heading, Text } from '@stipulate/ui';
 
+import { PremiumGate } from '../../../components/PremiumGate';
 import { fetchCatalog, getWalletCards } from '../../../lib/wallet';
 
 const CATEGORY_GAPS = [
@@ -45,47 +46,49 @@ export default function DiscoverPage() {
   const gaps = CATEGORY_GAPS.filter((gap) => !walletIds.has(gap.suggest));
 
   return (
-    <div className="space-y-8">
-      <div>
-        <Text variant="overline" tone="secondary">
-          Card discovery
-        </Text>
-        <Heading as="h1" size="lg">
-          Unlock better cards for your spend
-        </Heading>
-        <Text tone="secondary" className="mt-2 max-w-2xl">
-          Based on your wallet, these cards fill category gaps and may improve net return on
-          common purchase types.
-        </Text>
-      </div>
+    <PremiumGate feature="Card discovery recommendations">
+      <div className="space-y-8">
+        <div>
+          <Text variant="overline" tone="secondary">
+            Card discovery
+          </Text>
+          <Heading as="h1" size="lg">
+            Unlock better cards for your spend
+          </Heading>
+          <Text tone="secondary" className="mt-2 max-w-2xl">
+            Based on your wallet, these cards fill category gaps and may improve net return on
+            common purchase types.
+          </Text>
+        </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        {gaps.map((gap) => (
-          <GlassPanel key={gap.category} hover>
-            <Text variant="overline" tone="secondary">
-              {gap.category} gap
-            </Text>
-            <Heading as="h3" size="sm" className="mt-2">
-              {catalogById[gap.suggest] ?? gap.suggest}
-            </Heading>
-            <Text tone="secondary" className="mt-2">
-              {gap.description}
-            </Text>
-            <Link href="/app/wallet" className="mt-4 inline-block">
-              <Button variant="outline" size="sm">
-                Add to wallet
-              </Button>
-            </Link>
-          </GlassPanel>
-        ))}
-        {gaps.length === 0 && (
-          <GlassPanel>
-            <Text tone="secondary">
-              Your wallet covers the top category recommendations. Nice work.
-            </Text>
-          </GlassPanel>
-        )}
+        <div className="grid gap-4 md:grid-cols-2">
+          {gaps.map((gap) => (
+            <GlassPanel key={gap.category} hover>
+              <Text variant="overline" tone="secondary">
+                {gap.category} gap
+              </Text>
+              <Heading as="h3" size="sm" className="mt-2">
+                {catalogById[gap.suggest] ?? gap.suggest}
+              </Heading>
+              <Text tone="secondary" className="mt-2">
+                {gap.description}
+              </Text>
+              <Link href="/app/wallet" className="mt-4 inline-block">
+                <Button variant="outline" size="sm">
+                  Add to wallet
+                </Button>
+              </Link>
+            </GlassPanel>
+          ))}
+          {gaps.length === 0 && (
+            <GlassPanel>
+              <Text tone="secondary">
+                Your wallet covers the top category recommendations. Nice work.
+              </Text>
+            </GlassPanel>
+          )}
+        </div>
       </div>
-    </div>
+    </PremiumGate>
   );
 }

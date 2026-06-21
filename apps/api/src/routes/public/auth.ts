@@ -15,7 +15,7 @@ import {
 import { createConsumerSession, revokeConsumerSession } from '../../repositories/consumer-session.repository.js';
 import { resolveConsumerUserId } from '../../lib/consumer-context.js';
 import { clearSessionCookie, setSessionCookie } from '../../lib/session-cookie.js';
-import { exportConsumerData } from '../../services/consumer-gdpr.service.js';
+import { exportConsumerData, scheduleConsumerDeletion } from '../../services/consumer-gdpr.service.js';
 
 const SignupSchema = z.object({
   email: z.string().email(),
@@ -184,4 +184,23 @@ consumerAuthHandler.get('/export', async (c) => {
 
   const bundle = await exportConsumerData(userId);
   return c.json({ data: bundle, requestId: c.get('requestId') });
+});
+
+consumerAuthHandler.post('/delete', async (c) => {
+  const userId = await resolveConsumerUserId(c);
+  if (!userId) throw new HTTPException(401, { message: 'Authentication required' });
+
+  const result = await scheduleConsumerDeletion(userId);
+  clearSessionCookie(c);
+  return c.json(
+    {
+      data: {
+        status: 'scheduled',
+        scheduledFor: result.scheduledFor,
+        message: 'Account deletion scheduled. You have been signed out.',
+      },
+      requestId: c.get('requestId'),
+    },
+    202,
+  );
 });
