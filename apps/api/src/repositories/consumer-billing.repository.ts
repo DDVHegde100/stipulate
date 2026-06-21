@@ -24,6 +24,11 @@ export async function findConsumerSubscription(consumerUserId: string): Promise<
   return result.rows[0] ?? null;
 }
 
+export async function isConsumerPremium(consumerUserId: string): Promise<boolean> {
+  const subscription = await findConsumerSubscription(consumerUserId);
+  return subscription?.subscription_plan === 'consumer_premium' && subscription.subscription_status === 'active';
+}
+
 export async function upsertConsumerSubscription(input: {
   consumerUserId: string;
   stripeCustomerId: string;

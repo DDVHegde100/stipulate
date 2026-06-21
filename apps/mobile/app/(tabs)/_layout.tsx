@@ -37,6 +37,15 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="cards"
+        options={{
+          title: 'Cards',
+          tabBarIcon: ({ color, size }) => (
+            <TabIcon name="card-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="route"
         options={{
           title: 'Route',

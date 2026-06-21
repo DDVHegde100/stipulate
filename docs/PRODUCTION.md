@@ -103,6 +103,8 @@ Cancel with `POST /public/auth/delete/cancel`. Due deletions are purged daily vi
 | Weekly digest | Mon 08:00 UTC | `schedule:digest` |
 | Ingestion drain | Every 30 min | `schedule:ingestion` |
 
+Benefit push alerts require Consumer Premium. Email alerts respect notification prefs.
+
 ## Monitoring
 
 - Route P95 latency target: `<20ms` with warm cache

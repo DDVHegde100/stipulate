@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { GlassPanel, Heading, Text } from '@stipulate/ui';
 
 import { demoApiFetch } from '../../../lib/demo-api';
+import { getStoredUser } from '../../../lib/consumer-auth';
 import { estimateMissedRewards, getRouteHistory } from '../../../lib/route-history';
 import { getWalletCards } from '../../../lib/wallet';
 import { PremiumGate } from '../../../components/PremiumGate';
@@ -22,28 +23,43 @@ const CAP_LIMITS: Record<string, number> = {
   default: 1_000_000,
 };
 
+function mergeCategoryTotals(
+  fromHistory: Record<string, number>,
+  caps: CapRow[],
+): Record<string, number> {
+  const merged = { ...fromHistory };
+  for (const cap of caps) {
+    merged[cap.category] = (merged[cap.category] ?? 0) + cap.spentMinor;
+  }
+  return merged;
+}
+
 export default function AnalyticsPage() {
   const [caps, setCaps] = useState<CapRow[]>([]);
   const [error, setError] = useState<string | null>(null);
   const history = useMemo(() => getRouteHistory(), []);
+  const user = getStoredUser();
+  const spendUserRef = user?.id ?? 'web-wallet';
 
   useEffect(() => {
     const cards = getWalletCards();
     if (cards.length === 0) return;
 
     void demoApiFetch<{ caps: CapRow[] }>(
-      `/spend/summary?user_ref=web-wallet&card_ids=${cards.map((c) => c.cardId).join(',')}`,
+      `/spend/summary?user_ref=${encodeURIComponent(spendUserRef)}&card_ids=${cards.map((c) => c.cardId).join(',')}`,
     )
       .then((data) => setCaps(data.caps))
       .catch((err) => setError(err instanceof Error ? err.message : 'Failed to load spend'));
-  }, []);
+  }, [spendUserRef]);
 
   const missedMinor = estimateMissedRewards(history);
-  const categoryTotals = history.reduce<Record<string, number>>((acc, entry) => {
+  const historyCategories = history.reduce<Record<string, number>>((acc, entry) => {
     const key = entry.mcc.startsWith('54') ? 'groceries' : entry.mcc.startsWith('58') ? 'dining' : 'other';
     acc[key] = (acc[key] ?? 0) + entry.amountMinor;
     return acc;
   }, {});
+  const categoryTotals = mergeCategoryTotals(historyCategories, caps);
+  const syncedSpendMinor = caps.reduce((sum, cap) => sum + cap.spentMinor, 0);
 
   const categoryEntries = Object.entries(categoryTotals).sort((a, b) => b[1] - a[1]);
   const maxCategory = categoryEntries[0]?.[1] ?? 1;
@@ -58,6 +74,11 @@ export default function AnalyticsPage() {
         <Heading as="h1" size="lg">
           Rewards overview
         </Heading>
+        {syncedSpendMinor > 0 && (
+          <Text tone="secondary" className="mt-2">
+            Includes ${(syncedSpendMinor / 100).toFixed(2)} from linked bank and Plaid sync.
+          </Text>
+        )}
       </div>
 
       {error && <Text tone="secondary">{error}</Text>}
