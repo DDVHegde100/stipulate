@@ -230,6 +230,19 @@ export class StipulateClient {
     return this.patch(`/issuing/cards/virtual/${encodeURIComponent(cardId)}/status`, { status });
   }
 
+  async listIssuingAuthorizations(input: {
+    cardholderId?: string;
+    virtualCardId?: string;
+    limit?: number;
+  }): Promise<{ authorizations: Array<Record<string, unknown>> }> {
+    const params = new URLSearchParams();
+    if (input.cardholderId) params.set('cardholderId', input.cardholderId);
+    if (input.virtualCardId) params.set('virtualCardId', input.virtualCardId);
+    if (input.limit) params.set('limit', String(input.limit));
+    const qs = params.toString();
+    return this.get(`/issuing/authorizations${qs ? `?${qs}` : ''}`);
+  }
+
   async getOpenApiSpec(): Promise<string> {
     const response = await this.fetchFn(`${this.baseUrl}/openapi`, {
       headers: { 'X-API-Key': this.apiKey },

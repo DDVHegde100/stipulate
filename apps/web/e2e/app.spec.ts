@@ -68,3 +68,12 @@ test('batch route page renders sample spend shell', async ({ page }) => {
   await expect(page.getByRole('heading', { name: /multiple purchases/i })).toBeVisible();
   await expect(page.getByRole('button', { name: /run batch route/i })).toBeVisible();
 });
+
+test('settings page shows billing and privacy sections', async ({ page }) => {
+  await seedConsumerSession(page);
+  await page.goto('/app/settings');
+  await expect(page.getByRole('heading', { name: /^Settings$/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /^Billing$/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /^Privacy$/i })).toBeVisible();
+  await expect(page.getByRole('button', { name: /download my data/i })).toBeVisible();
+});

@@ -607,6 +607,15 @@ paths:
         '200':
           description: Portal session URL
 
+  /public/auth/export:
+    get:
+      operationId: exportConsumerData
+      summary: GDPR export bundle for the authenticated consumer
+      security: []
+      responses:
+        '200':
+          description: Consumer data export JSON
+
   /openapi:
     get:
       operationId: getOpenApiSpec

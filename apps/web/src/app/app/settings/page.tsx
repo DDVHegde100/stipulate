@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button, Card, GlassPanel, Heading, Input, Text } from '@stipulate/ui';
 
-import { getStoredUser, updateProfile } from '../../../lib/consumer-auth';
+import { getStoredUser, updateProfile, downloadConsumerExport } from '../../../lib/consumer-auth';
 import { fetchConsumerBillingStatus, startConsumerCheckout, startConsumerPortal } from '../../../lib/consumer-billing';
 import { PlaidConnectPanel } from '../../../components/PlaidConnectPanel';
 
@@ -19,6 +19,7 @@ export default function SettingsPage() {
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(false);
   const [billingLoading, setBillingLoading] = useState(false);
+  const [exportLoading, setExportLoading] = useState(false);
   const [billingStatus, setBillingStatus] = useState<{ plan: string; status: string; isPremium: boolean } | null>(
     null,
   );
@@ -191,6 +192,36 @@ export default function SettingsPage() {
             </Button>
           </Link>
         </div>
+      </Card>
+
+      <Card className="p-6">
+        <Heading as="h2" size="sm" className="mb-2">
+          Privacy
+        </Heading>
+        <Text tone="secondary" className="mb-4">
+          Download a JSON bundle of your profile, wallet, linked accounts, and subscription data.
+        </Text>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={exportLoading}
+          onClick={() => {
+            setExportLoading(true);
+            void downloadConsumerExport()
+              .then((bundle) => {
+                const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `stipulate-export-${new Date().toISOString().slice(0, 10)}.json`;
+                link.click();
+                URL.revokeObjectURL(url);
+              })
+              .finally(() => setExportLoading(false));
+          }}
+        >
+          {exportLoading ? 'Preparing…' : 'Download my data'}
+        </Button>
       </Card>
     </div>
   );

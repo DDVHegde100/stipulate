@@ -3,6 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { GlassCard } from '@/components/GlassCard';
+import { PremiumGate } from '@/components/PremiumGate';
 import { SectionHeader } from '@/components/SectionHeader';
 import { useWallet } from '@/hooks/useWallet';
 import { fetchChangelog, type ChangelogEntry } from '@/lib/stipulate';
@@ -25,6 +26,7 @@ export default function AlertsScreen() {
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView contentContainerStyle={styles.content}>
         <SectionHeader overline="Benefit alerts" title="What changed on your cards" />
+        <PremiumGate feature="Benefit change alerts">
         {error ? <Text style={styles.error}>{error}</Text> : null}
 
         {entries.map((entry) => (
@@ -54,6 +56,7 @@ export default function AlertsScreen() {
             <Text style={styles.summary}>{selected.change_summary}</Text>
           </GlassCard>
         )}
+        </PremiumGate>
       </ScrollView>
     </SafeAreaView>
   );

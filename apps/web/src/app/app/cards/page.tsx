@@ -8,11 +8,13 @@ import {
   createCardholder,
   issueVirtualCard,
   listPhysicalCardOrders,
+  listIssuingAuthorizations,
   listVirtualCards,
   orderPhysicalCard,
   updateVirtualCardStatus,
   type Cardholder,
   type PhysicalCardOrder,
+  type IssuingAuthorization,
   type VirtualCard,
 } from '../../../lib/issuing';
 
@@ -31,6 +33,7 @@ export default function CardsPage() {
   const [cardholder, setCardholder] = useState<Cardholder | null>(null);
   const [cards, setCards] = useState<VirtualCard[]>([]);
   const [orders, setOrders] = useState<PhysicalCardOrder[]>([]);
+  const [authorizations, setAuthorizations] = useState<IssuingAuthorization[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [issuing, setIssuing] = useState(false);
@@ -75,6 +78,8 @@ export default function CardsPage() {
         setCards(virtualCards);
         const physicalOrders = await listPhysicalCardOrders(cardholderId);
         setOrders(physicalOrders);
+        const ledger = await listIssuingAuthorizations(cardholderId);
+        setAuthorizations(ledger);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load cards');
       } finally {
@@ -251,6 +256,40 @@ export default function CardsPage() {
                 </span>
                 <span className="text-[var(--color-text-tertiary)]">
                   {new Date(order.createdAt).toLocaleDateString()}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </GlassPanel>
+
+      <GlassPanel>
+        <Heading as="h2" size="sm" className="mb-2">
+          Authorization ledger
+        </Heading>
+        <Text tone="secondary" className="mb-4">
+          Recent card authorizations synced from Stripe Issuing webhooks.
+        </Text>
+        {authorizations.length === 0 ? (
+          <Text tone="secondary">No authorizations recorded yet.</Text>
+        ) : (
+          <div className="space-y-2">
+            {authorizations.map((auth) => (
+              <div
+                key={auth.id}
+                className="flex items-center justify-between rounded-lg border border-glass-border px-3 py-2 text-sm"
+              >
+                <div>
+                  <span className="text-white">
+                    {auth.merchantName ?? auth.externalId} · ${(auth.amountMinor / 100).toFixed(2)}
+                  </span>
+                  <Text variant="caption" tone="tertiary" className="block capitalize">
+                    {auth.status}
+                    {auth.merchantCategoryCode ? ` · MCC ${auth.merchantCategoryCode}` : ''}
+                  </Text>
+                </div>
+                <span className="text-[var(--color-text-tertiary)]">
+                  {new Date(auth.authorizedAt).toLocaleDateString()}
                 </span>
               </div>
             ))}

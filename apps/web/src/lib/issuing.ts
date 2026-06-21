@@ -29,6 +29,19 @@ export interface PhysicalCardOrder {
   createdAt: string;
 }
 
+export interface IssuingAuthorization {
+  id: string;
+  virtualCardId: string | null;
+  cardExternalId: string;
+  externalId: string;
+  amountMinor: number;
+  currency: string;
+  merchantName: string | null;
+  merchantCategoryCode: string | null;
+  status: string;
+  authorizedAt: string;
+}
+
 function issuingHeaders(): Record<string, string> {
   return {
     'Content-Type': 'application/json',
@@ -102,4 +115,11 @@ export async function listPhysicalCardOrders(cardholderId: string): Promise<Phys
     `/issuing/cards/physical/orders?cardholderId=${encodeURIComponent(cardholderId)}`,
   );
   return data.orders;
+}
+
+export async function listIssuingAuthorizations(cardholderId: string): Promise<IssuingAuthorization[]> {
+  const data = await issuingFetch<{ authorizations: IssuingAuthorization[] }>(
+    `/issuing/authorizations?cardholderId=${encodeURIComponent(cardholderId)}`,
+  );
+  return data.authorizations;
 }
