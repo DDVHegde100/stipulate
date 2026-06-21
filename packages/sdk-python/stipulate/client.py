@@ -103,6 +103,48 @@ class StipulateClient:
         query = f"?{urllib.parse.urlencode(params)}" if params else ""
         return self._get(f"/org/audit{query}")
 
+    def proxy_pay(self, payload: Mapping[str, Any]) -> Mapping[str, Any]:
+        return self._post("/proxy-pay", payload)
+
+    def list_vaulted_payment_methods(self) -> Mapping[str, Any]:
+        return self._get("/billing/payment-methods")
+
+    def vault_payment_method(self, payload: Mapping[str, Any]) -> Mapping[str, Any]:
+        return self._post("/billing/payment-methods", payload)
+
+    def remove_vaulted_payment_method(self, method_id: str) -> Mapping[str, Any]:
+        return self._delete(f"/billing/payment-methods/{urllib.parse.quote(method_id)}")
+
+    def create_cardholder(self, payload: Optional[Mapping[str, Any]] = None) -> Mapping[str, Any]:
+        return self._post("/issuing/cardholders", payload or {})
+
+    def issue_virtual_card(self, payload: Mapping[str, Any]) -> Mapping[str, Any]:
+        return self._post("/issuing/cards/virtual", payload)
+
+    def list_virtual_cards(self, cardholder_id: str) -> Mapping[str, Any]:
+        query = urllib.parse.urlencode({"cardholderId": cardholder_id})
+        return self._get(f"/issuing/cards/virtual?{query}")
+
+    def update_virtual_card_status(self, card_id: str, status: str) -> Mapping[str, Any]:
+        return self._patch(
+            f"/issuing/cards/virtual/{urllib.parse.quote(card_id)}/status",
+            {"status": status},
+        )
+
+    def _patch(self, path: str, payload: Mapping[str, Any]) -> Mapping[str, Any]:
+        url = f"{self.base_url}{path}"
+        body = json.dumps(payload).encode("utf-8")
+        request = urllib.request.Request(
+            url,
+            data=body,
+            method="PATCH",
+            headers={
+                "Content-Type": "application/json",
+                "X-API-Key": self.api_key,
+            },
+        )
+        return self._execute(request)
+
     def _delete(self, path: str) -> Mapping[str, Any]:
         url = f"{self.base_url}{path}"
         request = urllib.request.Request(

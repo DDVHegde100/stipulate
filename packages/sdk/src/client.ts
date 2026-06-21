@@ -182,6 +182,54 @@ export class StipulateClient {
     return this.post<ProxyPayResponse>('/proxy-pay', request);
   }
 
+  async listVaultedPaymentMethods(): Promise<{
+    paymentMethods: Array<{
+      id: string;
+      paymentMethodId: string;
+      label: string | null;
+      last4: string | null;
+      isDefault: boolean;
+    }>;
+  }> {
+    return this.get('/billing/payment-methods');
+  }
+
+  async vaultPaymentMethod(input: {
+    paymentMethodId: string;
+    label?: string;
+    network?: string;
+    last4?: string;
+    setDefault?: boolean;
+  }): Promise<Record<string, unknown>> {
+    return this.post('/billing/payment-methods', input);
+  }
+
+  async removeVaultedPaymentMethod(id: string): Promise<{ removed: boolean }> {
+    return this.delete(`/billing/payment-methods/${encodeURIComponent(id)}`);
+  }
+
+  async createCardholder(input: { programSlug?: string } = {}): Promise<Record<string, unknown>> {
+    return this.post('/issuing/cardholders', input);
+  }
+
+  async issueVirtualCard(input: {
+    cardholderId: string;
+    spendLimitMinor?: number;
+  }): Promise<Record<string, unknown>> {
+    return this.post('/issuing/cards/virtual', input);
+  }
+
+  async listVirtualCards(cardholderId: string): Promise<{ cards: Array<Record<string, unknown>> }> {
+    return this.get(`/issuing/cards/virtual?cardholderId=${encodeURIComponent(cardholderId)}`);
+  }
+
+  async updateVirtualCardStatus(
+    cardId: string,
+    status: 'active' | 'frozen' | 'closed',
+  ): Promise<Record<string, unknown>> {
+    return this.patch(`/issuing/cards/virtual/${encodeURIComponent(cardId)}/status`, { status });
+  }
+
   async getOpenApiSpec(): Promise<string> {
     const response = await this.fetchFn(`${this.baseUrl}/openapi`, {
       headers: { 'X-API-Key': this.apiKey },
@@ -219,6 +267,34 @@ export class StipulateClient {
   private async post<T>(path: string, body: unknown): Promise<T> {
     const response = await this.fetchFn(`${this.baseUrl}${path}`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': this.apiKey,
+      },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(this.timeoutMs),
+    });
+
+    const json = (await response.json()) as StipulateApiEnvelope<T> & {
+      error?: { code: string; message: string };
+      requestId?: string;
+    };
+
+    if (!response.ok) {
+      throw new StipulateError(
+        json.error?.message ?? `HTTP ${response.status}`,
+        response.status,
+        json.error?.code,
+        json.requestId,
+      );
+    }
+
+    return json.data;
+  }
+
+  private async patch<T>(path: string, body: unknown): Promise<T> {
+    const response = await this.fetchFn(`${this.baseUrl}${path}`, {
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         'X-API-Key': this.apiKey,

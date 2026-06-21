@@ -101,3 +101,14 @@ def test_get_org_audit_log_parses_envelope(monkeypatch: pytest.MonkeyPatch) -> N
     client = StipulateClient("test_key", base_url="http://localhost:3000/v1")
     data = client.get_org_audit_log(limit=10)
     assert data["events"][0]["action"] == "api_key.created"
+
+
+def test_list_vaulted_payment_methods(monkeypatch: pytest.MonkeyPatch) -> None:
+    def fake_urlopen(request: Any, timeout: float = 30.0) -> _FakeResponse:
+        assert request.full_url.endswith("/billing/payment-methods")
+        return _FakeResponse({"data": {"paymentMethods": [{"id": "pm1"}]}, "requestId": "r5"})
+
+    monkeypatch.setattr("urllib.request.urlopen", fake_urlopen)
+    client = StipulateClient("test_key", base_url="http://localhost:3000/v1")
+    data = client.list_vaulted_payment_methods()
+    assert data["paymentMethods"][0]["id"] == "pm1"

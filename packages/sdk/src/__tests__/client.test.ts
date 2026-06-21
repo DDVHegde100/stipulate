@@ -156,4 +156,38 @@ describe('StipulateClient', () => {
       expect.objectContaining({ method: 'POST' }),
     );
   });
+
+  it('lists vaulted payment methods', async () => {
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: { paymentMethods: [{ id: 'pm1', paymentMethodId: 'pm_test', isDefault: true }] },
+        requestId: 'r7',
+      }),
+    });
+
+    const client = new StipulateClient({ apiKey: 'test_key', baseUrl: 'http://localhost:3000/v1', fetch: mockFetch });
+    const result = await client.listVaultedPaymentMethods();
+
+    expect(result.paymentMethods).toHaveLength(1);
+  });
+
+  it('issues virtual cards via issuing API', async () => {
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: { id: 'card-1', last4: '4242', mode: 'sandbox' },
+        requestId: 'r8',
+      }),
+    });
+
+    const client = new StipulateClient({ apiKey: 'test_key', baseUrl: 'http://localhost:3000/v1', fetch: mockFetch });
+    const result = await client.issueVirtualCard({ cardholderId: '00000000-0000-4000-8000-000000000020' });
+
+    expect(result.last4).toBe('4242');
+    expect(mockFetch).toHaveBeenCalledWith(
+      'http://localhost:3000/v1/issuing/cards/virtual',
+      expect.objectContaining({ method: 'POST' }),
+    );
+  });
 });

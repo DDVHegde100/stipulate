@@ -46,6 +46,15 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="proxy-pay"
+        options={{
+          title: 'Pay',
+          tabBarIcon: ({ color, size }) => (
+            <TabIcon name="card-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="insights"
         options={{
           title: 'Insights',

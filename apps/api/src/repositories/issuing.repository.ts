@@ -1,6 +1,12 @@
 import { randomBytes } from 'node:crypto';
 
 import { query } from '../lib/db.js';
+import { findConsumerById } from './consumer-user.repository.js';
+import {
+  createStripeCardholder,
+  createStripeVirtualCard,
+  updateStripeVirtualCardStatus,
+} from '../services/stripe-issuing.service.js';
 
 export interface CardholderRow {
   id: string;
@@ -42,12 +48,37 @@ async function resolveProgramId(slug: string): Promise<string | null> {
   return result.rows[0]?.id ?? null;
 }
 
+async function resolveProgramById(programId: string): Promise<{ slug: string; processor: string } | null> {
+  if (process.env.NODE_ENV === 'test') {
+    return { slug: 'stipulate_sandbox', processor: 'sandbox' };
+  }
+
+  const result = await query<{ slug: string; processor: string }>(
+    `SELECT slug, processor FROM card_programs WHERE id = $1::uuid LIMIT 1`,
+    [programId],
+  );
+  return result.rows[0] ?? null;
+}
+
+export type IssuingMode = 'sandbox' | 'stripe';
+
+export async function resolveIssuingMode(programSlug: string): Promise<IssuingMode> {
+  if (process.env.NODE_ENV === 'test') return 'sandbox';
+  if (!process.env.STRIPE_SECRET_KEY) return 'sandbox';
+  const program = await query<{ processor: string }>(
+    `SELECT processor FROM card_programs WHERE slug = $1 LIMIT 1`,
+    [programSlug],
+  );
+  return program.rows[0]?.processor === 'stripe_issuing' ? 'stripe' : 'sandbox';
+}
+
 export async function createCardholder(input: {
   consumerUserId: string;
   programSlug: string;
-}): Promise<CardholderRow & { program_slug: string }> {
+}): Promise<CardholderRow & { program_slug: string; mode: IssuingMode }> {
   const programId = await resolveProgramId(input.programSlug);
   if (!programId) throw new Error(`Unknown card program: ${input.programSlug}`);
+  const mode = await resolveIssuingMode(input.programSlug);
 
   if (process.env.NODE_ENV === 'test') {
     const row: CardholderRow = {
@@ -60,7 +91,18 @@ export async function createCardholder(input: {
       created_at: new Date(),
     };
     testCardholders.set(input.consumerUserId, row);
-    return { ...row, program_slug: input.programSlug };
+    return { ...row, program_slug: input.programSlug, mode: 'sandbox' };
+  }
+
+  let externalId = `ext_${randomBytes(6).toString('hex')}`;
+  if (mode === 'stripe') {
+    const consumer = await findConsumerById(input.consumerUserId);
+    const stripeHolder = await createStripeCardholder({
+      name: consumer?.name ?? consumer?.email ?? 'Stipulate Cardholder',
+      email: consumer?.email,
+      metadata: { consumer_user_id: input.consumerUserId, program_slug: input.programSlug },
+    });
+    externalId = stripeHolder.id;
   }
 
   const result = await query<CardholderRow>(
@@ -68,9 +110,9 @@ export async function createCardholder(input: {
      VALUES ($1, $2, $3, 'approved', 'passed')
      ON CONFLICT (consumer_user_id, program_id) DO UPDATE SET updated_at = NOW()
      RETURNING id, consumer_user_id, program_id, external_id, status, kyc_status, created_at`,
-    [input.consumerUserId, programId, `ext_${randomBytes(6).toString('hex')}`],
+    [input.consumerUserId, programId, externalId],
   );
-  return { ...result.rows[0]!, program_slug: input.programSlug };
+  return { ...result.rows[0]!, program_slug: input.programSlug, mode };
 }
 
 export async function findCardholderById(cardholderId: string): Promise<CardholderRow | null> {
@@ -92,14 +134,31 @@ export async function findCardholderById(cardholderId: string): Promise<Cardhold
 export async function issueVirtualCard(input: {
   cardholderId: string;
   spendLimitMinor?: number;
-}): Promise<VirtualCardRow> {
+}): Promise<VirtualCardRow & { mode: IssuingMode }> {
   const cardholder = await findCardholderById(input.cardholderId);
   if (!cardholder) throw new Error('Cardholder not found');
 
-  const last4 = String(Math.floor(1000 + Math.random() * 9000));
-  const panToken = `pan_tok_${randomBytes(8).toString('hex')}`;
+  const program = await resolveProgramById(cardholder.program_id);
+  const mode = program ? await resolveIssuingMode(program.slug) : 'sandbox';
+
+  let last4 = String(Math.floor(1000 + Math.random() * 9000));
+  let panToken = `pan_tok_${randomBytes(8).toString('hex')}`;
   const cvvToken = `cvv_tok_${randomBytes(4).toString('hex')}`;
   const now = new Date();
+  let network = 'visa';
+  let externalId = `vc_${randomBytes(6).toString('hex')}`;
+  let expMonth = now.getUTCMonth() + 1;
+  let expYear = now.getUTCFullYear() + 3;
+
+  if (mode === 'stripe' && cardholder.external_id?.startsWith('ich_')) {
+    const stripeCard = await createStripeVirtualCard({ cardholderId: cardholder.external_id });
+    externalId = stripeCard.id;
+    last4 = stripeCard.last4;
+    network = stripeCard.brand;
+    expMonth = stripeCard.exp_month;
+    expYear = stripeCard.exp_year;
+    panToken = `stripe_card_${stripeCard.id}`;
+  }
 
   if (process.env.NODE_ENV === 'test') {
     const row: VirtualCardRow = {
@@ -107,40 +166,41 @@ export async function issueVirtualCard(input: {
       cardholder_id: input.cardholderId,
       program_id: cardholder.program_id,
       last4,
-      network: 'visa',
+      network,
       status: 'active',
       pan_token: panToken,
       cvv_token: cvvToken,
-      exp_month: now.getUTCMonth() + 1,
-      exp_year: now.getUTCFullYear() + 3,
+      exp_month: expMonth,
+      exp_year: expYear,
       spend_limit_minor: input.spendLimitMinor ?? null,
       created_at: now,
     };
     const existing = testVirtualCards.get(input.cardholderId) ?? [];
     testVirtualCards.set(input.cardholderId, [...existing, row]);
-    return row;
+    return { ...row, mode: 'sandbox' };
   }
 
   const result = await query<VirtualCardRow>(
     `INSERT INTO virtual_cards (
        cardholder_id, program_id, external_id, last4, network, status,
        pan_token, cvv_token, exp_month, exp_year, spend_limit_minor
-     ) VALUES ($1, $2, $3, $4, 'visa', 'active', $5, $6, $7, $8, $9)
+     ) VALUES ($1, $2, $3, $4, $5, 'active', $6, $7, $8, $9, $10)
      RETURNING id, cardholder_id, program_id, last4, network, status,
                pan_token, cvv_token, exp_month, exp_year, spend_limit_minor, created_at`,
     [
       input.cardholderId,
       cardholder.program_id,
-      `vc_${randomBytes(6).toString('hex')}`,
+      externalId,
       last4,
+      network,
       panToken,
       cvvToken,
-      now.getUTCMonth() + 1,
-      now.getUTCFullYear() + 3,
+      expMonth,
+      expYear,
       input.spendLimitMinor ?? null,
     ],
   );
-  return result.rows[0]!;
+  return { ...result.rows[0]!, mode };
 }
 
 export async function listVirtualCards(cardholderId: string): Promise<VirtualCardRow[]> {
@@ -162,16 +222,34 @@ export async function listVirtualCards(cardholderId: string): Promise<VirtualCar
 export async function updateVirtualCardStatus(input: {
   cardId: string;
   status: 'active' | 'frozen' | 'closed';
-}): Promise<VirtualCardRow | null> {
+}): Promise<(VirtualCardRow & { mode: IssuingMode }) | null> {
   if (process.env.NODE_ENV === 'test') {
     for (const cards of testVirtualCards.values()) {
       const card = cards.find((c) => c.id === input.cardId);
       if (card) {
         card.status = input.status;
-        return card;
+        return { ...card, mode: 'sandbox' };
       }
     }
     return null;
+  }
+
+  const existing = await query<VirtualCardRow & { external_id: string | null }>(
+    `SELECT id, cardholder_id, program_id, external_id, last4, network, status,
+            pan_token, cvv_token, exp_month, exp_year, spend_limit_minor, created_at
+     FROM virtual_cards WHERE id = $1::uuid LIMIT 1`,
+    [input.cardId],
+  );
+  const current = existing.rows[0];
+  if (!current) return null;
+
+  const program = await resolveProgramById(current.program_id);
+  const mode = program ? await resolveIssuingMode(program.slug) : 'sandbox';
+
+  if (mode === 'stripe' && current.external_id?.startsWith('ic_')) {
+    const stripeStatus =
+      input.status === 'active' ? 'active' : input.status === 'frozen' ? 'inactive' : 'canceled';
+    await updateStripeVirtualCardStatus({ stripeCardId: current.external_id, status: stripeStatus });
   }
 
   const result = await query<VirtualCardRow>(
@@ -181,7 +259,8 @@ export async function updateVirtualCardStatus(input: {
                pan_token, cvv_token, exp_month, exp_year, spend_limit_minor, created_at`,
     [input.cardId, input.status],
   );
-  return result.rows[0] ?? null;
+  const row = result.rows[0];
+  return row ? { ...row, mode } : null;
 }
 
 export interface PhysicalCardOrderRow {

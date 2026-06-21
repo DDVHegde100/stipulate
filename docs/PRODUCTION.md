@@ -28,6 +28,7 @@ Copy `.env.production.example` to your secret manager. Never commit real values.
 | `PLAID_CLIENT_ID` | Plaid | Bank linking (sandbox or production) |
 | `PLAID_SECRET` | Plaid | Plaid API secret |
 | `ISSUING_WEBHOOK_SECRET` | Issuing | Physical card shipping status callbacks |
+| `STRIPE_ISSUING_CARD_DESIGN_ID` | Issuing | Stripe Issuing virtual card design |
 | `OPENAI_API_KEY` | Parser | Benefit guide extraction |
 | `SENTRY_DSN` | Recommended | Error tracking |
 | `ADMIN_API_KEY` | Admin | Internal admin routes |
