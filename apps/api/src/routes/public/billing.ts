@@ -6,6 +6,7 @@ import type { AppBindings } from '../../app.js';
 import { resolveConsumerUserId } from '../../lib/consumer-context.js';
 import { getFeatureFlags } from '../../lib/feature-flags.js';
 import { createConsumerCheckoutSession } from '../../services/stripe.service.js';
+import { findConsumerSubscription } from '../../repositories/consumer-billing.repository.js';
 
 const CheckoutSchema = z.object({
   successUrl: z.string().url(),
@@ -41,4 +42,22 @@ consumerBillingHandler.post('/checkout', async (c) => {
   });
 
   return c.json({ data: session, requestId: c.get('requestId') });
+});
+
+consumerBillingHandler.get('/status', async (c) => {
+  const userId = await resolveConsumerUserId(c);
+  if (!userId) throw new HTTPException(401, { message: 'Authentication required' });
+
+  const subscription = await findConsumerSubscription(userId);
+  const plan = subscription?.subscription_plan ?? 'free';
+  const status = subscription?.subscription_status ?? 'inactive';
+
+  return c.json({
+    data: {
+      plan,
+      status,
+      isPremium: plan === 'consumer_premium' && status === 'active',
+    },
+    requestId: c.get('requestId'),
+  });
 });

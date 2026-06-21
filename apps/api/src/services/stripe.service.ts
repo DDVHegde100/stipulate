@@ -1,5 +1,7 @@
 import * as billingRepo from '../repositories/billing.repository.js';
+import * as consumerBillingRepo from '../repositories/consumer-billing.repository.js';
 import { findOrgBySlug } from '../repositories/org.repository.js';
+import { handleStripeIssuingWebhookEvent } from './stripe-issuing-webhook.service.js';
 
 const STRIPE_API = 'https://api.stripe.com/v1';
 
@@ -167,10 +169,17 @@ export async function handleStripeWebhookEvent(event: {
   const isNew = await billingRepo.recordStripeWebhookEvent(event.id, event.type, event);
   if (!isNew) return;
 
+  if (event.type.startsWith('issuing_')) {
+    await handleStripeIssuingWebhookEvent(event);
+    return;
+  }
+
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
-    const orgId = String(session.metadata ? (session.metadata as Record<string, string>).org_id : '');
-    const plan = String(session.metadata ? (session.metadata as Record<string, string>).plan : 'payg');
+    const metadata = (session.metadata ?? {}) as Record<string, string>;
+    const orgId = String(metadata.org_id ?? '');
+    const consumerUserId = String(metadata.consumer_user_id ?? '');
+    const plan = String(metadata.plan ?? 'payg');
     const customerId = String(session.customer ?? '');
     const subscriptionId = session.subscription ? String(session.subscription) : undefined;
 
@@ -204,13 +213,24 @@ export async function handleStripeWebhookEvent(event: {
         status: 'active',
       });
     }
+
+    if (consumerUserId && customerId && plan === 'consumer_premium') {
+      await consumerBillingRepo.upsertConsumerSubscription({
+        consumerUserId,
+        stripeCustomerId: customerId,
+        stripeSubscriptionId: subscriptionId,
+        plan: 'consumer_premium',
+        status: 'active',
+      });
+    }
   }
 
   if (event.type === 'customer.subscription.deleted') {
     const sub = event.data.object;
     const customerId = String(sub.customer ?? '');
-    // downgrade handled via org lookup in production
-    void customerId;
+    if (customerId) {
+      await consumerBillingRepo.cancelConsumerSubscriptionByCustomerId(customerId);
+    }
   }
 }
 

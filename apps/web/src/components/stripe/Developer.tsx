@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 const PATHS = [
   ["Don't code?", 'Use the API console to send route requests instantly.', 'Open console', '/console'],
-  ['Use our SDKs', 'Typed TypeScript and Python clients for production.', 'View docs', '/docs'],
+  ['Use our SDKs', 'Typed TypeScript and Python clients for production.', 'View docs', '/docs/sdk'],
   ['Build your own', 'OpenAPI 3.1, webhooks, idempotency keys, and org API keys.', 'Get API key', '/signup'],
 ] as const;
 
@@ -38,19 +38,20 @@ export function StripeDeveloper() {
             <div className="border-b border-white/10 px-4 py-2.5">
               <span className="font-mono text-[11px] text-white/40">route.ts</span>
             </div>
-            <pre className="overflow-x-auto p-5 font-mono text-[11px] leading-[1.8] text-white/75">{`import { Stipulate } from '@stipulate/sdk';
+            <pre className="overflow-x-auto p-5 font-mono text-[11px] leading-[1.8] text-white/75">{`import { StipulateClient } from '@stipulate/sdk';
 
-const client = new Stipulate({
+const client = new StipulateClient({
   apiKey: process.env.STIPULATE_KEY,
 });
 
-const { best } = await client.route({
-  amount: 87.42,
-  merchant: { name: 'Nobu', mcc: '5812' },
-  wallet: ['amex_gold', 'chase_sapphire_reserve'],
+const { bestCardId, rankedCards } = await client.route({
+  merchantName: 'Nobu',
+  mcc: '5812',
+  amount: { amountMinor: 8742, currency: 'USD' },
+  userCardIds: ['amex_gold', 'chase_sapphire_reserve'],
 });
 
-// best.return_pct → 4.2`}</pre>
+// rankedCards[0].effectiveMultiplier → 4.2`}</pre>
           </div>
 
           <div className="space-y-3">

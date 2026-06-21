@@ -29,6 +29,8 @@ Copy `.env.production.example` to your secret manager. Never commit real values.
 | `PLAID_SECRET` | Plaid | Plaid API secret |
 | `ISSUING_WEBHOOK_SECRET` | Issuing | Physical card shipping status callbacks |
 | `STRIPE_ISSUING_CARD_DESIGN_ID` | Issuing | Stripe Issuing virtual card design |
+| `LITHIC_API_KEY` | Issuing | Lithic processor (optional alternate) |
+| `MARQETA_APPLICATION_TOKEN` | Issuing | Marqeta processor (optional alternate) |
 | `OPENAI_API_KEY` | Parser | Benefit guide extraction |
 | `SENTRY_DSN` | Recommended | Error tracking |
 | `ADMIN_API_KEY` | Admin | Internal admin routes |
@@ -71,6 +73,19 @@ curl -sf -X POST "$API_URL/v1/route" \
 1. Revert the deployment to the previous image/tag.
 2. Do **not** roll back migrations automatically; review pending migrations first.
 3. Invalidate Redis routing cache if benefit data changed: delete keys matching `stipulate:benefits:*`.
+
+## Stripe webhooks
+
+Configure a single Stripe webhook endpoint pointing at `/webhooks/stripe` with at least:
+
+| Event | Purpose |
+|-------|---------|
+| `checkout.session.completed` | Org SaaS and consumer premium subscriptions |
+| `customer.subscription.deleted` | Downgrade canceled consumer plans |
+| `issuing_card.updated` | Sync virtual card freeze/close from Stripe Issuing |
+| `issuing_cardholder.updated` | Sync cardholder KYC and suspension state |
+
+Physical card shipping uses a separate callback at `/webhooks/issuing/shipping` with `ISSUING_WEBHOOK_SECRET`.
 
 ## Monitoring
 
