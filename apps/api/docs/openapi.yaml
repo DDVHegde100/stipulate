@@ -624,6 +624,38 @@ paths:
       responses:
         '202':
           description: Deletion scheduled and session cleared
+    get:
+      operationId: getConsumerDeletionStatus
+      summary: Scheduled consumer deletion status
+      security: []
+      responses:
+        '200':
+          description: Deletion status or null
+
+  /public/auth/delete/cancel:
+    post:
+      operationId: cancelConsumerDeletion
+      summary: Cancel a scheduled consumer account deletion
+      security: []
+      responses:
+        '200':
+          description: Deletion cancelled
+
+  /org/delete:
+    get:
+      operationId: getOrgDeletionStatus
+      summary: Scheduled org deletion status
+      responses:
+        '200':
+          description: Deletion status or null
+
+  /org/delete/cancel:
+    post:
+      operationId: cancelOrgDeletion
+      summary: Cancel a scheduled org deletion
+      responses:
+        '200':
+          description: Deletion cancelled
 
   /openapi:
     get:

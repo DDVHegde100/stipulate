@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button, Card, GlassPanel, Heading, Input, Text } from '@stipulate/ui';
 
-import { getStoredUser, updateProfile, downloadConsumerExport, scheduleConsumerDeletion, clearUser } from '../../../lib/consumer-auth';
+import { getStoredUser, updateProfile, downloadConsumerExport, scheduleConsumerDeletion, cancelConsumerDeletion, fetchConsumerDeletionStatus, clearUser } from '../../../lib/consumer-auth';
 import { fetchConsumerBillingStatus, startConsumerCheckout, startConsumerPortal } from '../../../lib/consumer-billing';
 import { PlaidConnectPanel } from '../../../components/PlaidConnectPanel';
 
@@ -24,6 +24,10 @@ export default function SettingsPage() {
   const [exportLoading, setExportLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
+  const [deletionStatus, setDeletionStatus] = useState<{ scheduledFor: string; status: string } | null>(
+    null,
+  );
+  const [cancelLoading, setCancelLoading] = useState(false);
   const [billingStatus, setBillingStatus] = useState<{ plan: string; status: string; isPremium: boolean } | null>(
     null,
   );
@@ -37,6 +41,9 @@ export default function SettingsPage() {
       void fetchConsumerBillingStatus()
         .then(setBillingStatus)
         .catch(() => setBillingStatus(null));
+      void fetchConsumerDeletionStatus()
+        .then(setDeletionStatus)
+        .catch(() => setDeletionStatus(null));
     }
   }, [user]);
 
@@ -236,7 +243,26 @@ export default function SettingsPage() {
           Permanently delete your consumer account after a 30-day grace period. You will be signed out
           immediately.
         </Text>
-        {!deleteConfirm ? (
+        {deletionStatus ? (
+          <div className="space-y-3">
+            <Text tone="secondary">
+              Deletion scheduled for {new Date(deletionStatus.scheduledFor).toLocaleDateString()}.
+            </Text>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={cancelLoading}
+              onClick={() => {
+                setCancelLoading(true);
+                void cancelConsumerDeletion()
+                  .then(() => setDeletionStatus(null))
+                  .finally(() => setCancelLoading(false));
+              }}
+            >
+              {cancelLoading ? 'Cancelling…' : 'Cancel scheduled deletion'}
+            </Button>
+          </div>
+        ) : !deleteConfirm ? (
           <Button variant="outline" size="sm" onClick={() => setDeleteConfirm(true)}>
             Schedule account deletion
           </Button>

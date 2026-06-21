@@ -27,6 +27,8 @@
     "smoke": "tsx scripts/smoke-api.ts",
     "batch:parse": "tsx scripts/batch-parse-catalog.ts",
     "reconcile:stripe": "tsx scripts/reconcile-stripe-usage.ts",
+    "purge:deletions": "tsx scripts/purge-scheduled-deletions.ts",
+    "verify:benefit-coverage": "tsx scripts/verify-benefit-coverage.ts",
     "bootstrap:org": "tsx scripts/bootstrap-org.ts"
   },
   "dependencies": {

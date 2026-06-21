@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
 
 import type { AppBindings } from '../../app.js';
-import { exportOrgData, scheduleOrgDeletion } from '../../services/org-gdpr.service.js';
+import { exportOrgData, scheduleOrgDeletion, cancelOrgDeletion, getOrgDeletionStatus } from '../../services/org-gdpr.service.js';
 import { listAuditEvents } from '../../repositories/audit.repository.js';
 
 export const orgHandler = new Hono<AppBindings>();
@@ -40,4 +40,27 @@ orgHandler.delete('/', async (c) => {
     },
     202,
   );
+});
+
+orgHandler.post('/delete/cancel', async (c) => {
+  const orgId = c.get('orgId');
+  if (!orgId) throw new HTTPException(403, { message: 'Org context required' });
+
+  const result = await cancelOrgDeletion(orgId);
+  if (!result.cancelled) {
+    throw new HTTPException(404, { message: 'No scheduled deletion found' });
+  }
+
+  return c.json({
+    data: { status: 'cancelled', message: 'Organization deletion cancelled.' },
+    requestId: c.get('requestId'),
+  });
+});
+
+orgHandler.get('/delete', async (c) => {
+  const orgId = c.get('orgId');
+  if (!orgId) throw new HTTPException(403, { message: 'Org context required' });
+
+  const status = await getOrgDeletionStatus(orgId);
+  return c.json({ data: status, requestId: c.get('requestId') });
 });

@@ -15,7 +15,7 @@ import {
 import { createConsumerSession, revokeConsumerSession } from '../../repositories/consumer-session.repository.js';
 import { resolveConsumerUserId } from '../../lib/consumer-context.js';
 import { clearSessionCookie, setSessionCookie } from '../../lib/session-cookie.js';
-import { exportConsumerData, scheduleConsumerDeletion } from '../../services/consumer-gdpr.service.js';
+import { exportConsumerData, scheduleConsumerDeletion, cancelConsumerDeletion, getConsumerDeletionStatus } from '../../services/consumer-gdpr.service.js';
 
 const SignupSchema = z.object({
   email: z.string().email(),
@@ -203,4 +203,27 @@ consumerAuthHandler.post('/delete', async (c) => {
     },
     202,
   );
+});
+
+consumerAuthHandler.get('/delete', async (c) => {
+  const userId = await resolveConsumerUserId(c);
+  if (!userId) throw new HTTPException(401, { message: 'Authentication required' });
+
+  const status = await getConsumerDeletionStatus(userId);
+  return c.json({ data: status, requestId: c.get('requestId') });
+});
+
+consumerAuthHandler.post('/delete/cancel', async (c) => {
+  const userId = await resolveConsumerUserId(c);
+  if (!userId) throw new HTTPException(401, { message: 'Authentication required' });
+
+  const result = await cancelConsumerDeletion(userId);
+  if (!result.cancelled) {
+    throw new HTTPException(404, { message: 'No scheduled deletion found' });
+  }
+
+  return c.json({
+    data: { status: 'cancelled', message: 'Account deletion cancelled.' },
+    requestId: c.get('requestId'),
+  });
 });

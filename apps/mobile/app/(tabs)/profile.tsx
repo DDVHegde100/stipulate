@@ -20,7 +20,7 @@ import { SectionHeader } from '@/components/SectionHeader';
 import { useAuth } from '@/context/AuthContext';
 import { useWallet } from '@/hooks/useWallet';
 import { fetchConsumerBillingStatus, startConsumerCheckout } from '@/lib/consumer-billing';
-import { downloadConsumerExport, scheduleConsumerDeletion } from '@/lib/consumer-auth';
+import { downloadConsumerExport, scheduleConsumerDeletion, fetchConsumerDeletionStatus, cancelConsumerDeletion } from '@/lib/consumer-auth';
 import { listCatalogCards } from '@/lib/stipulate';
 import { syncPushToken } from '@/lib/push-notifications';
 import { colors } from '@/theme/colors';
@@ -46,12 +46,17 @@ export default function ProfileScreen() {
   const [billingLoading, setBillingLoading] = useState(false);
   const [exportLoading, setExportLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deletionStatus, setDeletionStatus] = useState<{ scheduledFor: string } | null>(null);
+  const [cancelLoading, setCancelLoading] = useState(false);
 
   useEffect(() => {
     void listCatalogCards().then(setCatalog);
     void fetchConsumerBillingStatus()
       .then(setBillingStatus)
       .catch(() => setBillingStatus(null));
+    void fetchConsumerDeletionStatus()
+      .then(setDeletionStatus)
+      .catch(() => setDeletionStatus(null));
   }, []);
 
   useEffect(() => {
@@ -186,6 +191,28 @@ export default function ProfileScreen() {
             Permanently delete your account after a 30-day grace period. You will be signed out
             immediately.
           </Text>
+          {deletionStatus ? (
+            <>
+              <Text style={styles.gapDesc}>
+                Deletion scheduled for {new Date(deletionStatus.scheduledFor).toLocaleDateString()}.
+              </Text>
+              <Pressable
+                style={styles.button}
+                disabled={cancelLoading}
+                onPress={() => {
+                  setCancelLoading(true);
+                  void cancelConsumerDeletion()
+                    .then(() => setDeletionStatus(null))
+                    .catch(() => Alert.alert('Cancel failed', 'Try again later.'))
+                    .finally(() => setCancelLoading(false));
+                }}
+              >
+                <Text style={styles.buttonText}>
+                  {cancelLoading ? 'Cancelling…' : 'Cancel scheduled deletion'}
+                </Text>
+              </Pressable>
+            </>
+          ) : (
           <Pressable
             style={styles.dangerButton}
             disabled={deleteLoading}
@@ -214,6 +241,7 @@ export default function ProfileScreen() {
               {deleteLoading ? 'Scheduling…' : 'Schedule account deletion'}
             </Text>
           </Pressable>
+          )}
         </GlassCard>
 
         <Pressable

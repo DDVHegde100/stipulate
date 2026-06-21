@@ -91,6 +91,17 @@ Physical card shipping uses a separate callback at `/webhooks/issuing/shipping` 
 
 Consumer GDPR exports are available at `GET /public/auth/export` for authenticated wallet users.
 Account deletion can be scheduled at `POST /public/auth/delete` (30-day grace period).
+Cancel with `POST /public/auth/delete/cancel`. Due deletions are purged daily via `purge:deletions`.
+
+## Scheduled jobs
+
+| Job | Schedule | Command |
+|-----|----------|---------|
+| GDPR purge | Daily 04:00 UTC | `purge:deletions` |
+| Benefit reparse | Mon 06:00 UTC | `schedule:reparse` |
+| Stripe reconcile | Mon 06:00 UTC | `reconcile:stripe` |
+| Weekly digest | Mon 08:00 UTC | `schedule:digest` |
+| Ingestion drain | Every 30 min | `schedule:ingestion` |
 
 ## Monitoring
 

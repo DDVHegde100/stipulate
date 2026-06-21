@@ -135,3 +135,44 @@ export async function scheduleConsumerDeletion(): Promise<{ scheduledFor: string
   await clearUser();
   return { scheduledFor: json.data.scheduledFor };
 }
+
+export async function fetchConsumerDeletionStatus(): Promise<{
+  scheduledFor: string;
+  status: string;
+} | null> {
+  const user = await getStoredUser();
+  if (!user) throw new Error('Not signed in');
+
+  const response = await fetch(`${publicApiBase()}/public/auth/delete`, {
+    headers: { 'X-User-Id': user.id },
+    credentials: 'include',
+  });
+
+  const json = (await response.json()) as {
+    data: { scheduledFor: string; status: string } | null;
+    error?: { message: string };
+  };
+
+  if (!response.ok) {
+    throw new Error(json.error?.message ?? `HTTP ${response.status}`);
+  }
+
+  return json.data;
+}
+
+export async function cancelConsumerDeletion(): Promise<void> {
+  const user = await getStoredUser();
+  if (!user) throw new Error('Not signed in');
+
+  const response = await fetch(`${publicApiBase()}/public/auth/delete/cancel`, {
+    method: 'POST',
+    headers: { 'X-User-Id': user.id },
+    credentials: 'include',
+  });
+
+  const json = (await response.json()) as { error?: { message: string } };
+
+  if (!response.ok) {
+    throw new Error(json.error?.message ?? `HTTP ${response.status}`);
+  }
+}

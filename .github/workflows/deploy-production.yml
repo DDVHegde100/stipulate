@@ -71,3 +71,5 @@ jobs:
           curl -fsS "$API_URL/v1/openapi" | head -n 1 | grep -qE 'openapi|info'
           curl -fsS "$API_URL/v1/openapi/json" | grep -q '"/public/auth/export"'
           curl -fsS "$API_URL/v1/openapi/json" | grep -q '"/public/auth/delete"'
+          curl -fsS "$API_URL/v1/openapi/json" | grep -q '"/public/auth/delete/cancel"'
+          curl -fsS "$API_URL/v1/openapi/json" | grep -q '"/org/delete/cancel"'
