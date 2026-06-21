@@ -54,11 +54,15 @@ pnpm build
 
 ```bash
 curl -sf "$API_URL/health"
+curl -sf "$API_URL/status" | jq '.status, .checks.monitoring'
 curl -sf -X POST "$API_URL/v1/route" \
   -H "Content-Type: application/json" \
   -H "X-API-Key: $PRODUCTION_API_KEY" \
   -d '{"merchantName":"Starbucks","mcc":"5814","amount":{"amountMinor":650,"currency":"USD"},"userCardIds":["chase_sapphire_preferred","amex_gold"]}'
+curl -sf "$API_URL/v1/openapi/json" | grep -q '"/public/billing/portal"'
 ```
+
+See [launch.md](./launch.md) for the full runbook and [stripe-live-checklist.md](./stripe-live-checklist.md) before enabling live billing.
 
 ## Health endpoints
 
@@ -107,6 +111,8 @@ Benefit push alerts require Consumer Premium. Email alerts respect notification 
 
 ## Monitoring
 
+- Poll `GET /status` — alert on `checks.monitoring.routeSloOk === false` or queue depth breaches
 - Route P95 latency target: `<20ms` with warm cache
 - API error rate: `<0.1%` excluding 4xx validation errors
 - Parser queue depth and benefit publish failures
+- Stripe live readiness: `checks.monitoring.stripe` (see stripe-live-checklist.md)

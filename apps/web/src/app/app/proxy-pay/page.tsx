@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Button, GlassPanel, Heading, Input, Text } from '@stipulate/ui';
 
 import { getWalletCards } from '../../../lib/wallet';
+import { fetchPlatformStatus } from '../../../lib/platform-status';
 import {
   addVaultedPaymentMethod,
   listVaultedPaymentMethods,
@@ -31,6 +32,13 @@ export default function ProxyPayPage() {
   const [result, setResult] = useState<ProxyPayResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [proxyPayEnabled, setProxyPayEnabled] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    void fetchPlatformStatus()
+      .then((status) => setProxyPayEnabled(status.features.proxyPay))
+      .catch(() => setProxyPayEnabled(false));
+  }, []);
 
   useEffect(() => {
     void listVaultedPaymentMethods()
@@ -114,6 +122,20 @@ export default function ProxyPayPage() {
         </Text>
       </div>
 
+      {proxyPayEnabled === false && (
+        <GlassPanel data-testid="proxy-pay-disabled-gate">
+          <Heading as="h2" size="sm">
+            Proxy pay not enabled
+          </Heading>
+          <Text tone="secondary" className="mt-2">
+            This API deployment has proxy pay disabled. Set `FEATURE_PROXY_PAY=true` and configure Stripe
+            before using route + charge. See docs/PROXY_PAY.md.
+          </Text>
+        </GlassPanel>
+      )}
+
+      {proxyPayEnabled !== false && (
+        <>
       {error && (
         <GlassPanel className="border-red-500/30">
           <Text tone="secondary">{error}</Text>
@@ -226,6 +248,8 @@ export default function ProxyPayPage() {
             </p>
           </div>
         </GlassPanel>
+      )}
+        </>
       )}
     </div>
   );

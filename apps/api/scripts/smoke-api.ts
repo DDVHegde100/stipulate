@@ -24,6 +24,29 @@ async function main(): Promise<void> {
     throw new Error(`Health check failed: ${health.status}`);
   }
 
+  const status = await app.request('/status');
+  const statusBody = (await status.json()) as {
+    status?: string;
+    checks?: { monitoring?: { routeSloOk?: boolean } };
+  };
+  if (status.status !== 200 || statusBody.status !== 'operational') {
+    throw new Error(`Status smoke failed: ${status.status} ${JSON.stringify(statusBody)}`);
+  }
+  if (!statusBody.checks?.monitoring) {
+    throw new Error('Status smoke missing monitoring checks');
+  }
+
+  console.log('Health and status smoke passed');
+
+  const billingStatus = await app.request('/public/billing/status', {
+    headers: { 'X-User-Id': '00000000-0000-4000-8000-000000000001' },
+  });
+  if (billingStatus.status !== 200) {
+    throw new Error(`Consumer billing status smoke failed: ${billingStatus.status}`);
+  }
+
+  console.log('Consumer billing status smoke passed');
+
   const route = await app.request('/v1/route', {
     method: 'POST',
     headers: {
@@ -93,6 +116,23 @@ async function main(): Promise<void> {
 
   console.log('Spend track and caps smoke passed');
 
+  const proxyDisabled = await app.request('/v1/proxy-pay', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-Key': process.env.API_KEY,
+    },
+    body: JSON.stringify({
+      merchantName: 'Starbucks',
+      mcc: '5814',
+      amount: { amountMinor: 650, currency: 'USD' },
+      userCardIds: ['chase_sapphire_preferred'],
+    }),
+  });
+  if (proxyDisabled.status !== 404) {
+    throw new Error(`Proxy pay disabled gate smoke failed: ${proxyDisabled.status}`);
+  }
+
   process.env.FEATURE_PROXY_PAY = 'true';
   const vaultPm = await app.request('/v1/billing/payment-methods', {
     method: 'POST',
@@ -152,8 +192,11 @@ async function main(): Promise<void> {
   if (!openApiText.includes('"/org/delete/cancel"')) {
     throw new Error('OpenAPI JSON missing org deletion cancel path');
   }
+  if (!openApiText.includes('"/public/billing/portal"')) {
+    throw new Error('OpenAPI JSON missing consumer billing portal path');
+  }
 
-  console.log('OpenAPI GDPR paths smoke passed');
+  console.log('OpenAPI GDPR and billing paths smoke passed');
 
   await Promise.allSettled([disconnectRedis()]);
 }

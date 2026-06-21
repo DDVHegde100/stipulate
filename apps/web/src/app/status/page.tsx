@@ -19,8 +19,28 @@ interface StatusPayload {
       routeP50Ms?: number;
       routeP95Ms?: number;
       routeP99Ms?: number;
+      routeSampleCount?: number;
+      routeSloBreaches?: number;
     };
     features: Record<string, boolean>;
+    integrations: {
+      emailAlerts: boolean;
+      pushAlerts: boolean;
+      plaid: boolean;
+      emailDelivery?: { sent: number; failed: number };
+    };
+    monitoring: {
+      routeSloOk: boolean;
+      ingestionQueueOk: boolean;
+      reviewQueueOk: boolean;
+      observability: { sentry: boolean; posthog: boolean };
+      stripe: {
+        billing: boolean;
+        liveMode: boolean;
+        webhookConfigured: boolean;
+        consumerPriceConfigured: boolean;
+      };
+    };
   };
   timestamp: string;
 }
@@ -73,8 +93,16 @@ export default function StatusPage() {
               {[
                 { label: 'Postgres', ok: payload.checks.postgres.ok, detail: `${payload.checks.postgres.latencyMs ?? '—'}ms` },
                 { label: 'Redis', ok: payload.checks.redis.ok },
-                { label: 'Ingestion queue', ok: payload.checks.workers.ingestionQueueDepth < 100, detail: String(payload.checks.workers.ingestionQueueDepth) },
-                { label: 'Route p99', ok: (payload.checks.slo.routeP99Ms ?? 0) <= payload.checks.slo.routeP99LimitMs, detail: `${payload.checks.slo.routeP99Ms ?? '—'}ms` },
+                {
+                  label: 'Ingestion queue',
+                  ok: payload.checks.monitoring.ingestionQueueOk,
+                  detail: String(payload.checks.workers.ingestionQueueDepth),
+                },
+                {
+                  label: 'Route p99',
+                  ok: payload.checks.monitoring.routeSloOk,
+                  detail: `${payload.checks.slo.routeP99Ms ?? '—'}ms / ${payload.checks.slo.routeP99LimitMs}ms`,
+                },
               ].map((check) => (
                 <GlassPanel key={check.label}>
                   <Text variant="overline" tone="secondary">
@@ -91,6 +119,42 @@ export default function StatusPage() {
                 </GlassPanel>
               ))}
             </div>
+
+            <GlassPanel>
+              <Text variant="overline" tone="secondary" className="mb-3 block">
+                Integrations
+              </Text>
+              <div className="flex flex-wrap gap-2">
+                {(
+                  [
+                    ['emailAlerts', payload.checks.integrations.emailAlerts],
+                    ['pushAlerts', payload.checks.integrations.pushAlerts],
+                    ['plaid', payload.checks.integrations.plaid],
+                  ] as const
+                ).map(([name, enabled]) => (
+                  <Badge key={name} variant={enabled ? 'success' : 'outline'}>
+                    {name}
+                  </Badge>
+                ))}
+              </div>
+            </GlassPanel>
+
+            <GlassPanel>
+              <Text variant="overline" tone="secondary" className="mb-3 block">
+                Monitoring
+              </Text>
+              <div className="grid gap-2 text-sm text-[var(--color-text-secondary)]">
+                <p>
+                  Sentry: {payload.checks.monitoring.observability.sentry ? 'configured' : 'missing'} · PostHog:{' '}
+                  {payload.checks.monitoring.observability.posthog ? 'configured' : 'missing'}
+                </p>
+                <p>
+                  Stripe billing: {payload.checks.monitoring.stripe.billing ? 'on' : 'off'} · Live mode:{' '}
+                  {payload.checks.monitoring.stripe.liveMode ? 'yes' : 'no'} · Webhook:{' '}
+                  {payload.checks.monitoring.stripe.webhookConfigured ? 'yes' : 'no'}
+                </p>
+              </div>
+            </GlassPanel>
 
             <GlassPanel>
               <Text variant="overline" tone="secondary" className="mb-3 block">

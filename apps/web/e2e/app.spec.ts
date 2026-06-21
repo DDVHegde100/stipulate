@@ -77,6 +77,12 @@ test('privacy and terms pages are public', async ({ page }) => {
   await expect(page.getByRole('heading', { name: /^Terms of Service$/i })).toBeVisible();
 });
 
+test('proxy pay page shows disabled gate when feature off', async ({ page }) => {
+  await seedConsumerSession(page);
+  await page.goto('/app/proxy-pay');
+  await expect(page.getByTestId('proxy-pay-disabled-gate')).toBeVisible();
+});
+
 test('settings page shows billing and privacy sections', async ({ page }) => {
   await seedConsumerSession(page);
   await page.goto('/app/settings');

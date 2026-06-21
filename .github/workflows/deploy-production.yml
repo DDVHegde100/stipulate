@@ -67,9 +67,13 @@ jobs:
             API_URL="https://api.stipulate.io"
           fi
           echo "Smoke testing $API_URL"
-          curl -fsS "$API_URL/status" | grep -q '"status"'
+          curl -fsS "$API_URL/health" | grep -q '"status"'
+          curl -fsS "$API_URL/status" | grep -q '"operational"'
+          curl -fsS "$API_URL/status" | grep -q '"monitoring"'
+          curl -fsS "$API_URL/status" | grep -q '"routeSloOk"'
           curl -fsS "$API_URL/v1/openapi" | head -n 1 | grep -qE 'openapi|info'
           curl -fsS "$API_URL/v1/openapi/json" | grep -q '"/public/auth/export"'
           curl -fsS "$API_URL/v1/openapi/json" | grep -q '"/public/auth/delete"'
           curl -fsS "$API_URL/v1/openapi/json" | grep -q '"/public/auth/delete/cancel"'
           curl -fsS "$API_URL/v1/openapi/json" | grep -q '"/org/delete/cancel"'
+          curl -fsS "$API_URL/v1/openapi/json" | grep -q '"/public/billing/portal"'

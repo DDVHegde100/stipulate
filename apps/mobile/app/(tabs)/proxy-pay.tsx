@@ -7,6 +7,7 @@ import { PurchaseForm, type PurchaseInput } from '@/components/PurchaseForm';
 import { RouteResult } from '@/components/RouteResult';
 import { SectionHeader } from '@/components/SectionHeader';
 import { useWallet } from '@/hooks/useWallet';
+import { fetchPlatformStatus } from '@/lib/platform-status';
 import { listVaultedPaymentMethods, proxyPayPurchase, type ProxyPayResult } from '@/lib/proxy-pay';
 import { colors } from '@/theme/colors';
 
@@ -26,10 +27,19 @@ export default function ProxyPayScreen() {
   const [result, setResult] = useState<ProxyPayResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [proxyPayEnabled, setProxyPayEnabled] = useState<boolean | null>(null);
 
   useEffect(() => {
-    void listVaultedPaymentMethods().then(setVaulted).catch(() => {});
+    void fetchPlatformStatus()
+      .then((status) => setProxyPayEnabled(status.features.proxyPay))
+      .catch(() => setProxyPayEnabled(false));
   }, []);
+
+  useEffect(() => {
+    if (proxyPayEnabled) {
+      void listVaultedPaymentMethods().then(setVaulted).catch(() => {});
+    }
+  }, [proxyPayEnabled]);
 
   const runProxyPay = useCallback(
     async (input: PurchaseInput = purchase) => {
@@ -70,53 +80,67 @@ export default function ProxyPayScreen() {
           subtitle="Combines routing with a tokenized payment intent"
         />
 
-        <GlassCard>
-          <PurchaseForm
-            initial={purchase}
-            onSubmit={(next) => {
-              setPurchase(next);
-              void runProxyPay(next);
-            }}
-          />
-          <TextInput
-            style={styles.input}
-            value={paymentToken}
-            onChangeText={setPaymentToken}
-            placeholder="Payment token (pm_…)"
-            placeholderTextColor={colors.textTertiary}
-          />
-          {vaulted.length > 0 && (
-            <Text style={styles.meta}>
-              Vaulted default: •••• {vaulted.find((m) => m.last4)?.last4 ?? '????'}
-            </Text>
-          )}
-          <View style={styles.buttonRow}>
-            <Text style={styles.button} onPress={() => void runProxyPay()}>
-              {loading ? 'Processing…' : 'Run proxy pay'}
-            </Text>
+        {proxyPayEnabled === false ? (
+          <View testID="proxy-pay-disabled-gate">
+            <GlassCard>
+              <Text style={styles.label}>Proxy pay not enabled</Text>
+              <Text style={styles.meta}>
+                This API deployment has proxy pay disabled. Enable FEATURE_PROXY_PAY on the server to use
+                route + charge.
+              </Text>
+            </GlassCard>
           </View>
-          {error && <Text style={styles.error}>{error}</Text>}
-        </GlassCard>
+        ) : (
+          <>
+            <GlassCard>
+              <PurchaseForm
+                initial={purchase}
+                onSubmit={(next) => {
+                  setPurchase(next);
+                  void runProxyPay(next);
+                }}
+              />
+              <TextInput
+                style={styles.input}
+                value={paymentToken}
+                onChangeText={setPaymentToken}
+                placeholder="Payment token (pm_…)"
+                placeholderTextColor={colors.textTertiary}
+              />
+              {vaulted.length > 0 && (
+                <Text style={styles.meta}>
+                  Vaulted default: •••• {vaulted.find((m) => m.last4)?.last4 ?? '????'}
+                </Text>
+              )}
+              <View style={styles.buttonRow}>
+                <Text style={styles.button} onPress={() => void runProxyPay()}>
+                  {loading ? 'Processing…' : 'Run proxy pay'}
+                </Text>
+              </View>
+              {error && <Text style={styles.error}>{error}</Text>}
+            </GlassCard>
 
-        {loading && <ActivityIndicator color={colors.accent} />}
+            {loading && <ActivityIndicator color={colors.accent} />}
 
-        {result && (
-          <GlassCard>
-            <RouteResult
-              recommendation={{
-                merchant: purchase.merchantName,
-                amount: purchase.amountMinor / 100,
-                currency: 'USD',
-                recommendedCard: result.routing.bestCardId,
-                reason: `Est. reward $${(result.routing.estimatedRewardMinor / 100).toFixed(2)} · ${result.paymentIntent.mode ?? 'sandbox'}`,
-                confidence: 1,
-                factors: [],
-              }}
-            />
-            <Text style={styles.meta}>
-              Payment intent: {result.paymentIntent.id} ({result.paymentIntent.status})
-            </Text>
-          </GlassCard>
+            {result && (
+              <GlassCard>
+                <RouteResult
+                  recommendation={{
+                    merchant: purchase.merchantName,
+                    amount: purchase.amountMinor / 100,
+                    currency: 'USD',
+                    recommendedCard: result.routing.bestCardId,
+                    reason: `Est. reward $${(result.routing.estimatedRewardMinor / 100).toFixed(2)} · ${result.paymentIntent.mode ?? 'sandbox'}`,
+                    confidence: 1,
+                    factors: [],
+                  }}
+                />
+                <Text style={styles.meta}>
+                  Payment intent: {result.paymentIntent.id} ({result.paymentIntent.status})
+                </Text>
+              </GlassCard>
+            )}
+          </>
         )}
       </ScrollView>
     </SafeAreaView>

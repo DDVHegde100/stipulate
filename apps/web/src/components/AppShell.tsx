@@ -2,25 +2,39 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 import { Button, Logo } from '@stipulate/ui';
 
 import { clearUser, getStoredUser } from '../lib/consumer-auth';
+import { fetchPlatformStatus } from '../lib/platform-status';
 
 const navItems = [
   { href: '/app/wallet', label: 'Wallet' },
   { href: '/app/cards', label: 'Cards' },
   { href: '/app/route', label: 'Route' },
-  { href: '/app/proxy-pay', label: 'Proxy pay' },
+  { href: '/app/proxy-pay', label: 'Proxy pay', requiresProxyPay: true },
   { href: '/app/batch', label: 'Batch' },
   { href: '/app/analytics', label: 'Analytics' },
   { href: '/app/alerts', label: 'Alerts' },
   { href: '/app/discover', label: 'Discover' },
   { href: '/app/settings', label: 'Settings' },
-];
+] as const;
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const user = getStoredUser();
+  const [proxyPayEnabled, setProxyPayEnabled] = useState(true);
+
+  useEffect(() => {
+    void fetchPlatformStatus()
+      .then((status) => setProxyPayEnabled(status.features.proxyPay))
+      .catch(() => setProxyPayEnabled(false));
+  }, []);
+
+  const visibleNav = useMemo(
+    () => navItems.filter((item) => !('requiresProxyPay' in item && item.requiresProxyPay) || proxyPayEnabled),
+    [proxyPayEnabled],
+  );
 
   return (
     <div className="min-h-screen bg-ink-950">
@@ -30,7 +44,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <Logo variant="full" />
           </Link>
           <nav className="flex items-center gap-6">
-            {navItems.map((item) => (
+            {visibleNav.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}

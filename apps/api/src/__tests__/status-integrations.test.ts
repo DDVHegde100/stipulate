@@ -40,4 +40,21 @@ describe('status integrations', () => {
     expect(body.checks.integrations.emailAlerts).toBe(true);
     expect(body.checks.integrations.plaid).toBe(true);
   });
+
+  it('GET /status exposes monitoring and stripe readiness', async () => {
+    process.env.STRIPE_SECRET_KEY = 'sk_live_test_key';
+    process.env.STRIPE_WEBHOOK_SECRET = 'whsec_test';
+    process.env.STRIPE_PRICE_ID_CONSUMER = 'price_consumer';
+    resetEnvCache();
+
+    const app = createApp();
+    const response = await app.request('/status');
+    const body = await response.json();
+
+    expect(body.checks.monitoring.routeSloOk).toBe(true);
+    expect(body.checks.monitoring.observability.sentry).toBe(false);
+    expect(body.checks.monitoring.stripe.liveMode).toBe(true);
+    expect(body.checks.monitoring.stripe.webhookConfigured).toBe(true);
+    expect(body.checks.monitoring.stripe.consumerPriceConfigured).toBe(true);
+  });
 });
