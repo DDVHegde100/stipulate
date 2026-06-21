@@ -39,7 +39,7 @@ export default function LoginScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} testID="login-screen">
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -54,6 +54,7 @@ export default function LoginScreen() {
             <Text style={styles.label}>Email</Text>
             <TextInput
               style={styles.input}
+              testID="login-email"
               value={email}
               onChangeText={setEmail}
               autoCapitalize="none"
@@ -64,6 +65,7 @@ export default function LoginScreen() {
             <Text style={styles.label}>Password</Text>
             <TextInput
               style={styles.input}
+              testID="login-password"
               value={password}
               onChangeText={setPassword}
               secureTextEntry
@@ -71,7 +73,7 @@ export default function LoginScreen() {
               placeholderTextColor={colors.textTertiary}
             />
             {error ? <Text style={styles.error}>{error}</Text> : null}
-            <Pressable style={styles.button} onPress={() => void handleSubmit()} disabled={loading}>
+            <Pressable style={styles.button} testID="login-submit" onPress={() => void handleSubmit()} disabled={loading}>
               {loading ? (
                 <ActivityIndicator color="#fff" />
               ) : (

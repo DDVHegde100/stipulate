@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Button, Card, GlassPanel, Heading, Input, Text } from '@stipulate/ui';
 
 import { getStoredUser, updateProfile } from '../../../lib/consumer-auth';
-import { startConsumerCheckout } from '../../../lib/consumer-billing';
+import { fetchConsumerBillingStatus, startConsumerCheckout } from '../../../lib/consumer-billing';
 import { PlaidConnectPanel } from '../../../components/PlaidConnectPanel';
 
 const TIMEZONES = ['UTC', 'America/New_York', 'America/Chicago', 'America/Los_Angeles', 'Europe/London'];
@@ -19,6 +19,9 @@ export default function SettingsPage() {
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(false);
   const [billingLoading, setBillingLoading] = useState(false);
+  const [billingStatus, setBillingStatus] = useState<{ plan: string; status: string; isPremium: boolean } | null>(
+    null,
+  );
 
   useEffect(() => {
     if (user) {
@@ -26,6 +29,9 @@ export default function SettingsPage() {
       setTimezone(user.timezone);
       setEmailAlerts(user.notificationPrefs.email);
       setPushAlerts(user.notificationPrefs.push);
+      void fetchConsumerBillingStatus()
+        .then(setBillingStatus)
+        .catch(() => setBillingStatus(null));
     }
   }, [user]);
 
@@ -125,27 +131,43 @@ export default function SettingsPage() {
         <Heading as="h2" size="sm" className="mb-2">
           Billing
         </Heading>
-        <Text tone="secondary" className="mb-4">
-          Upgrade to Consumer Premium for full analytics and alerts.
-        </Text>
+        {billingStatus?.isPremium ? (
+          <Text tone="secondary" className="mb-4">
+            Consumer Premium is active ({billingStatus.status}).
+          </Text>
+        ) : billingStatus?.status === 'canceled' ? (
+          <Text tone="secondary" className="mb-4">
+            Your premium subscription was canceled. Resubscribe to restore full analytics and alerts.
+          </Text>
+        ) : (
+          <Text tone="secondary" className="mb-4">
+            Upgrade to Consumer Premium for full analytics and alerts.
+          </Text>
+        )}
         <div className="flex flex-wrap gap-3">
-          <Button
-            size="sm"
-            disabled={billingLoading}
-            onClick={() => {
-              setBillingLoading(true);
-              void startConsumerCheckout({
-                successUrl: `${window.location.origin}/app/settings?billing=success`,
-                cancelUrl: `${window.location.origin}/app/settings?billing=cancel`,
-              })
-                .then((session) => {
-                  window.location.href = session.url;
+          {!billingStatus?.isPremium ? (
+            <Button
+              size="sm"
+              disabled={billingLoading}
+              onClick={() => {
+                setBillingLoading(true);
+                void startConsumerCheckout({
+                  successUrl: `${window.location.origin}/app/settings?billing=success`,
+                  cancelUrl: `${window.location.origin}/app/settings?billing=cancel`,
                 })
-                .catch(() => setBillingLoading(false));
-            }}
-          >
-            {billingLoading ? 'Redirecting…' : 'Upgrade with Stripe'}
-          </Button>
+                  .then((session) => {
+                    window.location.href = session.url;
+                  })
+                  .catch(() => setBillingLoading(false));
+              }}
+            >
+              {billingLoading ? 'Redirecting…' : 'Upgrade with Stripe'}
+            </Button>
+          ) : (
+            <Text variant="body-sm" tone="secondary">
+              Plan: {billingStatus.plan}
+            </Text>
+          )}
           <Link href="/dashboard/billing">
             <Button variant="outline" size="sm">
               Developer billing

@@ -10,7 +10,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "typecheck": "tsc --noEmit",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "test:e2e": "detox test --configuration ios.sim.debug",
+    "test:e2e:build": "detox build --configuration ios.sim.debug"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.4",
@@ -37,8 +39,12 @@
   },
   "devDependencies": {
     "@babel/core": "^7.26.9",
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.13.4",
     "@types/react": "~18.3.18",
+    "detox": "^20.34.3",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.6",
     "typescript": "^5.7.3"
   }
 }

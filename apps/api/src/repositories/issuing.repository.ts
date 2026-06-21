@@ -7,6 +7,8 @@ import {
   createStripeVirtualCard,
   updateStripeVirtualCardStatus,
 } from '../services/stripe-issuing.service.js';
+import { getIssuingProcessor, processorKindFromSlug } from '../services/processors/index.js';
+import type { ProcessorKind } from '../services/processors/index.js';
 
 export interface CardholderRow {
   id: string;
@@ -38,7 +40,9 @@ const testVirtualCards = new Map<string, VirtualCardRow[]>();
 
 async function resolveProgramId(slug: string): Promise<string | null> {
   if (process.env.NODE_ENV === 'test') {
-    return slug === 'stipulate_sandbox' ? '00000000-0000-4000-8000-000000000010' : null;
+    if (slug === 'stipulate_sandbox') return '00000000-0000-4000-8000-000000000010';
+    if (slug === 'stripe_issuing_sandbox') return '00000000-0000-4000-8000-000000000011';
+    return null;
   }
 
   const result = await query<{ id: string }>(
@@ -50,6 +54,9 @@ async function resolveProgramId(slug: string): Promise<string | null> {
 
 async function resolveProgramById(programId: string): Promise<{ slug: string; processor: string } | null> {
   if (process.env.NODE_ENV === 'test') {
+    if (programId === '00000000-0000-4000-8000-000000000011') {
+      return { slug: 'stripe_issuing_sandbox', processor: 'stripe_issuing' };
+    }
     return { slug: 'stipulate_sandbox', processor: 'sandbox' };
   }
 
@@ -60,16 +67,22 @@ async function resolveProgramById(programId: string): Promise<{ slug: string; pr
   return result.rows[0] ?? null;
 }
 
-export type IssuingMode = 'sandbox' | 'stripe';
+export type IssuingMode = ProcessorKind;
 
 export async function resolveIssuingMode(programSlug: string): Promise<IssuingMode> {
-  if (process.env.NODE_ENV === 'test') return 'sandbox';
-  if (!process.env.STRIPE_SECRET_KEY) return 'sandbox';
+  if (process.env.NODE_ENV === 'test') {
+    if (programSlug.includes('stripe') && process.env.STRIPE_SECRET_KEY) return 'stripe';
+    return 'sandbox';
+  }
+
   const program = await query<{ processor: string }>(
     `SELECT processor FROM card_programs WHERE slug = $1 LIMIT 1`,
     [programSlug],
   );
-  return program.rows[0]?.processor === 'stripe_issuing' ? 'stripe' : 'sandbox';
+  const processor = program.rows[0]?.processor ?? 'sandbox';
+  const kind = processorKindFromSlug(processor);
+  if (kind === 'stripe' && !process.env.STRIPE_SECRET_KEY) return 'sandbox';
+  return kind;
 }
 
 export async function createCardholder(input: {
@@ -81,17 +94,28 @@ export async function createCardholder(input: {
   const mode = await resolveIssuingMode(input.programSlug);
 
   if (process.env.NODE_ENV === 'test') {
+    let externalId = `ext_${randomBytes(4).toString('hex')}`;
+    if (mode === 'stripe') {
+      const consumer = await findConsumerById(input.consumerUserId);
+      const stripeHolder = await createStripeCardholder({
+        name: consumer?.name ?? consumer?.email ?? 'Stipulate Cardholder',
+        email: consumer?.email,
+        metadata: { consumer_user_id: input.consumerUserId, program_slug: input.programSlug },
+      });
+      externalId = stripeHolder.id;
+    }
+
     const row: CardholderRow = {
-      id: '00000000-0000-4000-8000-000000000020',
+      id: input.consumerUserId,
       consumer_user_id: input.consumerUserId,
       program_id: programId,
-      external_id: `ext_${randomBytes(4).toString('hex')}`,
+      external_id: externalId,
       status: 'approved',
       kyc_status: 'passed',
       created_at: new Date(),
     };
     testCardholders.set(input.consumerUserId, row);
-    return { ...row, program_slug: input.programSlug, mode: 'sandbox' };
+    return { ...row, program_slug: input.programSlug, mode };
   }
 
   let externalId = `ext_${randomBytes(6).toString('hex')}`;
@@ -103,6 +127,15 @@ export async function createCardholder(input: {
       metadata: { consumer_user_id: input.consumerUserId, program_slug: input.programSlug },
     });
     externalId = stripeHolder.id;
+  } else {
+    const consumer = await findConsumerById(input.consumerUserId);
+    const processor = getIssuingProcessor(mode);
+    const created = await processor.createCardholder({
+      consumerUserId: input.consumerUserId,
+      name: consumer?.name ?? consumer?.email ?? 'Stipulate Cardholder',
+      email: consumer?.email,
+    });
+    externalId = created.externalId;
   }
 
   const result = await query<CardholderRow>(
@@ -158,6 +191,15 @@ export async function issueVirtualCard(input: {
     expMonth = stripeCard.exp_month;
     expYear = stripeCard.exp_year;
     panToken = `stripe_card_${stripeCard.id}`;
+  } else if (mode !== 'stripe' && cardholder.external_id) {
+    const processor = getIssuingProcessor(mode);
+    const created = await processor.issueVirtualCard({ cardholderExternalId: cardholder.external_id });
+    externalId = created.externalId;
+    last4 = created.last4;
+    network = created.network;
+    expMonth = created.expMonth;
+    expYear = created.expYear;
+    panToken = created.panToken;
   }
 
   if (process.env.NODE_ENV === 'test') {
@@ -177,7 +219,7 @@ export async function issueVirtualCard(input: {
     };
     const existing = testVirtualCards.get(input.cardholderId) ?? [];
     testVirtualCards.set(input.cardholderId, [...existing, row]);
-    return { ...row, mode: 'sandbox' };
+    return { ...row, mode };
   }
 
   const result = await query<VirtualCardRow>(
@@ -346,4 +388,55 @@ export async function updatePhysicalCardOrderStatus(input: {
     [input.orderId, input.status, input.trackingNumber ?? null],
   );
   return result.rows[0] ?? null;
+}
+
+export async function syncVirtualCardFromExternal(input: {
+  externalId: string;
+  status: 'active' | 'frozen' | 'closed';
+  last4?: string;
+  network?: string;
+}): Promise<void> {
+  if (process.env.NODE_ENV === 'test') {
+    for (const cards of testVirtualCards.values()) {
+      const card = cards.find((entry) => entry.pan_token?.includes(input.externalId));
+      if (card) {
+        card.status = input.status;
+        if (input.last4) card.last4 = input.last4;
+        if (input.network) card.network = input.network;
+      }
+    }
+    return;
+  }
+
+  await query(
+    `UPDATE virtual_cards SET
+       status = $2,
+       last4 = COALESCE($3, last4),
+       network = COALESCE($4, network),
+       updated_at = NOW()
+     WHERE external_id = $1`,
+    [input.externalId, input.status, input.last4 ?? null, input.network ?? null],
+  );
+}
+
+export async function syncCardholderFromExternal(input: {
+  externalId: string;
+  status: string;
+  kycStatus: string;
+}): Promise<void> {
+  if (process.env.NODE_ENV === 'test') {
+    for (const row of testCardholders.values()) {
+      if (row.external_id === input.externalId) {
+        row.status = input.status;
+        row.kyc_status = input.kycStatus;
+      }
+    }
+    return;
+  }
+
+  await query(
+    `UPDATE cardholders SET status = $2, kyc_status = $3, updated_at = NOW()
+     WHERE external_id = $1`,
+    [input.externalId, input.status, input.kycStatus],
+  );
 }

@@ -21,6 +21,10 @@ export default function DocsPage() {
           <a href={specUrl} className="text-accent-400 hover:underline">
             Download YAML
           </a>
+          {' · '}
+          <a href="/docs/sdk" className="text-accent-400 hover:underline">
+            SDK docs
+          </a>
         </Text>
         <OpenApiEmbed />
       </main>

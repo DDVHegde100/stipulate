@@ -44,7 +44,7 @@ export default function WalletScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top']}>
+    <SafeAreaView style={styles.safeArea} edges={['top']} testID="wallet-screen">
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.header}>
           <Logo size={40} />
