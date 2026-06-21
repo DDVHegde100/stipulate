@@ -180,3 +180,15 @@ export {
   type RotatingCategoryState,
   type UpsertRotatingCategoryState,
 } from "./rotating-category.js";
+
+export {
+  CreateCardholderSchema,
+  IssueVirtualCardSchema,
+  CardholderSchema,
+  VirtualCardSchema,
+  CardholderStatusSchema,
+  KycStatusSchema,
+  VirtualCardStatusSchema,
+  type CreateCardholderInput,
+  type IssueVirtualCardInput,
+} from "./issuing.js";

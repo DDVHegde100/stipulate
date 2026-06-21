@@ -18,6 +18,7 @@ export const ProxyPayResponseSchema = z.object({
     status: z.enum(['requires_confirmation', 'processing', 'succeeded']),
     tokenizedPan: z.string().optional(),
     network: z.string().optional(),
+    mode: z.enum(['sandbox', 'stripe']).optional(),
   }),
   computedAt: z.string().datetime({ offset: true }),
 });

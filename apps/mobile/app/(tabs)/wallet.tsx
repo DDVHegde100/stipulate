@@ -8,16 +8,39 @@ import { SectionHeader } from '@/components/SectionHeader';
 import { useAuth } from '@/context/AuthContext';
 import { useWallet } from '@/hooks/useWallet';
 import { listCatalogCards } from '@/lib/stipulate';
+import { connectBankStub, syncPlaidTransactions } from '@/lib/plaid';
 import { colors } from '@/theme/colors';
 
 export default function WalletScreen() {
   const { user } = useAuth();
   const { cards, loaded, addCard, removeCard } = useWallet();
   const [catalog, setCatalog] = useState<Array<{ card_id: string; name: string }>>([]);
+  const [bankMessage, setBankMessage] = useState<string | null>(null);
+  const [bankLoading, setBankLoading] = useState(false);
 
   useEffect(() => {
     void listCatalogCards().then(setCatalog);
   }, []);
+
+  async function handleConnectBank() {
+    if (!user) return;
+    setBankLoading(true);
+    setBankMessage(null);
+    try {
+      const linked = await connectBankStub(user.id);
+      for (const suggestion of linked.suggestedCards.slice(0, 2)) {
+        await addCard(suggestion.cardId, suggestion.accountName);
+      }
+      const synced = await syncPlaidTransactions(user.id);
+      setBankMessage(
+        `Linked ${linked.accountsLinked} account(s) and synced ${synced.imported} spend row(s).`,
+      );
+    } catch {
+      setBankMessage('Bank linking failed. Try again later.');
+    } finally {
+      setBankLoading(false);
+    }
+  }
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -32,6 +55,17 @@ export default function WalletScreen() {
             />
           </View>
         </View>
+
+        <GlassCard>
+          <Text style={styles.cardLabel}>Bank linking</Text>
+          <Text style={styles.cardBody}>
+            Connect your bank to detect cards and sync recent spend for cap tracking.
+          </Text>
+          <Pressable style={styles.connectButton} onPress={() => void handleConnectBank()} disabled={bankLoading}>
+            <Text style={styles.connectText}>{bankLoading ? 'Connecting…' : 'Connect bank account'}</Text>
+          </Pressable>
+          {bankMessage && <Text style={styles.cardMeta}>{bankMessage}</Text>}
+        </GlassCard>
 
         <GlassCard>
           <Text style={styles.cardLabel}>Linked cards ({cards.length})</Text>
@@ -91,4 +125,12 @@ const styles = StyleSheet.create({
   remove: { color: '#f87171', fontSize: 14, fontWeight: '600' },
   addRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10 },
   add: { color: colors.accent, fontWeight: '600' },
+  connectButton: {
+    marginTop: 12,
+    backgroundColor: colors.accent,
+    borderRadius: 12,
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  connectText: { color: colors.background, fontWeight: '700' },
 });

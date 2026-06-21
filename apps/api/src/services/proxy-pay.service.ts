@@ -58,6 +58,7 @@ async function buildPaymentIntent(input: {
         status: mapStripeStatus(stripeIntent.status),
         tokenizedPan: undefined,
         network: input.network,
+        mode: 'stripe' as const,
       };
     } catch {
       // Fall through to sandbox intent when Stripe rejects test tokens
@@ -69,6 +70,7 @@ async function buildPaymentIntent(input: {
     status: token ? ('requires_confirmation' as const) : ('processing' as const),
     tokenizedPan: token ? `tok_${token.slice(0, 8)}` : undefined,
     network: input.network,
+    mode: 'sandbox' as const,
   };
 }
 
