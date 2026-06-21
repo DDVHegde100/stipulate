@@ -152,4 +152,97 @@ describe('issuing API', () => {
     const body = await response.json();
     expect(body.data.status).toBe('submitted');
   });
+
+  it('GET /v1/issuing/cards/physical/orders lists orders for cardholder', async () => {
+    const app = createApp();
+    const userId = '00000000-0000-4000-8000-000000000005';
+
+    const cardholder = await app.request('/v1/issuing/cardholders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': process.env.API_KEY!,
+        'X-Consumer-User-Id': userId,
+      },
+      body: JSON.stringify({}),
+    });
+    const cardholderBody = await cardholder.json();
+
+    await app.request('/v1/issuing/cards/physical/order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': process.env.API_KEY!,
+      },
+      body: JSON.stringify({
+        cardholderId: cardholderBody.data.id,
+        shippingAddress: {
+          line1: '456 Oak Ave',
+          city: 'Austin',
+          state: 'TX',
+          postalCode: '78701',
+          country: 'US',
+        },
+      }),
+    });
+
+    const response = await app.request(
+      `/v1/issuing/cards/physical/orders?cardholderId=${cardholderBody.data.id}`,
+      { headers: { 'X-API-Key': process.env.API_KEY! } },
+    );
+
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data.orders.length).toBeGreaterThan(0);
+  });
+
+  it('POST /webhooks/issuing/shipping updates order status', async () => {
+    const app = createApp();
+    const userId = '00000000-0000-4000-8000-000000000006';
+
+    const cardholder = await app.request('/v1/issuing/cardholders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': process.env.API_KEY!,
+        'X-Consumer-User-Id': userId,
+      },
+      body: JSON.stringify({}),
+    });
+    const cardholderBody = await cardholder.json();
+
+    const order = await app.request('/v1/issuing/cards/physical/order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': process.env.API_KEY!,
+      },
+      body: JSON.stringify({
+        cardholderId: cardholderBody.data.id,
+        shippingAddress: {
+          line1: '789 Pine Rd',
+          city: 'Seattle',
+          state: 'WA',
+          postalCode: '98101',
+          country: 'US',
+        },
+      }),
+    });
+    const orderBody = await order.json();
+
+    const response = await app.request('/webhooks/issuing/shipping', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        orderId: orderBody.data.id,
+        status: 'shipped',
+        trackingNumber: '1Z999AA10123456784',
+      }),
+    });
+
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data.status).toBe('shipped');
+    expect(body.data.trackingNumber).toBe('1Z999AA10123456784');
+  });
 });

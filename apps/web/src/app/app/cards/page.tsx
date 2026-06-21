@@ -7,10 +7,12 @@ import { getStoredUser } from '../../../lib/consumer-auth';
 import {
   createCardholder,
   issueVirtualCard,
+  listPhysicalCardOrders,
   listVirtualCards,
   orderPhysicalCard,
   updateVirtualCardStatus,
   type Cardholder,
+  type PhysicalCardOrder,
   type VirtualCard,
 } from '../../../lib/issuing';
 
@@ -28,6 +30,7 @@ function storeCardholderId(id: string): void {
 export default function CardsPage() {
   const [cardholder, setCardholder] = useState<Cardholder | null>(null);
   const [cards, setCards] = useState<VirtualCard[]>([]);
+  const [orders, setOrders] = useState<PhysicalCardOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [issuing, setIssuing] = useState(false);
@@ -70,6 +73,8 @@ export default function CardsPage() {
 
         const virtualCards = await listVirtualCards(cardholderId);
         setCards(virtualCards);
+        const physicalOrders = await listPhysicalCardOrders(cardholderId);
+        setOrders(physicalOrders);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load cards');
       } finally {
@@ -114,6 +119,7 @@ export default function CardsPage() {
         shippingAddress: { ...address, country: 'US' },
       });
       setOrderStatus(`Order ${order.id.slice(0, 8)} submitted (${order.status})`);
+      setOrders((prev) => [order, ...prev]);
       setShowShipForm(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to order physical card');
@@ -230,6 +236,25 @@ export default function CardsPage() {
           <Text tone="secondary" className="mt-3">
             {orderStatus}
           </Text>
+        )}
+
+        {orders.length > 0 && (
+          <div className="mt-4 space-y-2">
+            {orders.map((order) => (
+              <div
+                key={order.id}
+                className="flex items-center justify-between rounded-lg border border-glass-border px-3 py-2 text-sm"
+              >
+                <span className="capitalize text-[var(--color-text-secondary)]">
+                  {order.status}
+                  {order.trackingNumber ? ` · ${order.trackingNumber}` : ''}
+                </span>
+                <span className="text-[var(--color-text-tertiary)]">
+                  {new Date(order.createdAt).toLocaleDateString()}
+                </span>
+              </div>
+            ))}
+          </div>
         )}
       </GlassPanel>
     </div>

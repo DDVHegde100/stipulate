@@ -29,6 +29,20 @@ export const OrderPhysicalCardSchema = z.object({
   }),
 });
 
+export const PhysicalCardOrderStatusSchema = z.enum([
+  'pending',
+  'submitted',
+  'shipped',
+  'delivered',
+  'cancelled',
+]);
+
+export const PhysicalCardShippingWebhookSchema = z.object({
+  orderId: z.string().uuid(),
+  status: PhysicalCardOrderStatusSchema,
+  trackingNumber: z.string().max(128).optional(),
+});
+
 export const CardholderSchema = z.object({
   id: z.string().uuid(),
   consumerUserId: z.string().uuid(),

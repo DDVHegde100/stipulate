@@ -352,6 +352,8 @@ describe('openapi spec', () => {
     const text = await response.text();
     expect(text).toContain('openapi: 3.1.0');
     expect(text).toContain('/org/export');
+    expect(text).toContain('/billing/payment-methods');
+    expect(text).toContain('/issuing/cardholders');
   });
 
   it('GET /v1/openapi/json returns parsed spec', async () => {
@@ -363,5 +365,7 @@ describe('openapi spec', () => {
     const body = await response.json();
     expect(body.paths['/org/export']).toBeDefined();
     expect(body.paths['/proxy-pay']).toBeDefined();
+    expect(body.paths['/billing/payment-methods']).toBeDefined();
+    expect(body.paths['/issuing/cardholders']).toBeDefined();
   });
 });

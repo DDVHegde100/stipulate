@@ -192,6 +192,8 @@ export interface PhysicalCardOrderRow {
   created_at: Date;
 }
 
+const testPhysicalOrders = new Map<string, PhysicalCardOrderRow[]>();
+
 export async function orderPhysicalCard(input: {
   cardholderId: string;
   shippingAddress: Record<string, string>;
@@ -200,13 +202,16 @@ export async function orderPhysicalCard(input: {
   if (!cardholder) throw new Error('Cardholder not found');
 
   if (process.env.NODE_ENV === 'test') {
-    return {
+    const order: PhysicalCardOrderRow = {
       id: '00000000-0000-4000-8000-000000000030',
       cardholder_id: input.cardholderId,
       status: 'submitted',
       tracking_number: null,
       created_at: new Date(),
     };
+    const existing = testPhysicalOrders.get(input.cardholderId) ?? [];
+    testPhysicalOrders.set(input.cardholderId, [order, ...existing]);
+    return order;
   }
 
   const result = await query<PhysicalCardOrderRow>(
@@ -216,4 +221,50 @@ export async function orderPhysicalCard(input: {
     [input.cardholderId, cardholder.program_id, JSON.stringify(input.shippingAddress)],
   );
   return result.rows[0]!;
+}
+
+export async function listPhysicalCardOrders(cardholderId: string): Promise<PhysicalCardOrderRow[]> {
+  if (process.env.NODE_ENV === 'test') {
+    return (testPhysicalOrders.get(cardholderId) ?? []).slice().sort(
+      (a, b) => b.created_at.getTime() - a.created_at.getTime(),
+    );
+  }
+
+  const result = await query<PhysicalCardOrderRow>(
+    `SELECT id, cardholder_id, status, tracking_number, created_at
+     FROM physical_card_orders
+     WHERE cardholder_id = $1::uuid
+     ORDER BY created_at DESC`,
+    [cardholderId],
+  );
+  return result.rows;
+}
+
+export async function updatePhysicalCardOrderStatus(input: {
+  orderId: string;
+  status: 'pending' | 'submitted' | 'shipped' | 'delivered' | 'cancelled';
+  trackingNumber?: string;
+}): Promise<PhysicalCardOrderRow | null> {
+  if (process.env.NODE_ENV === 'test') {
+    for (const orders of testPhysicalOrders.values()) {
+      const order = orders.find((entry) => entry.id === input.orderId);
+      if (order) {
+        order.status = input.status;
+        if (input.trackingNumber) order.tracking_number = input.trackingNumber;
+        return order;
+      }
+    }
+    return null;
+  }
+
+  const result = await query<PhysicalCardOrderRow>(
+    `UPDATE physical_card_orders
+     SET status = $2,
+         tracking_number = COALESCE($3, tracking_number),
+         updated_at = NOW()
+     WHERE id = $1::uuid
+     RETURNING id, cardholder_id, status, tracking_number, created_at`,
+    [input.orderId, input.status, input.trackingNumber ?? null],
+  );
+  return result.rows[0] ?? null;
 }

@@ -35,7 +35,7 @@ export async function recordApiUsage(
     if (ctx.orgId) {
       const billing = await findBillingSubscription(ctx.orgId);
       if (billing?.stripe_customer_id && billing.plan === 'payg') {
-        await reportStripeUsage(billing.stripe_customer_id, 1);
+        await reportStripeUsage(ctx.orgId, 1);
       }
     }
   } catch {
@@ -71,14 +71,13 @@ export async function checkPlanLimits(
 }
 
 /** Report usage to Stripe metered billing (when configured). */
-export async function reportStripeUsage(
-  stripeCustomerId: string,
-  quantity: number,
-): Promise<void> {
+export async function reportStripeUsage(orgId: string, quantity: number): Promise<void> {
   const stripeKey = process.env.STRIPE_SECRET_KEY;
-  const priceId = process.env.STRIPE_PRICE_ID_METERED;
+  if (!stripeKey) return;
 
-  if (!stripeKey || !priceId) return;
+  const billing = await findBillingSubscription(orgId);
+  const subscriptionItemId = billing?.stripe_subscription_item_id;
+  if (!subscriptionItemId) return;
 
   try {
     const body = new URLSearchParams({
@@ -87,19 +86,25 @@ export async function reportStripeUsage(
       action: 'increment',
     });
 
-    await fetch(`https://api.stripe.com/v1/subscription_items/${priceId}/usage_records`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${stripeKey}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
+    const response = await fetch(
+      `https://api.stripe.com/v1/subscription_items/${subscriptionItemId}/usage_records`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${stripeKey}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body,
       },
-      body,
-    });
-  } catch {
-    // Stripe reporting is best-effort
-  }
+    );
 
-  void stripeCustomerId;
+    if (!response.ok) {
+      const err = await response.text();
+      console.error(`Stripe usage report failed for org ${orgId}: ${response.status} ${err}`);
+    }
+  } catch (error) {
+    console.error(`Stripe usage report error for org ${orgId}:`, error);
+  }
 }
 
 export { COST_PER_CALL_MICROS };

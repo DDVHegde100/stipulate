@@ -187,6 +187,8 @@ export {
   IssueVirtualCardSchema,
   UpdateVirtualCardStatusSchema,
   OrderPhysicalCardSchema,
+  PhysicalCardOrderStatusSchema,
+  PhysicalCardShippingWebhookSchema,
   CardholderSchema,
   VirtualCardSchema,
   CardholderStatusSchema,

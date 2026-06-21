@@ -48,7 +48,20 @@ async function main(): Promise<void> {
   if (!process.env.STRIPE_SECRET_KEY) {
     console.log('\nNote: STRIPE_SECRET_KEY not set — local totals only (no Stripe API sync).');
   } else {
-    console.log('\nStripe meter sync: compare totals above with Stripe Billing → Meters dashboard.');
+    const subs = await query<{ org_id: string; slug: string; stripe_subscription_item_id: string | null }>(
+      `SELECT o.id AS org_id, o.slug, bs.stripe_subscription_item_id
+       FROM organizations o
+       JOIN billing_subscriptions bs ON bs.org_id = o.id
+       WHERE bs.plan = 'payg'`,
+    );
+    const missingItems = subs.rows.filter((row) => !row.stripe_subscription_item_id);
+    if (missingItems.length > 0) {
+      console.log('\nWarning: PAYG orgs missing stripe_subscription_item_id:');
+      for (const row of missingItems) {
+        console.log(`  ${row.slug}`);
+      }
+    }
+    console.log('\nStripe meter sync: compare totals above with Stripe Billing usage records.');
   }
 
   await disconnectDatabase();

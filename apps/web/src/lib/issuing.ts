@@ -96,3 +96,10 @@ export async function orderPhysicalCard(input: {
     body: JSON.stringify(input),
   });
 }
+
+export async function listPhysicalCardOrders(cardholderId: string): Promise<PhysicalCardOrder[]> {
+  const data = await issuingFetch<{ orders: PhysicalCardOrder[] }>(
+    `/issuing/cards/physical/orders?cardholderId=${encodeURIComponent(cardholderId)}`,
+  );
+  return data.orders;
+}
