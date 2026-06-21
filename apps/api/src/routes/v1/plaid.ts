@@ -59,7 +59,7 @@ async function mapAccountsToCatalog(input: {
 plaidHandler.post('/link-token', async (c) => {
   const consumerUserId = await resolveUserRef(c);
 
-  if (process.env.NODE_ENV === 'test' || !isPlaidConfigured()) {
+  if (!isPlaidConfigured()) {
     return c.json({
       data: {
         linkToken: `link-sandbox-stub-${Date.now()}`,
@@ -101,7 +101,7 @@ plaidHandler.post('/exchange', async (c) => {
 
   const consumerUserId = await resolveUserRef(c);
 
-  if (process.env.NODE_ENV === 'test' || !isPlaidConfigured()) {
+  if (!isPlaidConfigured()) {
     const institutionName = body.institutionName ?? 'Chase';
     const stubAccounts = [
       {

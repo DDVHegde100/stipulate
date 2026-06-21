@@ -141,6 +141,20 @@ async function main(): Promise<void> {
 
   console.log('Proxy pay, vault, and issuing smoke passed');
 
+  const openApiJson = await app.request('/v1/openapi/json');
+  if (openApiJson.status !== 200) {
+    throw new Error(`OpenAPI JSON smoke failed: ${openApiJson.status}`);
+  }
+  const openApiText = await openApiJson.text();
+  if (!openApiText.includes('"/public/auth/delete/cancel"')) {
+    throw new Error('OpenAPI JSON missing consumer deletion cancel path');
+  }
+  if (!openApiText.includes('"/org/delete/cancel"')) {
+    throw new Error('OpenAPI JSON missing org deletion cancel path');
+  }
+
+  console.log('OpenAPI GDPR paths smoke passed');
+
   await Promise.allSettled([disconnectRedis()]);
 }
 

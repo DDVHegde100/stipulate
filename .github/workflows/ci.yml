@@ -193,6 +193,7 @@ jobs:
       - run: pnpm --filter @stipulate/api db:migrate
       - run: pnpm --filter @stipulate/api db:seed ../../packages/schema/data/cards/catalog-core50.json
       - run: pnpm --filter @stipulate/api db:seed-benefits --top75
+      - run: pnpm --filter @stipulate/api verify:benefit-coverage --min=25
       - run: pnpm --filter @stipulate/api smoke
 
   e2e:

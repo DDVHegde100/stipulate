@@ -37,6 +37,27 @@ export interface ConsumerExportBundle {
 
 const testDeletionRequests = new Map<string, { scheduledFor: string; status: string }>();
 
+export function listTestConsumerDeletionsDue(): string[] {
+  const now = Date.now();
+  return [...testDeletionRequests.entries()]
+    .filter(([, request]) => request.status === 'scheduled' && Date.parse(request.scheduledFor) <= now)
+    .map(([consumerUserId]) => consumerUserId);
+}
+
+export function clearTestConsumerDeletion(consumerUserId: string): void {
+  testDeletionRequests.delete(consumerUserId);
+}
+
+/** For tests: mark a scheduled deletion as due immediately. */
+export function markTestConsumerDeletionDue(consumerUserId: string): void {
+  const existing = testDeletionRequests.get(consumerUserId);
+  if (!existing) return;
+  testDeletionRequests.set(consumerUserId, {
+    ...existing,
+    scheduledFor: new Date(Date.now() - 60_000).toISOString(),
+  });
+}
+
 /** Build a GDPR export bundle for a consumer user. */
 export async function exportConsumerData(consumerUserId: string): Promise<ConsumerExportBundle> {
   const user = await findConsumerById(consumerUserId);
@@ -123,4 +144,38 @@ export async function scheduleConsumerDeletion(
   await revokeAllConsumerSessions(consumerUserId);
 
   return { scheduledFor: scheduledFor.toISOString() };
+}
+
+/** Cancel a scheduled consumer account deletion. */
+export async function cancelConsumerDeletion(consumerUserId: string): Promise<{ cancelled: boolean }> {
+  if (process.env.NODE_ENV === 'test') {
+    const existed = testDeletionRequests.delete(consumerUserId);
+    return { cancelled: existed };
+  }
+
+  const result = await query(
+    `UPDATE consumer_deletion_requests SET status = 'cancelled', completed_at = NOW()
+     WHERE consumer_user_id = $1::uuid AND status = 'scheduled'`,
+    [consumerUserId],
+  );
+
+  return { cancelled: (result.rowCount ?? 0) > 0 };
+}
+
+export async function getConsumerDeletionStatus(
+  consumerUserId: string,
+): Promise<{ scheduledFor: string; status: string } | null> {
+  if (process.env.NODE_ENV === 'test') {
+    return testDeletionRequests.get(consumerUserId) ?? null;
+  }
+
+  const result = await query<{ scheduled_for: string; status: string }>(
+    `SELECT scheduled_for::text, status FROM consumer_deletion_requests
+     WHERE consumer_user_id = $1::uuid AND status = 'scheduled' LIMIT 1`,
+    [consumerUserId],
+  );
+
+  return result.rows[0]
+    ? { scheduledFor: result.rows[0].scheduled_for, status: result.rows[0].status }
+    : null;
 }

@@ -69,4 +69,19 @@ describe('consumer GDPR export', () => {
     const exportAfter = await exportConsumerData('00000000-0000-4000-8000-000000000001');
     expect(exportAfter.deletionRequest?.status).toBe('scheduled');
   });
+
+  it('POST /public/auth/delete/cancel clears scheduled deletion', async () => {
+    const app = createApp();
+    const userId = '00000000-0000-4000-8000-000000000001';
+    await scheduleConsumerDeletion(userId);
+
+    const response = await app.request('/public/auth/delete/cancel', {
+      method: 'POST',
+      headers: { 'X-User-Id': userId },
+    });
+
+    expect(response.status).toBe(200);
+    const exportAfter = await exportConsumerData(userId);
+    expect(exportAfter.deletionRequest).toBeUndefined();
+  });
 });

@@ -16,6 +16,19 @@ export interface OrgExportBundle {
   deletionRequest?: { scheduledFor: string; status: string };
 }
 
+const testOrgDeletionRequests = new Map<string, { scheduledFor: string; status: string }>();
+
+export function listTestOrgDeletionsDue(): string[] {
+  const now = Date.now();
+  return [...testOrgDeletionRequests.entries()]
+    .filter(([, request]) => request.status === 'scheduled' && Date.parse(request.scheduledFor) <= now)
+    .map(([orgId]) => orgId);
+}
+
+export function clearTestOrgDeletion(orgId: string): void {
+  testOrgDeletionRequests.delete(orgId);
+}
+
 /** Build a GDPR export bundle for an org. */
 export async function exportOrgData(orgId: string): Promise<OrgExportBundle> {
   if (process.env.NODE_ENV === 'test') {
@@ -25,6 +38,7 @@ export async function exportOrgData(orgId: string): Promise<OrgExportBundle> {
       apiKeys: [],
       usageSummary: { totalCalls: 0, totalCostMicros: 0, byType: {} },
       webhooks: [],
+      deletionRequest: testOrgDeletionRequests.get(orgId),
     };
   }
 
@@ -83,6 +97,10 @@ export async function scheduleOrgDeletion(orgId: string): Promise<{ scheduledFor
   scheduledFor.setDate(scheduledFor.getDate() + 30);
 
   if (process.env.NODE_ENV === 'test') {
+    testOrgDeletionRequests.set(orgId, {
+      scheduledFor: scheduledFor.toISOString(),
+      status: 'scheduled',
+    });
     return { scheduledFor: scheduledFor.toISOString() };
   }
 
@@ -99,4 +117,40 @@ export async function scheduleOrgDeletion(orgId: string): Promise<{ scheduledFor
   await query(`UPDATE api_keys SET is_active = FALSE, updated_at = NOW() WHERE org_id = $1::uuid`, [orgId]);
 
   return { scheduledFor: scheduledFor.toISOString() };
+}
+
+/** Cancel a scheduled org deletion request. */
+export async function cancelOrgDeletion(orgId: string): Promise<{ cancelled: boolean }> {
+  if (process.env.NODE_ENV === 'test') {
+    const existed = testOrgDeletionRequests.delete(orgId);
+    return { cancelled: existed };
+  }
+
+  const result = await query(
+    `UPDATE org_deletion_requests SET status = 'cancelled', completed_at = NOW()
+     WHERE org_id = $1::uuid AND status = 'scheduled'`,
+    [orgId],
+  );
+
+  await query(`UPDATE api_keys SET is_active = TRUE, updated_at = NOW() WHERE org_id = $1::uuid`, [orgId]);
+
+  return { cancelled: (result.rowCount ?? 0) > 0 };
+}
+
+export async function getOrgDeletionStatus(
+  orgId: string,
+): Promise<{ scheduledFor: string; status: string } | null> {
+  if (process.env.NODE_ENV === 'test') {
+    return testOrgDeletionRequests.get(orgId) ?? null;
+  }
+
+  const result = await query<{ scheduled_for: string; status: string }>(
+    `SELECT scheduled_for::text, status FROM org_deletion_requests
+     WHERE org_id = $1::uuid AND status = 'scheduled' LIMIT 1`,
+    [orgId],
+  );
+
+  return result.rows[0]
+    ? { scheduledFor: result.rows[0].scheduled_for, status: result.rows[0].status }
+    : null;
 }

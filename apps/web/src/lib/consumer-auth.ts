@@ -140,3 +140,36 @@ export async function scheduleConsumerDeletion(): Promise<{ scheduledFor: string
 
   return { scheduledFor: json.data.scheduledFor };
 }
+
+export async function fetchConsumerDeletionStatus(): Promise<{
+  scheduledFor: string;
+  status: string;
+} | null> {
+  const response = await fetch(`${publicApiBase()}/public/auth/delete`, {
+    credentials: 'include',
+  });
+
+  const json = (await response.json()) as {
+    data: { scheduledFor: string; status: string } | null;
+    error?: { message: string };
+  };
+
+  if (!response.ok) {
+    throw new Error(json.error?.message ?? `HTTP ${response.status}`);
+  }
+
+  return json.data;
+}
+
+export async function cancelConsumerDeletion(): Promise<void> {
+  const response = await fetch(`${publicApiBase()}/public/auth/delete/cancel`, {
+    method: 'POST',
+    credentials: 'include',
+  });
+
+  const json = (await response.json()) as { error?: { message: string } };
+
+  if (!response.ok) {
+    throw new Error(json.error?.message ?? `HTTP ${response.status}`);
+  }
+}
