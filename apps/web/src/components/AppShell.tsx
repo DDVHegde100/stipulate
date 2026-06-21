@@ -8,7 +8,9 @@ import { clearUser, getStoredUser } from '../lib/consumer-auth';
 
 const navItems = [
   { href: '/app/wallet', label: 'Wallet' },
+  { href: '/app/cards', label: 'Cards' },
   { href: '/app/route', label: 'Route' },
+  { href: '/app/proxy-pay', label: 'Proxy pay' },
   { href: '/app/batch', label: 'Batch' },
   { href: '/app/analytics', label: 'Analytics' },
   { href: '/app/alerts', label: 'Alerts' },

@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { ProxyPayResponseSchema, type ProxyPayRequest } from '@stipulate/schema';
 import { routePurchase } from './routing.service.js';
 import { createProxyPayPaymentIntent } from './stripe.service.js';
+import { getDefaultOrgPaymentMethod } from '../repositories/payment-method.repository.js';
 
 export class ProxyPayError extends Error {
   constructor(
@@ -28,14 +29,25 @@ function mapStripeStatus(status: string): 'requires_confirmation' | 'processing'
   return 'requires_confirmation';
 }
 
+async function resolvePaymentMethodToken(
+  request: ProxyPayRequest,
+  orgId?: string,
+): Promise<string | undefined> {
+  if (request.paymentMethodToken) return request.paymentMethodToken;
+  if (!orgId) return undefined;
+  const defaultMethod = await getDefaultOrgPaymentMethod(orgId);
+  return defaultMethod?.stripe_payment_method_id;
+}
+
 async function buildPaymentIntent(input: {
   request: ProxyPayRequest;
   requestId: string;
   bestCardId: string;
   estimatedRewardMinor: number;
   network: string;
+  paymentMethodToken?: string;
 }) {
-  const token = input.request.paymentMethodToken;
+  const token = input.paymentMethodToken;
   const useStripe =
     Boolean(process.env.STRIPE_SECRET_KEY) &&
     Boolean(token?.startsWith('pm_'));
@@ -80,9 +92,11 @@ export async function proxyPayPurchase(
   requestId: string,
   context: { orgId?: string } = {},
 ) {
-  if (process.env.NODE_ENV === 'production' && !request.paymentMethodToken) {
+  const paymentMethodToken = await resolvePaymentMethodToken(request, context.orgId);
+
+  if (process.env.NODE_ENV === 'production' && !paymentMethodToken) {
     throw new ProxyPayError(
-      'paymentMethodToken is required for proxy pay in production',
+      'paymentMethodToken or a vaulted org payment method is required for proxy pay in production',
       'PAYMENT_TOKEN_REQUIRED',
     );
   }
@@ -90,7 +104,7 @@ export async function proxyPayPurchase(
   const routing = await routePurchase(request, requestId, context);
   const best = routing.rankedCards[0];
   const network = inferPaymentNetwork({
-    paymentMethodToken: request.paymentMethodToken,
+    paymentMethodToken,
     bestCardId: routing.bestCardId,
   });
 
@@ -100,6 +114,7 @@ export async function proxyPayPurchase(
     bestCardId: routing.bestCardId,
     estimatedRewardMinor: best?.estimatedReward.amountMinor ?? 0,
     network,
+    paymentMethodToken,
   });
 
   return ProxyPayResponseSchema.parse({

@@ -72,4 +72,84 @@ describe('issuing API', () => {
     expect(body.data.last4).toHaveLength(4);
     expect(body.data.panToken).toBeTruthy();
   });
+
+  it('PATCH /v1/issuing/cards/virtual/:id/status freezes a card', async () => {
+    const app = createApp();
+    const userId = '00000000-0000-4000-8000-000000000002';
+
+    const cardholder = await app.request('/v1/issuing/cardholders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': process.env.API_KEY!,
+        'X-Consumer-User-Id': userId,
+      },
+      body: JSON.stringify({}),
+    });
+    const cardholderBody = await cardholder.json();
+
+    const issued = await app.request('/v1/issuing/cards/virtual', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': process.env.API_KEY!,
+      },
+      body: JSON.stringify({ cardholderId: cardholderBody.data.id }),
+    });
+    const issuedBody = await issued.json();
+
+    const response = await app.request(
+      `/v1/issuing/cards/virtual/${issuedBody.data.id}/status`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': process.env.API_KEY!,
+        },
+        body: JSON.stringify({ status: 'frozen' }),
+      },
+    );
+
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data.status).toBe('frozen');
+  });
+
+  it('POST /v1/issuing/cards/physical/order submits shipping order', async () => {
+    const app = createApp();
+    const userId = '00000000-0000-4000-8000-000000000004';
+
+    const cardholder = await app.request('/v1/issuing/cardholders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': process.env.API_KEY!,
+        'X-Consumer-User-Id': userId,
+      },
+      body: JSON.stringify({}),
+    });
+    const cardholderBody = await cardholder.json();
+
+    const response = await app.request('/v1/issuing/cards/physical/order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': process.env.API_KEY!,
+      },
+      body: JSON.stringify({
+        cardholderId: cardholderBody.data.id,
+        shippingAddress: {
+          line1: '123 Main St',
+          city: 'San Francisco',
+          state: 'CA',
+          postalCode: '94105',
+          country: 'US',
+        },
+      }),
+    });
+
+    expect(response.status).toBe(201);
+    const body = await response.json();
+    expect(body.data.status).toBe('submitted');
+  });
 });

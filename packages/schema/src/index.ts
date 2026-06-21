@@ -168,6 +168,7 @@ export {
 export {
   ProxyPayRequestSchema,
   ProxyPayResponseSchema,
+  VaultPaymentMethodSchema,
   type ProxyPayRequest,
   type ProxyPayResponse,
 } from "./proxy-pay.js";
@@ -184,6 +185,8 @@ export {
 export {
   CreateCardholderSchema,
   IssueVirtualCardSchema,
+  UpdateVirtualCardStatusSchema,
+  OrderPhysicalCardSchema,
   CardholderSchema,
   VirtualCardSchema,
   CardholderStatusSchema,

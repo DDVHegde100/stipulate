@@ -7,6 +7,14 @@ export const ProxyPayRequestSchema = RouteRequestSchema.extend({
   idempotencyKey: z.string().min(8).optional(),
 });
 
+export const VaultPaymentMethodSchema = z.object({
+  paymentMethodId: z.string().min(3),
+  label: z.string().max(128).optional(),
+  network: z.string().max(32).optional(),
+  last4: z.string().length(4).optional(),
+  setDefault: z.boolean().optional(),
+});
+
 export const ProxyPayResponseSchema = z.object({
   requestId: z.string().min(1),
   routing: z.object({
