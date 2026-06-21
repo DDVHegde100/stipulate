@@ -15,11 +15,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: brand.name,
   slug: 'stipulate',
+  owner: 'stipulate',
   version: '0.1.0',
   orientation: 'portrait',
   scheme: 'stipulate',
   userInterfaceStyle: 'dark',
   newArchEnabled: true,
+  runtimeVersion: {
+    policy: 'appVersion',
+  },
   icon: '../../packages/brand/assets/logo-icon.svg',
   splash: {
     backgroundColor: brand.colors.ink,
@@ -50,6 +54,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         autoVerify: true,
         data: [
           { scheme: 'https', host: 'stipulate.io', pathPrefix: '/app' },
+          { scheme: 'https', host: 'www.stipulate.io', pathPrefix: '/app' },
           { scheme: 'stipulate' },
         ],
         category: ['BROWSABLE', 'DEFAULT'],
@@ -81,6 +86,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     apiKey: process.env.EXPO_PUBLIC_API_KEY ?? 'stip_dev_local_key_change_in_production',
     eas: {
       projectId: 'stipulate-mobile',
+    },
+    router: {
+      origin: `https://${brand.domain}`,
     },
   },
 });

@@ -34,7 +34,7 @@ Operational checklist for shipping Stipulate v1 to production.
 | API | Tag `v*.*.*` → `deploy-production.yml` | `https://api.stipulate.io` |
 | Web | Vercel production deploy | `https://stipulate.io` |
 | Docs | `pnpm --filter @stipulate/docs start` or static host | `https://docs.stipulate.io` |
-| Mobile | `eas build --profile production` | App Store / Play Store |
+| Mobile | Tag `v*.*.*` → `mobile-release.yml` | App Store / Play Store |
 
 See [store-listing.md](./store-listing.md) for App Store copy and screenshot checklist.
 
@@ -62,8 +62,9 @@ See [store-listing.md](./store-listing.md) for App Store copy and screenshot che
    eas submit --profile production --platform ios
    eas submit --profile production --platform android
    ```
-4. Verify deep links: `stipulate://app/route`, `stipulate://login`.
+4. Verify deep links: `stipulate://app/route`, `stipulate://login`, `https://stipulate.io/app/wallet`.
 5. Set `EXPO_PUBLIC_PUSH_TOKEN` in EAS secrets for production push alerts.
+6. Confirm `/privacy` and `/terms` are live before store submission.
 
 ## Scheduled jobs
 

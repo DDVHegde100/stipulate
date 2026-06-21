@@ -69,6 +69,14 @@ test('batch route page renders sample spend shell', async ({ page }) => {
   await expect(page.getByRole('button', { name: /run batch route/i })).toBeVisible();
 });
 
+test('privacy and terms pages are public', async ({ page }) => {
+  await page.goto('/privacy');
+  await expect(page.getByRole('heading', { name: /^Privacy Policy$/i })).toBeVisible();
+
+  await page.goto('/terms');
+  await expect(page.getByRole('heading', { name: /^Terms of Service$/i })).toBeVisible();
+});
+
 test('settings page shows billing and privacy sections', async ({ page }) => {
   await seedConsumerSession(page);
   await page.goto('/app/settings');

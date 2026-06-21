@@ -3,6 +3,7 @@ import { useState } from 'react';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
+  Linking,
   Platform,
   Pressable,
   ScrollView,
@@ -97,6 +98,17 @@ export default function SignupScreen() {
               Sign in
             </Link>
           </Text>
+          <Text style={styles.legal}>
+            By creating an account you agree to our{' '}
+            <Text style={styles.link} onPress={() => void Linking.openURL('https://stipulate.io/terms')}>
+              Terms
+            </Text>{' '}
+            and{' '}
+            <Text style={styles.link} onPress={() => void Linking.openURL('https://stipulate.io/privacy')}>
+              Privacy Policy
+            </Text>
+            .
+          </Text>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -136,5 +148,6 @@ const styles = StyleSheet.create({
   buttonText: { color: '#fff', fontWeight: '600', fontSize: 16 },
   error: { color: '#f87171', marginTop: 10, fontSize: 14 },
   footer: { color: colors.textSecondary, textAlign: 'center', fontSize: 14 },
+  legal: { color: colors.textTertiary, textAlign: 'center', fontSize: 12, lineHeight: 18 },
   link: { color: colors.accentLight },
 });

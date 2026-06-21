@@ -70,8 +70,8 @@ export function StripeFooter() {
           <span>© {new Date().getFullYear()} Stipulate, Inc.</span>
           <div className="flex gap-6">
             <Link href="/status">Status</Link>
-            <Link href="/docs">Privacy</Link>
-            <Link href="/docs">Terms</Link>
+            <Link href="/privacy">Privacy</Link>
+            <Link href="/terms">Terms</Link>
           </div>
         </div>
       </div>
