@@ -4,7 +4,7 @@ import { createApp } from '../app.js';
 import { resetEnvCache } from '../config/env.js';
 import { resetDatabasePool } from '../lib/db.js';
 import { resetRedisClient } from '../lib/redis.js';
-import { exportConsumerData } from '../services/consumer-gdpr.service.js';
+import { exportConsumerData, scheduleConsumerDeletion } from '../services/consumer-gdpr.service.js';
 
 describe('consumer GDPR export', () => {
   beforeEach(() => {
@@ -42,5 +42,31 @@ describe('consumer GDPR export', () => {
     const body = await response.json();
     expect(body.data.user.email).toBe('demo@stipulate.io');
     expect(body.data.exportedAt).toBeTruthy();
+  });
+
+  it('POST /public/auth/delete schedules deletion and clears session', async () => {
+    const app = createApp();
+    const login = await app.request('/public/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: 'demo@stipulate.io',
+        password: 'demo-password-123',
+      }),
+    });
+    const cookie = login.headers.get('Set-Cookie') ?? '';
+
+    const response = await app.request('/public/auth/delete', {
+      method: 'POST',
+      headers: { Cookie: cookie.split(';')[0] ?? '' },
+    });
+
+    expect(response.status).toBe(202);
+    const body = await response.json();
+    expect(body.data.status).toBe('scheduled');
+    expect(body.data.scheduledFor).toBeTruthy();
+
+    const exportAfter = await exportConsumerData('00000000-0000-4000-8000-000000000001');
+    expect(exportAfter.deletionRequest?.status).toBe('scheduled');
   });
 });

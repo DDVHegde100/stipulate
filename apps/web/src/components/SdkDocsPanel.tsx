@@ -50,6 +50,15 @@ result = client.route({
 
 print(result["bestCardId"], result["rankedCards"][0]["effectiveMultiplier"])`;
 
+const CONSUMER_AUTH = `# Consumer app auth (session cookie or X-User-Id header)
+curl -X POST https://api.stipulate.io/public/auth/login \\
+  -H "Content-Type: application/json" \\
+  -d '{"email":"you@example.com","password":"..."}' \\
+  -c cookies.txt
+
+curl https://api.stipulate.io/public/auth/export -b cookies.txt
+curl -X POST https://api.stipulate.io/public/auth/delete -b cookies.txt`;
+
 const INSTALL = [
   { label: 'TypeScript / Node', command: 'pnpm add @stipulate/sdk' },
   { label: 'Python', command: 'pip install stipulate-sdk' },
@@ -103,6 +112,18 @@ export function SdkDocsPanel() {
         </pre>
         <pre className="overflow-x-auto rounded-xl border border-glass-border bg-ink-900 p-4 font-mono text-[13px] leading-relaxed text-white/80">
           {TS_ISSUING}
+        </pre>
+      </GlassPanel>
+
+      <GlassPanel className="space-y-4">
+        <Heading as="h2" size="sm">
+          Consumer privacy API
+        </Heading>
+        <Text tone="secondary">
+          Wallet users can export or schedule deletion via session-authenticated public routes.
+        </Text>
+        <pre className="overflow-x-auto rounded-xl border border-glass-border bg-ink-900 p-4 font-mono text-[13px] leading-relaxed text-white/80">
+          {CONSUMER_AUTH}
         </pre>
       </GlassPanel>
 

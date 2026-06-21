@@ -122,3 +122,21 @@ export async function downloadConsumerExport(): Promise<Record<string, unknown>>
 
   return json.data;
 }
+
+export async function scheduleConsumerDeletion(): Promise<{ scheduledFor: string }> {
+  const response = await fetch(`${publicApiBase()}/public/auth/delete`, {
+    method: 'POST',
+    credentials: 'include',
+  });
+
+  const json = (await response.json()) as {
+    data: { scheduledFor: string };
+    error?: { message: string };
+  };
+
+  if (!response.ok) {
+    throw new Error(json.error?.message ?? `HTTP ${response.status}`);
+  }
+
+  return { scheduledFor: json.data.scheduledFor };
+}

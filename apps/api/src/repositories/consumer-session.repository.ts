@@ -84,3 +84,17 @@ export async function revokeConsumerSession(token: string): Promise<void> {
 
   await query(`DELETE FROM consumer_sessions WHERE token_hash = $1`, [tokenHash]);
 }
+
+/** Revoke all sessions for a consumer user (e.g. on account deletion request). */
+export async function revokeAllConsumerSessions(consumerUserId: string): Promise<void> {
+  if (process.env.NODE_ENV === 'test') {
+    for (const [hash, row] of testSessions.entries()) {
+      if (row.consumer_user_id === consumerUserId) {
+        testSessions.delete(hash);
+      }
+    }
+    return;
+  }
+
+  await query(`DELETE FROM consumer_sessions WHERE consumer_user_id = $1::uuid`, [consumerUserId]);
+}

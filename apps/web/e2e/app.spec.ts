@@ -53,7 +53,7 @@ test('authenticated settings page renders profile form', async ({ page }) => {
 test('authenticated discover page renders gaps', async ({ page }) => {
   await seedConsumerSession(page);
   await page.goto('/app/discover');
-  await expect(page.getByRole('heading', { name: /unlock better cards/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /consumer premium required/i })).toBeVisible();
 });
 
 test('route page renders purchase form', async ({ page }) => {
@@ -76,4 +76,6 @@ test('settings page shows billing and privacy sections', async ({ page }) => {
   await expect(page.getByRole('heading', { name: /^Billing$/i })).toBeVisible();
   await expect(page.getByRole('heading', { name: /^Privacy$/i })).toBeVisible();
   await expect(page.getByRole('button', { name: /download my data/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /^Delete account$/i })).toBeVisible();
+  await expect(page.getByRole('button', { name: /schedule account deletion/i })).toBeVisible();
 });

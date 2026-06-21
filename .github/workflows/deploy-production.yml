@@ -70,3 +70,4 @@ jobs:
           curl -fsS "$API_URL/status" | grep -q '"status"'
           curl -fsS "$API_URL/v1/openapi" | head -n 1 | grep -qE 'openapi|info'
           curl -fsS "$API_URL/v1/openapi/json" | grep -q '"/public/auth/export"'
+          curl -fsS "$API_URL/v1/openapi/json" | grep -q '"/public/auth/delete"'
