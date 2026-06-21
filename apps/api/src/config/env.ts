@@ -58,6 +58,8 @@ const envSchema = z
     PLAID_SECRET: z.string().optional(),
     PLAID_ENV: z.enum(['sandbox', 'development', 'production']).default('sandbox'),
     STRIPE_PRICE_ID_CONSUMER: z.string().optional(),
+    STRIPE_ISSUING_CARD_DESIGN_ID: z.string().optional(),
+    ISSUING_WEBHOOK_SECRET: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     if (data.NODE_ENV === 'production' && !data.API_KEY) {

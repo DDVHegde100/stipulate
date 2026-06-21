@@ -17,6 +17,7 @@ import { SectionHeader } from '@/components/SectionHeader';
 import { useAuth } from '@/context/AuthContext';
 import { useWallet } from '@/hooks/useWallet';
 import { listCatalogCards } from '@/lib/stipulate';
+import { syncPushToken } from '@/lib/push-notifications';
 import { colors } from '@/theme/colors';
 
 const STEPS = ['Welcome', 'Add cards', 'Notifications'] as const;
@@ -28,6 +29,7 @@ export default function OnboardingScreen() {
   const [catalog, setCatalog] = useState<Array<{ card_id: string; name: string }>>([]);
   const [search, setSearch] = useState('');
   const [emailNotifs, setEmailNotifs] = useState(true);
+  const [pushNotifs, setPushNotifs] = useState(true);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -52,8 +54,11 @@ export default function OnboardingScreen() {
       await refreshProfile({
         onboardingComplete: true,
         walletCardIds: cards.map((c) => c.cardId),
-        notificationPrefs: { email: emailNotifs, push: false },
+        notificationPrefs: { email: emailNotifs, push: pushNotifs },
       });
+      if (pushNotifs) {
+        await syncPushToken(user.id, true);
+      }
       router.replace('/(tabs)/wallet');
     } finally {
       setLoading(false);
@@ -122,6 +127,10 @@ export default function OnboardingScreen() {
             <View style={styles.switchRow}>
               <Text style={styles.body}>Email benefit change alerts</Text>
               <Switch value={emailNotifs} onValueChange={setEmailNotifs} />
+            </View>
+            <View style={styles.switchRow}>
+              <Text style={styles.body}>Push benefit change alerts</Text>
+              <Switch value={pushNotifs} onValueChange={setPushNotifs} />
             </View>
             <Pressable style={styles.button} onPress={() => void finish()} disabled={loading}>
               {loading ? (

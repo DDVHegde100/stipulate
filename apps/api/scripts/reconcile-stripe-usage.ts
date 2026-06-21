@@ -4,6 +4,7 @@
  * Usage: pnpm --filter @stipulate/api reconcile:stripe
  */
 import { query, disconnectDatabase } from '../src/lib/db.js';
+import { compareOrgUsageDrift } from '../src/services/stripe-reconcile.service.js';
 
 async function main(): Promise<void> {
   const since = new Date();
@@ -31,6 +32,7 @@ async function main(): Promise<void> {
 
   let totalCalls = 0;
   let totalMicros = 0;
+  let driftCount = 0;
 
   for (const row of result.rows) {
     const calls = Number(row.total_calls);
@@ -40,6 +42,23 @@ async function main(): Promise<void> {
     console.log(
       `  ${row.slug.padEnd(24)} ${String(calls).padStart(8)} calls  $${(micros / 1_000_000).toFixed(4)}`,
     );
+
+    if (process.env.STRIPE_SECRET_KEY) {
+      try {
+        const drift = await compareOrgUsageDrift({
+          orgId: row.org_id,
+          periodStart: since,
+        });
+        if (drift && drift.delta !== 0) {
+          driftCount++;
+          console.log(
+            `    drift: local=${drift.localCalls} stripe=${drift.stripeCalls} delta=${drift.delta}`,
+          );
+        }
+      } catch (error) {
+        console.log(`    drift check failed: ${error instanceof Error ? error.message : error}`);
+      }
+    }
   }
 
   console.log('─'.repeat(60));
@@ -47,21 +66,11 @@ async function main(): Promise<void> {
 
   if (!process.env.STRIPE_SECRET_KEY) {
     console.log('\nNote: STRIPE_SECRET_KEY not set — local totals only (no Stripe API sync).');
+  } else if (driftCount > 0) {
+    console.log(`\nWarning: ${driftCount} org(s) with usage drift detected.`);
+    process.exitCode = 1;
   } else {
-    const subs = await query<{ org_id: string; slug: string; stripe_subscription_item_id: string | null }>(
-      `SELECT o.id AS org_id, o.slug, bs.stripe_subscription_item_id
-       FROM organizations o
-       JOIN billing_subscriptions bs ON bs.org_id = o.id
-       WHERE bs.plan = 'payg'`,
-    );
-    const missingItems = subs.rows.filter((row) => !row.stripe_subscription_item_id);
-    if (missingItems.length > 0) {
-      console.log('\nWarning: PAYG orgs missing stripe_subscription_item_id:');
-      for (const row of missingItems) {
-        console.log(`  ${row.slug}`);
-      }
-    }
-    console.log('\nStripe meter sync: compare totals above with Stripe Billing usage records.');
+    console.log('\nStripe meter sync: no drift detected for PAYG orgs.');
   }
 
   await disconnectDatabase();

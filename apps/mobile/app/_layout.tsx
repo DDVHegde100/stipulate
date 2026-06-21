@@ -2,11 +2,13 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 
 import { AuthProvider } from '@/context/AuthContext';
+import { NotificationBootstrap } from '@/components/NotificationBootstrap';
 import { colors } from '@/theme/colors';
 
 export default function RootLayout() {
   return (
     <AuthProvider>
+      <NotificationBootstrap />
       <StatusBar style="light" />
       <Stack
         screenOptions={{
