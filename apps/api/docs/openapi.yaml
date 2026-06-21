@@ -459,6 +459,25 @@ paths:
         '200':
           description: Physical card orders
 
+  /issuing/authorizations:
+    get:
+      operationId: listIssuingAuthorizations
+      summary: List Issuing authorization ledger entries
+      parameters:
+        - name: cardholderId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: virtualCardId
+          in: query
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Authorization ledger
+
   /plaid/link-token:
     post:
       operationId: createPlaidLinkToken
@@ -560,6 +579,33 @@ paths:
       responses:
         '202':
           description: Deletion scheduled
+
+  /public/billing/checkout:
+    post:
+      operationId: createConsumerCheckout
+      summary: Start Consumer Premium Stripe Checkout
+      security: []
+      responses:
+        '200':
+          description: Checkout session URL
+
+  /public/billing/status:
+    get:
+      operationId: getConsumerBillingStatus
+      summary: Consumer subscription plan and status
+      security: []
+      responses:
+        '200':
+          description: Billing status
+
+  /public/billing/portal:
+    post:
+      operationId: createConsumerBillingPortal
+      summary: Stripe billing portal for Consumer Premium
+      security: []
+      responses:
+        '200':
+          description: Portal session URL
 
   /openapi:
     get:

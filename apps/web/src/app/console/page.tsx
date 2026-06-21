@@ -69,6 +69,11 @@ export default function ConsolePage() {
                 <Link href="/docs">
                   <Button size="sm">Embedded docs</Button>
                 </Link>
+                <Link href="/docs/sdk">
+                  <Button variant="outline" size="sm">
+                    SDK docs
+                  </Button>
+                </Link>
               </div>
             </GlassPanel>
 

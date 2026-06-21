@@ -204,7 +204,7 @@ export async function issueVirtualCard(input: {
 
   if (process.env.NODE_ENV === 'test') {
     const row: VirtualCardRow = {
-      id: '00000000-0000-4000-8000-000000000021',
+      id: input.cardholderId,
       cardholder_id: input.cardholderId,
       program_id: cardholder.program_id,
       last4,
@@ -388,6 +388,24 @@ export async function updatePhysicalCardOrderStatus(input: {
     [input.orderId, input.status, input.trackingNumber ?? null],
   );
   return result.rows[0] ?? null;
+}
+
+export async function findVirtualCardIdByExternalId(externalId: string): Promise<string | null> {
+  if (process.env.NODE_ENV === 'test') {
+    for (const cards of testVirtualCards.values()) {
+      const card = cards.find(
+        (entry) => entry.pan_token?.includes(externalId) || entry.id === externalId,
+      );
+      if (card) return card.id;
+    }
+    return null;
+  }
+
+  const result = await query<{ id: string }>(
+    `SELECT id FROM virtual_cards WHERE external_id = $1 LIMIT 1`,
+    [externalId],
+  );
+  return result.rows[0]?.id ?? null;
 }
 
 export async function syncVirtualCardFromExternal(input: {

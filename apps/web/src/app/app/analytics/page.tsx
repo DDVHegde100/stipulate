@@ -6,6 +6,7 @@ import { GlassPanel, Heading, Text } from '@stipulate/ui';
 import { demoApiFetch } from '../../../lib/demo-api';
 import { estimateMissedRewards, getRouteHistory } from '../../../lib/route-history';
 import { getWalletCards } from '../../../lib/wallet';
+import { PremiumGate } from '../../../components/PremiumGate';
 
 interface CapRow {
   cardId: string;
@@ -48,6 +49,7 @@ export default function AnalyticsPage() {
   const maxCategory = categoryEntries[0]?.[1] ?? 1;
 
   return (
+    <PremiumGate feature="Spend analytics">
     <div className="space-y-8">
       <div>
         <Text variant="overline" tone="secondary">
@@ -140,5 +142,6 @@ export default function AnalyticsPage() {
         </div>
       </GlassPanel>
     </div>
+    </PremiumGate>
   );
 }

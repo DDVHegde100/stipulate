@@ -26,6 +26,17 @@ const TS_PROXY = `const payment = await client.proxyPay({
 
 console.log(payment.paymentIntent.id);`;
 
+const TS_ISSUING = `const cardholder = await client.createCardholder({ programSlug: 'stipulate_sandbox' });
+const card = await client.issueVirtualCard({ cardholderId: cardholder.id });
+await client.updateVirtualCardStatus(card.id, { status: 'frozen' });`;
+
+const TS_VAULT = `const methods = await client.listVaultedPaymentMethods();
+await client.vaultPaymentMethod({
+  paymentMethodId: 'pm_card_visa',
+  label: 'Corporate Visa',
+  setDefault: true,
+});`;
+
 const PY_ROUTE = `from stipulate import StipulateClient
 
 client = StipulateClient("sk_live_...", base_url="https://api.stipulate.io/v1")
@@ -37,7 +48,7 @@ result = client.route({
     "userCardIds": ["amex_gold", "chase_sapphire_reserve"],
 })
 
-print(result["best"]["cardId"], result["best"]["returnPct"])`;
+print(result["bestCardId"], result["rankedCards"][0]["effectiveMultiplier"])`;
 
 const INSTALL = [
   { label: 'TypeScript / Node', command: 'pnpm add @stipulate/sdk' },
@@ -80,6 +91,18 @@ export function SdkDocsPanel() {
         <Text tone="secondary">Charge the optimal card via Stipulate proxy pay.</Text>
         <pre className="overflow-x-auto rounded-xl border border-glass-border bg-ink-900 p-4 font-mono text-[13px] leading-relaxed text-white/80">
           {TS_PROXY}
+        </pre>
+      </GlassPanel>
+
+      <GlassPanel className="space-y-4">
+        <Heading as="h2" size="sm">
+          Vault & issuing
+        </Heading>
+        <pre className="overflow-x-auto rounded-xl border border-glass-border bg-ink-900 p-4 font-mono text-[13px] leading-relaxed text-white/80">
+          {TS_VAULT}
+        </pre>
+        <pre className="overflow-x-auto rounded-xl border border-glass-border bg-ink-900 p-4 font-mono text-[13px] leading-relaxed text-white/80">
+          {TS_ISSUING}
         </pre>
       </GlassPanel>
 

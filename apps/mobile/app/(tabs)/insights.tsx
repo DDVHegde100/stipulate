@@ -6,6 +6,7 @@ import { CapProgress } from '@/components/CapProgress';
 import { GlassCard } from '@/components/GlassCard';
 import { SectionHeader } from '@/components/SectionHeader';
 import { useWallet } from '@/hooks/useWallet';
+import { fetchConsumerBillingStatus } from '@/lib/consumer-billing';
 import { estimateMissedRewards, getRouteHistory } from '@/lib/route-history';
 import { fetchSpendSummary } from '@/lib/stipulate';
 import { colors } from '@/theme/colors';
@@ -23,9 +24,13 @@ export default function InsightsScreen() {
   const [caps, setCaps] = useState<
     Array<{ cardId: string; category: string; spentMinor: number }>
   >([]);
+  const [isPremium, setIsPremium] = useState<boolean | null>(null);
 
   useEffect(() => {
     void getRouteHistory().then(setHistory);
+    void fetchConsumerBillingStatus()
+      .then((status) => setIsPremium(status.isPremium))
+      .catch(() => setIsPremium(false));
   }, []);
 
   useEffect(() => {
@@ -53,6 +58,15 @@ export default function InsightsScreen() {
       <ScrollView contentContainerStyle={styles.content}>
         <SectionHeader overline="Spend analytics" title="Rewards overview" />
 
+        {isPremium === false ? (
+          <GlassCard>
+            <Text style={styles.cardLabel}>Consumer Premium</Text>
+            <Text style={styles.empty}>
+              Upgrade in Profile to unlock full spend analytics and cap tracking.
+            </Text>
+          </GlassCard>
+        ) : (
+          <>
         <View style={styles.statsRow}>
           <GlassCard style={styles.statCard}>
             <Text style={styles.statLabel}>Missed rewards</Text>
@@ -90,6 +104,8 @@ export default function InsightsScreen() {
             capMinor={CAP_LIMITS[cap.category] ?? CAP_LIMITS.default!}
           />
         ))}
+          </>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

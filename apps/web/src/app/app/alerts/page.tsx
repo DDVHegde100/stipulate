@@ -5,6 +5,7 @@ import { Badge, GlassPanel, Heading, Text } from '@stipulate/ui';
 
 import { demoApiFetch } from '../../../lib/demo-api';
 import { getWalletCards } from '../../../lib/wallet';
+import { PremiumGate } from '../../../components/PremiumGate';
 
 interface ChangelogEntry {
   id: string;
@@ -35,6 +36,7 @@ export default function AlertsPage() {
   }, []);
 
   return (
+    <PremiumGate feature="Benefit change alerts">
     <div className="space-y-8">
       <div>
         <Text variant="overline" tone="secondary">
@@ -117,5 +119,6 @@ export default function AlertsPage() {
         </GlassPanel>
       </div>
     </div>
+    </PremiumGate>
   );
 }

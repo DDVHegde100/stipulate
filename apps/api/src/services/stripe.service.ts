@@ -107,6 +107,28 @@ export async function createConsumerCheckoutSession(input: {
   return { url: session.url, sessionId: session.id };
 }
 
+/** Create a Stripe billing portal session for consumer premium subscribers. */
+export async function createConsumerPortalSession(input: {
+  consumerUserId: string;
+  returnUrl: string;
+}): Promise<{ url: string }> {
+  if (process.env.NODE_ENV === 'test') {
+    return { url: 'https://billing.stripe.com/consumer-test' };
+  }
+
+  const subscription = await consumerBillingRepo.findConsumerSubscription(input.consumerUserId);
+  if (!subscription?.stripe_customer_id) {
+    throw new Error('No consumer billing customer found');
+  }
+
+  const session = await stripeRequest<{ url: string }>('/billing_portal/sessions', {
+    customer: subscription.stripe_customer_id,
+    return_url: input.returnUrl,
+  });
+
+  return { url: session.url };
+}
+
 /** Create a billing portal session for self-serve management. */
 export async function createPortalSession(orgId: string, returnUrl: string): Promise<{ url: string }> {
   if (process.env.NODE_ENV === 'test') {

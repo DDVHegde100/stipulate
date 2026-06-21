@@ -5,6 +5,7 @@ import type { AppBindings } from '../../app.js';
 import { CreateCardholderSchema, IssueVirtualCardSchema, OrderPhysicalCardSchema, UpdateVirtualCardStatusSchema } from '@stipulate/schema';
 import { resolveConsumerUserId } from '../../lib/consumer-context.js';
 import * as issuingRepo from '../../repositories/issuing.repository.js';
+import * as authRepo from '../../repositories/issuing-authorization.repository.js';
 
 export const issuingHandler = new Hono<AppBindings>();
 
@@ -192,6 +193,41 @@ issuingHandler.get('/cards/physical/orders', async (c) => {
         status: order.status,
         trackingNumber: order.tracking_number,
         createdAt: order.created_at.toISOString(),
+      })),
+    },
+    requestId: c.get('requestId'),
+  });
+});
+
+issuingHandler.get('/authorizations', async (c) => {
+  const cardholderId = c.req.query('cardholderId');
+  const virtualCardId = c.req.query('virtualCardId');
+  if (!cardholderId && !virtualCardId) {
+    throw new HTTPException(400, {
+      message: 'cardholderId or virtualCardId query parameter is required',
+    });
+  }
+
+  const limit = Number(c.req.query('limit') ?? '50');
+  const authorizations = await authRepo.listIssuingAuthorizations({
+    cardholderId: cardholderId ?? undefined,
+    virtualCardId: virtualCardId ?? undefined,
+    limit: Number.isFinite(limit) ? limit : 50,
+  });
+
+  return c.json({
+    data: {
+      authorizations: authorizations.map((row) => ({
+        id: row.id,
+        virtualCardId: row.virtual_card_id,
+        cardExternalId: row.card_external_id,
+        externalId: row.external_id,
+        amountMinor: row.amount_minor,
+        currency: row.currency,
+        merchantName: row.merchant_name,
+        merchantCategoryCode: row.merchant_category_code,
+        status: row.status,
+        authorizedAt: row.authorized_at.toISOString(),
       })),
     },
     requestId: c.get('requestId'),
