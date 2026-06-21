@@ -140,6 +140,16 @@ v1Routes.get('/', (c) => {
         path: '/v1/issuing/cards/virtual',
         description: 'Issue a sandbox virtual card for a cardholder',
       },
+      billingPaymentMethods: {
+        method: 'GET',
+        path: '/v1/billing/payment-methods',
+        description: 'List org vaulted Stripe payment methods for proxy-pay',
+      },
+      issuingPhysicalOrders: {
+        method: 'GET',
+        path: '/v1/issuing/cards/physical/orders',
+        description: 'List physical card shipping orders for a cardholder',
+      },
     },
   });
 });

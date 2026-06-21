@@ -20,8 +20,14 @@ Copy `.env.production.example` to your secret manager. Never commit real values.
 | `REDIS_URL` | Yes | Redis connection string |
 | `API_KEY` | Dev only | Replace with org-scoped DB keys in production |
 | `STRIPE_SECRET_KEY` | Billing | SaaS and consumer subscriptions |
+| `STRIPE_PRICE_ID_METERED` | Billing | PAYG metered price (usage reporting) |
+| `STRIPE_PRICE_ID_SAAS` | Billing | SaaS flat-rate checkout price |
 | `STRIPE_PRICE_ID_CONSUMER` | Billing | Consumer premium checkout price |
 | `STRIPE_WEBHOOK_SECRET` | Billing | Webhook signature verification |
+| `FEATURE_PROXY_PAY` | Proxy pay | Enable `/v1/proxy-pay` |
+| `PLAID_CLIENT_ID` | Plaid | Bank linking (sandbox or production) |
+| `PLAID_SECRET` | Plaid | Plaid API secret |
+| `ISSUING_WEBHOOK_SECRET` | Issuing | Physical card shipping status callbacks |
 | `OPENAI_API_KEY` | Parser | Benefit guide extraction |
 | `SENTRY_DSN` | Recommended | Error tracking |
 | `ADMIN_API_KEY` | Admin | Internal admin routes |

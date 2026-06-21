@@ -93,6 +93,54 @@ async function main(): Promise<void> {
 
   console.log('Spend track and caps smoke passed');
 
+  process.env.FEATURE_PROXY_PAY = 'true';
+  const vaultPm = await app.request('/v1/billing/payment-methods', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-Key': process.env.API_KEY,
+    },
+    body: JSON.stringify({
+      paymentMethodId: 'pm_smoke_vault',
+      setDefault: true,
+    }),
+  });
+  if (vaultPm.status !== 201) {
+    throw new Error(`Payment method vault smoke failed: ${vaultPm.status}`);
+  }
+
+  const proxyPay = await app.request('/v1/proxy-pay', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-Key': process.env.API_KEY,
+    },
+    body: JSON.stringify({
+      merchantName: 'Starbucks',
+      mcc: '5814',
+      amount: { amountMinor: 650, currency: 'USD' },
+      userCardIds: ['chase_sapphire_preferred'],
+    }),
+  });
+  if (proxyPay.status !== 200) {
+    throw new Error(`Proxy pay smoke failed: ${proxyPay.status}`);
+  }
+
+  const cardholder = await app.request('/v1/issuing/cardholders', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-Key': process.env.API_KEY,
+      'X-Consumer-User-Id': '00000000-0000-4000-8000-000000000099',
+    },
+    body: JSON.stringify({ programSlug: 'stipulate_sandbox' }),
+  });
+  if (cardholder.status !== 201) {
+    throw new Error(`Issuing cardholder smoke failed: ${cardholder.status}`);
+  }
+
+  console.log('Proxy pay, vault, and issuing smoke passed');
+
   await Promise.allSettled([disconnectRedis()]);
 }
 

@@ -174,3 +174,24 @@ issuingHandler.post('/cards/physical/order', async (c) => {
     throw error;
   }
 });
+
+issuingHandler.get('/cards/physical/orders', async (c) => {
+  const cardholderId = c.req.query('cardholderId');
+  if (!cardholderId) {
+    throw new HTTPException(400, { message: 'cardholderId query parameter is required' });
+  }
+
+  const orders = await issuingRepo.listPhysicalCardOrders(cardholderId);
+  return c.json({
+    data: {
+      orders: orders.map((order) => ({
+        id: order.id,
+        cardholderId: order.cardholder_id,
+        status: order.status,
+        trackingNumber: order.tracking_number,
+        createdAt: order.created_at.toISOString(),
+      })),
+    },
+    requestId: c.get('requestId'),
+  });
+});

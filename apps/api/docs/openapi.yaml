@@ -326,7 +326,7 @@ paths:
     post:
       operationId: proxyPay
       summary: Route purchase and return tokenized payment intent
-      description: Requires FEATURE_PROXY_PAY. Returns a sandbox payment intent stub.
+      description: Requires FEATURE_PROXY_PAY. Uses paymentMethodToken or org default vaulted PM.
       requestBody:
         required: true
         content:
@@ -345,13 +345,175 @@ paths:
                   type: array
                   items:
                     type: string
+                paymentMethodToken:
+                  type: string
+                idempotencyKey:
+                  type: string
       responses:
         '200':
           description: Proxy pay routing result with payment intent
         '404':
           description: Proxy pay feature disabled
         '422':
-          description: paymentMethodToken required in production
+          description: paymentMethodToken or vaulted PM required in production
+
+  /billing/payment-methods:
+    get:
+      operationId: listVaultedPaymentMethods
+      summary: List org vaulted Stripe payment methods
+      responses:
+        '200':
+          description: Vaulted payment methods
+    post:
+      operationId: vaultPaymentMethod
+      summary: Add or update a vaulted payment method
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VaultPaymentMethod'
+      responses:
+        '201':
+          description: Payment method vaulted
+
+  /billing/payment-methods/{id}:
+    delete:
+      operationId: removeVaultedPaymentMethod
+      summary: Remove a vaulted payment method
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Payment method removed
+
+  /issuing/cardholders:
+    post:
+      operationId: createCardholder
+      summary: Create a sandbox cardholder
+      responses:
+        '201':
+          description: Cardholder created
+
+  /issuing/cards/virtual:
+    post:
+      operationId: issueVirtualCard
+      summary: Issue a sandbox virtual card
+      responses:
+        '201':
+          description: Virtual card issued
+    get:
+      operationId: listVirtualCards
+      summary: List virtual cards for a cardholder
+      parameters:
+        - name: cardholderId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Virtual cards
+
+  /issuing/cards/virtual/{id}/status:
+    patch:
+      operationId: updateVirtualCardStatus
+      summary: Freeze, unfreeze, or close a virtual card
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Updated virtual card
+
+  /issuing/cards/physical/order:
+    post:
+      operationId: orderPhysicalCard
+      summary: Submit a physical card shipping order
+      responses:
+        '201':
+          description: Order submitted
+
+  /issuing/cards/physical/orders:
+    get:
+      operationId: listPhysicalCardOrders
+      summary: List physical card orders
+      parameters:
+        - name: cardholderId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Physical card orders
+
+  /plaid/link-token:
+    post:
+      operationId: createPlaidLinkToken
+      summary: Create a Plaid Link token
+      responses:
+        '200':
+          description: Link token
+
+  /plaid/exchange:
+    post:
+      operationId: exchangePlaidPublicToken
+      summary: Exchange Plaid public token
+      responses:
+        '200':
+          description: Linked accounts
+
+  /plaid/accounts:
+    get:
+      operationId: listPlaidAccounts
+      summary: List linked Plaid accounts
+      responses:
+        '200':
+          description: Linked accounts
+
+  /plaid/sync-transactions:
+    post:
+      operationId: syncPlaidTransactions
+      summary: Import transactions into spend tracking
+      responses:
+        '200':
+          description: Import summary
+
+  /wallet/cards:
+    get:
+      operationId: listWalletCards
+      summary: List server-backed wallet cards
+      responses:
+        '200':
+          description: Wallet cards
+
+  /spend/caps:
+    get:
+      operationId: getSpendCaps
+      summary: Cap utilization by card
+      responses:
+        '200':
+          description: Spend caps
+
+  /spend/track:
+    post:
+      operationId: trackSpend
+      summary: Record category spend
+      responses:
+        '200':
+          description: Spend recorded
 
   /webhooks/deliveries:
     get:
@@ -650,3 +812,20 @@ components:
           type: number
         notes:
           type: string
+
+    VaultPaymentMethod:
+      type: object
+      required: [paymentMethodId]
+      properties:
+        paymentMethodId:
+          type: string
+        label:
+          type: string
+        network:
+          type: string
+        last4:
+          type: string
+          minLength: 4
+          maxLength: 4
+        setDefault:
+          type: boolean

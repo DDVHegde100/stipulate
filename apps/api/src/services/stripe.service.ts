@@ -172,12 +172,34 @@ export async function handleStripeWebhookEvent(event: {
     const orgId = String(session.metadata ? (session.metadata as Record<string, string>).org_id : '');
     const plan = String(session.metadata ? (session.metadata as Record<string, string>).plan : 'payg');
     const customerId = String(session.customer ?? '');
+    const subscriptionId = session.subscription ? String(session.subscription) : undefined;
+
+    let subscriptionItemId: string | undefined;
+    let priceId: string | undefined;
+
+    if (subscriptionId && process.env.NODE_ENV !== 'test') {
+      try {
+        const subscription = await stripeRequest<{
+          items: { data: Array<{ id: string; price: { id: string } }> };
+        }>(`/subscriptions/${subscriptionId}?expand[]=items.data.price`);
+        const meteredPriceId = process.env.STRIPE_PRICE_ID_METERED;
+        const item =
+          subscription.items.data.find((entry) => !meteredPriceId || entry.price.id === meteredPriceId) ??
+          subscription.items.data[0];
+        subscriptionItemId = item?.id;
+        priceId = item?.price.id;
+      } catch {
+        // subscription item lookup is best-effort; metered reporting skips until set
+      }
+    }
 
     if (orgId && customerId) {
       await billingRepo.upsertBillingSubscription({
         orgId,
         stripeCustomerId: customerId,
-        stripeSubscriptionId: session.subscription ? String(session.subscription) : undefined,
+        stripeSubscriptionId: subscriptionId,
+        stripeSubscriptionItemId: subscriptionItemId,
+        stripePriceId: priceId,
         plan,
         status: 'active',
       });
