@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
 
 import type { AppBindings } from '../../app.js';
-import { CreateCardholderSchema, IssueVirtualCardSchema } from '@stipulate/schema';
+import { CreateCardholderSchema, IssueVirtualCardSchema, OrderPhysicalCardSchema, UpdateVirtualCardStatusSchema } from '@stipulate/schema';
 import { resolveConsumerUserId } from '../../lib/consumer-context.js';
 import * as issuingRepo from '../../repositories/issuing.repository.js';
 
@@ -101,4 +101,76 @@ issuingHandler.get('/cards/virtual', async (c) => {
     },
     requestId: c.get('requestId'),
   });
+});
+
+issuingHandler.patch('/cards/virtual/:id/status', async (c) => {
+  const cardId = c.req.param('id');
+  const body: unknown = await c.req.json().catch(() => {
+    throw new HTTPException(400, { message: 'Request body must be valid JSON' });
+  });
+
+  const parsed = UpdateVirtualCardStatusSchema.safeParse(body);
+  if (!parsed.success) {
+    return c.json(
+      { error: { code: 'VALIDATION_ERROR', details: parsed.error.flatten() }, requestId: c.get('requestId') },
+      422,
+    );
+  }
+
+  const card = await issuingRepo.updateVirtualCardStatus({
+    cardId,
+    status: parsed.data.status,
+  });
+  if (!card) throw new HTTPException(404, { message: 'Virtual card not found' });
+
+  return c.json({
+    data: {
+      id: card.id,
+      cardholderId: card.cardholder_id,
+      last4: card.last4,
+      network: card.network,
+      status: card.status,
+    },
+    requestId: c.get('requestId'),
+  });
+});
+
+issuingHandler.post('/cards/physical/order', async (c) => {
+  const body: unknown = await c.req.json().catch(() => {
+    throw new HTTPException(400, { message: 'Request body must be valid JSON' });
+  });
+
+  const parsed = OrderPhysicalCardSchema.safeParse(body);
+  if (!parsed.success) {
+    return c.json(
+      { error: { code: 'VALIDATION_ERROR', details: parsed.error.flatten() }, requestId: c.get('requestId') },
+      422,
+    );
+  }
+
+  try {
+    const order = await issuingRepo.orderPhysicalCard({
+      cardholderId: parsed.data.cardholderId,
+      shippingAddress: parsed.data.shippingAddress,
+    });
+
+    return c.json(
+      {
+        data: {
+          id: order.id,
+          cardholderId: order.cardholder_id,
+          status: order.status,
+          trackingNumber: order.tracking_number,
+          createdAt: order.created_at.toISOString(),
+        },
+        requestId: c.get('requestId'),
+      },
+      201,
+    );
+  } catch (error) {
+    if (error instanceof Error && error.message === 'Cardholder not found') {
+      throw new HTTPException(404, { message: error.message });
+    }
+    throw error;
+  }
 });

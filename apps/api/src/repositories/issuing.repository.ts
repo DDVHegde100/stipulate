@@ -158,3 +158,62 @@ export async function listVirtualCards(cardholderId: string): Promise<VirtualCar
   );
   return result.rows;
 }
+
+export async function updateVirtualCardStatus(input: {
+  cardId: string;
+  status: 'active' | 'frozen' | 'closed';
+}): Promise<VirtualCardRow | null> {
+  if (process.env.NODE_ENV === 'test') {
+    for (const cards of testVirtualCards.values()) {
+      const card = cards.find((c) => c.id === input.cardId);
+      if (card) {
+        card.status = input.status;
+        return card;
+      }
+    }
+    return null;
+  }
+
+  const result = await query<VirtualCardRow>(
+    `UPDATE virtual_cards SET status = $2, updated_at = NOW()
+     WHERE id = $1::uuid
+     RETURNING id, cardholder_id, program_id, last4, network, status,
+               pan_token, cvv_token, exp_month, exp_year, spend_limit_minor, created_at`,
+    [input.cardId, input.status],
+  );
+  return result.rows[0] ?? null;
+}
+
+export interface PhysicalCardOrderRow {
+  id: string;
+  cardholder_id: string;
+  status: string;
+  tracking_number: string | null;
+  created_at: Date;
+}
+
+export async function orderPhysicalCard(input: {
+  cardholderId: string;
+  shippingAddress: Record<string, string>;
+}): Promise<PhysicalCardOrderRow> {
+  const cardholder = await findCardholderById(input.cardholderId);
+  if (!cardholder) throw new Error('Cardholder not found');
+
+  if (process.env.NODE_ENV === 'test') {
+    return {
+      id: '00000000-0000-4000-8000-000000000030',
+      cardholder_id: input.cardholderId,
+      status: 'submitted',
+      tracking_number: null,
+      created_at: new Date(),
+    };
+  }
+
+  const result = await query<PhysicalCardOrderRow>(
+    `INSERT INTO physical_card_orders (cardholder_id, program_id, status, shipping_address)
+     VALUES ($1, $2, 'submitted', $3::jsonb)
+     RETURNING id, cardholder_id, status, tracking_number, created_at`,
+    [input.cardholderId, cardholder.program_id, JSON.stringify(input.shippingAddress)],
+  );
+  return result.rows[0]!;
+}

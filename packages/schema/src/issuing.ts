@@ -14,6 +14,21 @@ export const IssueVirtualCardSchema = z.object({
   spendLimitMinor: z.number().int().positive().optional(),
 });
 
+export const UpdateVirtualCardStatusSchema = z.object({
+  status: VirtualCardStatusSchema,
+});
+
+export const OrderPhysicalCardSchema = z.object({
+  cardholderId: z.string().uuid(),
+  shippingAddress: z.object({
+    line1: z.string().min(1),
+    city: z.string().min(1),
+    state: z.string().min(2).max(32),
+    postalCode: z.string().min(3).max(16),
+    country: z.string().length(2).default('US'),
+  }),
+});
+
 export const CardholderSchema = z.object({
   id: z.string().uuid(),
   consumerUserId: z.string().uuid(),
