@@ -190,4 +190,20 @@ describe('StipulateClient', () => {
       expect.objectContaining({ method: 'POST' }),
     );
   });
+
+  it('lists issuing authorizations', async () => {
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: { authorizations: [{ id: 'auth-1', status: 'approved' }] },
+        requestId: 'r9',
+      }),
+    });
+
+    const client = new StipulateClient({ apiKey: 'test_key', baseUrl: 'http://localhost:3000/v1', fetch: mockFetch });
+    const result = await client.listIssuingAuthorizations({ cardholderId: 'ch_1' });
+
+    expect(result.authorizations).toHaveLength(1);
+    expect(String(mockFetch.mock.calls[0]?.[0])).toContain('/issuing/authorizations');
+  });
 });

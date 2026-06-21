@@ -105,3 +105,20 @@ export async function registerPushToken(userId: string, token: string | null): P
     throw new Error(json.error?.message ?? `HTTP ${response.status}`);
   }
 }
+
+export async function downloadConsumerExport(): Promise<Record<string, unknown>> {
+  const response = await fetch(`${publicApiBase()}/public/auth/export`, {
+    credentials: 'include',
+  });
+
+  const json = (await response.json()) as {
+    data: Record<string, unknown>;
+    error?: { message: string };
+  };
+
+  if (!response.ok) {
+    throw new Error(json.error?.message ?? `HTTP ${response.status}`);
+  }
+
+  return json.data;
+}

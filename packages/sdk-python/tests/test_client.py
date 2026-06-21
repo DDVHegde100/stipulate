@@ -112,3 +112,14 @@ def test_list_vaulted_payment_methods(monkeypatch: pytest.MonkeyPatch) -> None:
     client = StipulateClient("test_key", base_url="http://localhost:3000/v1")
     data = client.list_vaulted_payment_methods()
     assert data["paymentMethods"][0]["id"] == "pm1"
+
+
+def test_list_issuing_authorizations(monkeypatch: pytest.MonkeyPatch) -> None:
+    def fake_urlopen(request: Any, timeout: float = 30.0) -> _FakeResponse:
+        assert "/issuing/authorizations" in request.full_url
+        return _FakeResponse({"data": {"authorizations": [{"id": "auth1"}]}, "requestId": "r6"})
+
+    monkeypatch.setattr("urllib.request.urlopen", fake_urlopen)
+    client = StipulateClient("test_key", base_url="http://localhost:3000/v1")
+    data = client.list_issuing_authorizations(cardholder_id="ch_1")
+    assert data["authorizations"][0]["id"] == "auth1"

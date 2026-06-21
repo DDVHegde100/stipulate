@@ -89,6 +89,8 @@ Configure a single Stripe webhook endpoint pointing at `/webhooks/stripe` with a
 
 Physical card shipping uses a separate callback at `/webhooks/issuing/shipping` with `ISSUING_WEBHOOK_SECRET`.
 
+Consumer GDPR exports are available at `GET /public/auth/export` for authenticated wallet users.
+
 ## Monitoring
 
 - Route P95 latency target: `<20ms` with warm cache

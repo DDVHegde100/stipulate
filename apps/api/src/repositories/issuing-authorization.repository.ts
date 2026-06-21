@@ -126,3 +126,27 @@ export async function listIssuingAuthorizations(input: {
 
   return [];
 }
+
+export async function listIssuingAuthorizationsForConsumer(
+  consumerUserId: string,
+  limit = 25,
+): Promise<IssuingAuthorizationRow[]> {
+  const capped = Math.min(limit, 100);
+
+  if (process.env.NODE_ENV === 'test') {
+    return listIssuingAuthorizations({ cardholderId: consumerUserId, limit: capped });
+  }
+
+  const result = await query<IssuingAuthorizationRow>(
+    `SELECT a.id, a.virtual_card_id, a.card_external_id, a.external_id, a.amount_minor, a.currency,
+            a.merchant_name, a.merchant_category_code, a.status, a.authorized_at, a.created_at
+     FROM issuing_authorizations a
+     JOIN virtual_cards v ON v.id = a.virtual_card_id
+     JOIN cardholders h ON h.id = v.cardholder_id
+     WHERE h.consumer_user_id = $1::uuid
+     ORDER BY a.authorized_at DESC
+     LIMIT $2`,
+    [consumerUserId, capped],
+  );
+  return result.rows;
+}

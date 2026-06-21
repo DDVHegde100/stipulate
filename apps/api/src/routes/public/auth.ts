@@ -15,6 +15,7 @@ import {
 import { createConsumerSession, revokeConsumerSession } from '../../repositories/consumer-session.repository.js';
 import { resolveConsumerUserId } from '../../lib/consumer-context.js';
 import { clearSessionCookie, setSessionCookie } from '../../lib/session-cookie.js';
+import { exportConsumerData } from '../../services/consumer-gdpr.service.js';
 
 const SignupSchema = z.object({
   email: z.string().email(),
@@ -175,4 +176,12 @@ consumerAuthHandler.post('/push-token', async (c) => {
     },
     200,
   );
+});
+
+consumerAuthHandler.get('/export', async (c) => {
+  const userId = await resolveConsumerUserId(c);
+  if (!userId) throw new HTTPException(401, { message: 'Authentication required' });
+
+  const bundle = await exportConsumerData(userId);
+  return c.json({ data: bundle, requestId: c.get('requestId') });
 });

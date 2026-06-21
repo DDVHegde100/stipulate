@@ -131,6 +131,22 @@ class StipulateClient:
             {"status": status},
         )
 
+    def list_issuing_authorizations(
+        self,
+        cardholder_id: Optional[str] = None,
+        virtual_card_id: Optional[str] = None,
+        limit: Optional[int] = None,
+    ) -> Mapping[str, Any]:
+        params: dict[str, str] = {}
+        if cardholder_id:
+            params["cardholderId"] = cardholder_id
+        if virtual_card_id:
+            params["virtualCardId"] = virtual_card_id
+        if limit is not None:
+            params["limit"] = str(limit)
+        query = f"?{urllib.parse.urlencode(params)}" if params else ""
+        return self._get(f"/issuing/authorizations{query}")
+
     def _patch(self, path: str, payload: Mapping[str, Any]) -> Mapping[str, Any]:
         url = f"{self.base_url}{path}"
         body = json.dumps(payload).encode("utf-8")
