@@ -43,6 +43,8 @@ export default function WalletScreen() {
     }
   }
 
+  const showEmptyState = loaded && cards.length === 0;
+
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']} testID="wallet-screen">
       <ScrollView contentContainerStyle={styles.content}>
@@ -57,31 +59,58 @@ export default function WalletScreen() {
           </View>
         </View>
 
-        <GlassCard>
-          <Text style={styles.cardLabel}>Bank linking</Text>
-          <Text style={styles.cardBody}>
-            Connect your bank to detect cards and sync recent spend for cap tracking.
-          </Text>
-          <PlaidConnectButton
-            consumerUserId={user?.id ?? ''}
-            onLinked={(result) => {
-              setBankLoading(true);
-              setBankMessage(null);
-              void handleLinked(result);
-            }}
-            onError={(message) => {
-              setBankMessage(message);
-              setBankLoading(false);
-            }}
-          />
-          {bankMessage && <Text style={styles.cardMeta}>{bankMessage}</Text>}
-        </GlassCard>
+        {showEmptyState ? (
+          <View testID="wallet-empty-state">
+            <GlassCard>
+              <Text style={styles.emptyTitle}>Link your bank to get started</Text>
+            <Text style={styles.cardBody}>
+              Connect your bank to detect cards automatically and sync recent spend for cap tracking.
+            </Text>
+            <PlaidConnectButton
+              consumerUserId={user?.id ?? ''}
+              onLinked={(result) => {
+                setBankLoading(true);
+                setBankMessage(null);
+                void handleLinked(result);
+              }}
+              onError={(message) => {
+                setBankMessage(message);
+                setBankLoading(false);
+              }}
+            />
+            {bankMessage ? <Text style={styles.cardMeta}>{bankMessage}</Text> : null}
+            {bankLoading ? <Text style={styles.cardMeta}>Linking accounts…</Text> : null}
+            </GlassCard>
+          </View>
+        ) : (
+          <View testID="wallet-bank-link-section">
+            <GlassCard>
+              <Text style={styles.cardLabel}>Bank linking</Text>
+            <Text style={styles.cardBody}>
+              Connect your bank to detect cards and sync recent spend for cap tracking.
+            </Text>
+            <PlaidConnectButton
+              consumerUserId={user?.id ?? ''}
+              onLinked={(result) => {
+                setBankLoading(true);
+                setBankMessage(null);
+                void handleLinked(result);
+              }}
+              onError={(message) => {
+                setBankMessage(message);
+                setBankLoading(false);
+              }}
+            />
+            {bankMessage ? <Text style={styles.cardMeta}>{bankMessage}</Text> : null}
+            </GlassCard>
+          </View>
+        )}
 
         <GlassCard>
           <Text style={styles.cardLabel}>Linked cards ({cards.length})</Text>
           {!loaded && <Text style={styles.cardBody}>Loading wallet…</Text>}
-          {loaded && cards.length === 0 && (
-            <Text style={styles.cardBody}>No cards linked yet. Add one below.</Text>
+          {showEmptyState && (
+            <Text style={styles.cardBody}>No cards linked yet — connect your bank above or add from the catalog.</Text>
           )}
           {cards.map((card) => (
             <View key={card.cardId} style={styles.row}>
@@ -119,6 +148,7 @@ const styles = StyleSheet.create({
   content: { padding: 20, gap: 16 },
   header: { flexDirection: 'row', alignItems: 'flex-start', gap: 14, marginBottom: 8 },
   headerText: { flex: 1 },
+  emptyTitle: { color: colors.text, fontSize: 18, fontWeight: '700', marginBottom: 8 },
   cardLabel: {
     color: colors.textAccent,
     fontSize: 12,

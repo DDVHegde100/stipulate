@@ -1,0 +1,67 @@
+name: Mobile Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+concurrency:
+  group: mobile-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  eas-production:
+    name: eas production build
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: EAS build production (iOS + Android)
+        working-directory: apps/mobile
+        run: |
+          if [ -n "${{ secrets.EXPO_TOKEN }}" ]; then
+            eas build --platform all --profile production --non-interactive --no-wait
+          else
+            echo "EXPO_TOKEN not configured — skipping EAS production build"
+          fi
+
+  eas-submit:
+    name: eas store submit
+    runs-on: ubuntu-latest
+    needs: [eas-production]
+    if: github.event_name == 'push'
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Submit latest production builds
+        working-directory: apps/mobile
+        run: |
+          if [ -n "${{ secrets.EXPO_TOKEN }}" ]; then
+            eas submit --platform ios --profile production --latest --non-interactive || true
+            eas submit --platform android --profile production --latest --non-interactive || true
+          else
+            echo "EXPO_TOKEN not configured — skipping store submit"
+          fi

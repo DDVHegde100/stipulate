@@ -63,3 +63,29 @@ export async function startConsumerCheckout(input: {
 
   return json.data;
 }
+
+export async function startConsumerPortal(input: { returnUrl: string }): Promise<{ url: string }> {
+  const user = await getStoredUser();
+  if (!user) throw new Error('Not signed in');
+
+  const response = await fetch(`${publicApiBase()}/public/billing/portal`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-User-Id': user.id,
+    },
+    credentials: 'include',
+    body: JSON.stringify(input),
+  });
+
+  const json = (await response.json()) as {
+    data: { url: string };
+    error?: { message: string };
+  };
+
+  if (!response.ok) {
+    throw new Error(json.error?.message ?? `HTTP ${response.status}`);
+  }
+
+  return json.data;
+}

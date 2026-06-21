@@ -19,7 +19,7 @@ import { PremiumGate } from '@/components/PremiumGate';
 import { SectionHeader } from '@/components/SectionHeader';
 import { useAuth } from '@/context/AuthContext';
 import { useWallet } from '@/hooks/useWallet';
-import { fetchConsumerBillingStatus, startConsumerCheckout } from '@/lib/consumer-billing';
+import { fetchConsumerBillingStatus, startConsumerCheckout, startConsumerPortal } from '@/lib/consumer-billing';
 import { downloadConsumerExport, scheduleConsumerDeletion, fetchConsumerDeletionStatus, cancelConsumerDeletion } from '@/lib/consumer-auth';
 import { listCatalogCards } from '@/lib/stipulate';
 import { syncPushToken } from '@/lib/push-notifications';
@@ -116,7 +116,9 @@ export default function ProfileScreen() {
         <GlassCard>
           <Text style={styles.cardLabel}>Billing</Text>
           {billingStatus?.isPremium ? (
-            <Text style={styles.gapDesc}>Consumer Premium is active.</Text>
+            <Text style={styles.gapDesc}>
+              Consumer Premium is active ({billingStatus.status}).
+            </Text>
           ) : (
             <Text style={styles.gapDesc}>Upgrade for full analytics and benefit alerts.</Text>
           )}
@@ -139,7 +141,23 @@ export default function ProfileScreen() {
                 {billingLoading ? 'Opening checkout…' : 'Upgrade with Stripe'}
               </Text>
             </Pressable>
-          ) : null}
+          ) : (
+            <Pressable
+              style={styles.outlineButton}
+              disabled={billingLoading}
+              onPress={() => {
+                setBillingLoading(true);
+                void startConsumerPortal({ returnUrl: 'https://stipulate.io/app/settings' })
+                  .then((session) => Linking.openURL(session.url))
+                  .catch(() => setBillingLoading(false))
+                  .finally(() => setBillingLoading(false));
+              }}
+            >
+              <Text style={styles.outlineButtonText}>
+                {billingLoading ? 'Opening portal…' : 'Manage subscription'}
+              </Text>
+            </Pressable>
+          )}
         </GlassCard>
 
         <GlassCard>
@@ -183,6 +201,15 @@ export default function ProfileScreen() {
               {exportLoading ? 'Preparing export…' : 'Download my data'}
             </Text>
           </Pressable>
+          <View style={styles.legalLinks}>
+            <Pressable onPress={() => void Linking.openURL('https://stipulate.io/privacy')}>
+              <Text style={styles.link}>Privacy policy</Text>
+            </Pressable>
+            <Text style={styles.linkSep}>·</Text>
+            <Pressable onPress={() => void Linking.openURL('https://stipulate.io/terms')}>
+              <Text style={styles.link}>Terms of service</Text>
+            </Pressable>
+          </View>
         </GlassCard>
 
         <GlassCard>
@@ -281,6 +308,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: { color: '#fff', fontWeight: '600' },
+  outlineButton: {
+    marginTop: 16,
+    borderWidth: 1,
+    borderColor: colors.glass.border,
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  outlineButtonText: { color: colors.text, fontWeight: '600' },
+  legalLinks: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 14, gap: 8 },
+  link: { color: colors.accentLight, fontSize: 14 },
+  linkSep: { color: colors.textTertiary, fontSize: 14 },
   cardLabel: {
     color: colors.textTertiary,
     fontSize: 12,

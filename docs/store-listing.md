@@ -40,6 +40,10 @@ credit card,rewards,cashback,points,travel,dining,benefits,wallet,routing
 
 https://stipulate.io/privacy
 
+## Terms of service URL
+
+https://stipulate.io/terms
+
 ## Support URL
 
 https://stipulate.io/docs

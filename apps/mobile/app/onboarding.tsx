@@ -2,6 +2,7 @@ import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -17,7 +18,7 @@ import { SectionHeader } from '@/components/SectionHeader';
 import { useAuth } from '@/context/AuthContext';
 import { useWallet } from '@/hooks/useWallet';
 import { listCatalogCards } from '@/lib/stipulate';
-import { syncPushToken } from '@/lib/push-notifications';
+import { syncPushToken, obtainPushToken } from '@/lib/push-notifications';
 import { colors } from '@/theme/colors';
 
 const STEPS = ['Welcome', 'Add cards', 'Notifications'] as const;
@@ -46,6 +47,25 @@ export default function OnboardingScreen() {
   const filtered = catalog.filter((c) =>
     c.name.toLowerCase().includes(search.toLowerCase()),
   );
+
+  async function handlePushToggle(enabled: boolean) {
+    if (!enabled) {
+      setPushNotifs(false);
+      return;
+    }
+
+    const token = await obtainPushToken();
+    if (!token) {
+      Alert.alert(
+        'Notifications disabled',
+        'Enable notifications in Settings to receive benefit change alerts on this device.',
+      );
+      setPushNotifs(false);
+      return;
+    }
+
+    setPushNotifs(true);
+  }
 
   async function finish() {
     if (!user) return;
@@ -130,7 +150,11 @@ export default function OnboardingScreen() {
             </View>
             <View style={styles.switchRow}>
               <Text style={styles.body}>Push benefit change alerts</Text>
-              <Switch testID="onboarding-push-toggle" value={pushNotifs} onValueChange={setPushNotifs} />
+              <Switch
+                testID="onboarding-push-toggle"
+                value={pushNotifs}
+                onValueChange={(value) => void handlePushToggle(value)}
+              />
             </View>
             <Pressable style={styles.button} testID="onboarding-finish" onPress={() => void finish()} disabled={loading}>
               {loading ? (
