@@ -41,6 +41,9 @@ pnpm-debug.log*
 coverage/
 .nyc_output/
 *.lcov
+test-results/
+playwright-report/
+blob-report/
 
 # Docker
 docker/data/

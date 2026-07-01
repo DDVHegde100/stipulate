@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-if grep -q '^Co-authored-by: Cursor <cursoragent@cursor.com>$' "$1"; then
+if grep -Eiq '^Co-authored-by: Cursor <cursoragent@cursor.com>$' "$1"; then
   echo "error: Co-authored-by Cursor trailers are not permitted in this repository" >&2
   exit 1
 fi

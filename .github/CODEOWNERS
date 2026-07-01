@@ -1,0 +1,11 @@
+# Stipulate code owners
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+* @DDVHegde100
+
+/apps/api/ @DDVHegde100
+/apps/web/ @DDVHegde100
+/apps/mobile/ @DDVHegde100
+/packages/ @DDVHegde100
+/.github/ @DDVHegde100
+/docs/ @DDVHegde100
