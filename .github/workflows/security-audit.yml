@@ -1,0 +1,38 @@
+name: Security audit
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  push:
+    branches: [main]
+    paths:
+      - 'pnpm-lock.yaml'
+      - 'package.json'
+      - 'apps/**/package.json'
+      - 'packages/**/package.json'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: pnpm audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Audit production dependencies
+        run: pnpm audit --audit-level=high --prod
+        continue-on-error: false

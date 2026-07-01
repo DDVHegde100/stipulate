@@ -29,6 +29,7 @@
     "docker:logs": "docker compose logs -f",
     "db:migrate": "turbo run db:migrate --filter=@stipulate/api",
     "catalog:validate": "pnpm --filter @stipulate/schema catalog:validate",
+    "commit": "sh scripts/stipulate-commit.sh",
     "prepare": "husky || true"
   },
   "devDependencies": {

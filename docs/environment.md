@@ -57,6 +57,8 @@ FEATURE_PROXY_PAY=false
 - [ ] Set up CloudWatch / Datadog alerts on p99 latency > 20ms
 - [ ] Enable Stripe live mode webhooks
 - [ ] Configure WAF on API gateway
+- [ ] Verify `pnpm audit --audit-level=high --prod` passes
+- [ ] Confirm `VERSION.json` matches deployed tag
 
 ## Secret rotation
 

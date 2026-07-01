@@ -1,9 +1,13 @@
 import Constants from 'expo-constants';
 
+import { assertProductionApiUrl } from './production-guard';
+
 const extra = Constants.expoConfig?.extra as { apiUrl?: string; apiKey?: string } | undefined;
 
 const API_BASE = extra?.apiUrl ?? 'http://localhost:3000/v1';
 const API_KEY = extra?.apiKey ?? 'stip_dev_local_key_change_in_production';
+
+assertProductionApiUrl(API_BASE);
 
 function apiHeaders(consumerUserId?: string): Record<string, string> {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };

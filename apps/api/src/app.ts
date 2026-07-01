@@ -19,6 +19,7 @@ import { waitlistHandler } from './routes/public/waitlist.js';
 import { consumerAuthHandler } from './routes/public/auth.js';
 import { consumerBillingHandler } from './routes/public/billing.js';
 import { captureException } from './lib/observability.js';
+import { bodyLimit } from './middleware/body-limit.js';
 
 export type AppVariables = {
   requestId: string;
@@ -46,6 +47,7 @@ export function createApp(options: CreateAppOptions = {}): Hono<AppBindings> {
 
   app.use('*', requestId);
   app.use('*', timing);
+  app.use('*', bodyLimit);
   app.use('*', secureHeaders());
   app.use(
     '*',

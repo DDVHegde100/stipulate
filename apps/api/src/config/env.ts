@@ -10,6 +10,10 @@ const envSchema = z
       .string()
       .url()
       .default('postgresql://stipulate:stipulate@localhost:5432/stipulate'),
+    DATABASE_SSL: z
+      .string()
+      .optional()
+      .transform((value) => value === 'true' || value === '1'),
     REDIS_URL: z.string().url().default('redis://localhost:6379'),
     API_VERSION: z
       .string()
@@ -70,6 +74,46 @@ const envSchema = z
         message: 'API_KEY is required when NODE_ENV is production',
         path: ['API_KEY'],
       });
+    }
+
+    if (data.NODE_ENV === 'production' && data.CORS_ORIGINS.includes('*')) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'CORS_ORIGINS must not include wildcard in production',
+        path: ['CORS_ORIGINS'],
+      });
+    }
+
+    if (data.NODE_ENV === 'production') {
+      const dbUrl = data.DATABASE_URL;
+      const sslEnabled =
+        data.DATABASE_SSL === true ||
+        dbUrl.includes('sslmode=require') ||
+        dbUrl.includes('ssl=true');
+      if (!sslEnabled) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message:
+            'Production DATABASE_URL must use SSL (sslmode=require) or DATABASE_SSL=true',
+          path: ['DATABASE_URL'],
+        });
+      }
+
+      if (!data.SENTRY_DSN) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'SENTRY_DSN is required when NODE_ENV is production',
+          path: ['SENTRY_DSN'],
+        });
+      }
+
+      if (data.STRIPE_SECRET_KEY && !data.STRIPE_WEBHOOK_SECRET) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'STRIPE_WEBHOOK_SECRET is required when STRIPE_SECRET_KEY is set',
+          path: ['STRIPE_WEBHOOK_SECRET'],
+        });
+      }
     }
   });
 

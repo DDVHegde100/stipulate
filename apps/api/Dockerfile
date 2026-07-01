@@ -22,13 +22,16 @@ RUN pnpm --filter @stipulate/api build
 FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
-RUN addgroup -S stipulate && adduser -S stipulate -G stipulate
+RUN apk add --no-cache wget \
+  && addgroup -S stipulate \
+  && adduser -S stipulate -G stipulate
 COPY --from=build /app/apps/api/dist ./dist
 COPY --from=build /app/apps/api/package.json ./package.json
 COPY --from=build /app/apps/api/migrations ./migrations
 COPY --from=build /app/node_modules ./node_modules
 USER stipulate
 EXPOSE 3000
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD wget -qO- http://127.0.0.1:3000/health/live || exit 1
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget -qO- http://127.0.0.1:3000/health/ready || exit 1
+STOPSIGNAL SIGTERM
 CMD ["node", "dist/index.js"]

@@ -2,6 +2,8 @@
 
 Use this checklist before pointing production traffic at the API or marketing site.
 
+See also [ARCHITECTURE.md](./ARCHITECTURE.md) for system topology and [SECURITY.md](../SECURITY.md) for vulnerability reporting.
+
 ## Required infrastructure
 
 - [ ] PostgreSQL 16+ with automated backups
@@ -36,6 +38,12 @@ Copy `.env.production.example` to your secret manager. Never commit real values.
 | `ADMIN_API_KEY` | Admin | Internal admin routes |
 
 ## Pre-deploy steps
+
+Verify `VERSION.json` matches the release tag and run the security audit:
+
+```bash
+pnpm audit --audit-level=high --prod
+```
 
 ```bash
 pnpm install --frozen-lockfile

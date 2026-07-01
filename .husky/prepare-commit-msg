@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+# Strip automated co-authorship trailers before the commit is finalized.
+if [ -n "${1:-}" ] && [ -f "$1" ]; then
+  if sed --version 2>/dev/null | grep -q GNU; then
+    sed -i '/^Co-authored-by: Cursor <cursoragent@cursor.com>$/d' "$1"
+  else
+    sed -i '' '/^Co-authored-by: Cursor <cursoragent@cursor.com>$/d' "$1"
+  fi
+fi

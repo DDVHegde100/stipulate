@@ -1,0 +1,12 @@
+{
+  "version": "0.1.0",
+  "releaseDate": "2026-06-26",
+  "apiVersion": "v1",
+  "surfaces": {
+    "api": "https://api.stipulate.io",
+    "web": "https://stipulate.io",
+    "docs": "https://docs.stipulate.io"
+  },
+  "minimumNode": "20.0.0",
+  "minimumPnpm": "9.0.0"
+}
