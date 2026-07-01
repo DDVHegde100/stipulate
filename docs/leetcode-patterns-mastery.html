@@ -1,0 +1,2195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LeetCode Pattern Mastery — Complete Study Guide</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a2332;
+      --surface2: #243044;
+      --text: #e7ecf3;
+      --muted: #8b9cb3;
+      --accent: #6cb6ff;
+      --accent2: #3fb950;
+      --warn: #f0883e;
+      --border: #30363d;
+      --code-bg: #0d1117;
+      --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      display: flex;
+      min-height: 100vh;
+    }
+    nav.sidebar {
+      position: fixed;
+      left: 0; top: 0; bottom: 0;
+      width: 280px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 1.5rem 1rem;
+      z-index: 100;
+    }
+    nav.sidebar h2 { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    nav.sidebar a {
+      display: block;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.35rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      margin-bottom: 2px;
+    }
+    nav.sidebar a:hover, nav.sidebar a.active { background: var(--surface2); color: var(--accent); }
+    main {
+      margin-left: 280px;
+      max-width: 920px;
+      padding: 2.5rem 3rem 6rem;
+      flex: 1;
+    }
+    h1 { font-size: 2.2rem; margin-bottom: 0.5rem; color: #fff; }
+    .subtitle { color: var(--muted); font-size: 1.1rem; margin-bottom: 2.5rem; }
+    section.pattern {
+      margin-bottom: 4rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid var(--border);
+    }
+    section.pattern h2 {
+      font-size: 1.75rem;
+      color: var(--accent);
+      margin-bottom: 0.25rem;
+      scroll-margin-top: 1.5rem;
+    }
+    section.pattern .pattern-num { color: var(--muted); font-size: 0.9rem; font-weight: normal; }
+    h3 { font-size: 1.2rem; color: #fff; margin: 1.75rem 0 0.75rem; }
+    h4 { font-size: 1rem; color: var(--accent2); margin: 1.25rem 0 0.5rem; }
+    p { margin-bottom: 1rem; }
+    ul, ol { margin: 0 0 1rem 1.5rem; }
+    li { margin-bottom: 0.4rem; }
+    .signal-box, .complexity-box, .why-box, .pitfall-box {
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0 1.25rem;
+      border-left: 4px solid;
+    }
+    .signal-box { background: rgba(108,182,255,0.08); border-color: var(--accent); }
+    .complexity-box { background: rgba(63,185,80,0.08); border-color: var(--accent2); }
+    .why-box { background: rgba(240,136,62,0.08); border-color: var(--warn); }
+    .pitfall-box { background: rgba(248,81,73,0.08); border-color: #f85149; }
+    .signal-box strong, .complexity-box strong, .why-box strong, .pitfall-box strong { display: block; margin-bottom: 0.35rem; }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 0.75rem 0 1.25rem;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      line-height: 1.55;
+    }
+    code { font-family: var(--mono); font-size: 0.88em; }
+    p code, li code { background: var(--surface2); padding: 0.15em 0.4em; border-radius: 4px; }
+    .template-label {
+      display: inline-block;
+      background: var(--surface2);
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .practice-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin: 0.75rem 0;
+    }
+    .practice-card h5 { color: #fff; font-size: 1rem; margin-bottom: 0.35rem; }
+    .practice-card .difficulty { font-size: 0.8rem; color: var(--warn); }
+    .practice-card .hint { color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .practice-card details { margin-top: 0.5rem; }
+    .practice-card summary { cursor: pointer; color: var(--accent); font-size: 0.9rem; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.75rem; text-align: left; }
+    th { background: var(--surface2); color: var(--accent); }
+    .memory-box {
+      background: rgba(188,140,255,0.1);
+      border-left: 4px solid #bc8cff;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+    }
+    .walkthrough {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    .walkthrough ol { margin-left: 1.25rem; }
+    @media (max-width: 900px) {
+      nav.sidebar { display: none; }
+      main { margin-left: 0; padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<nav class="sidebar">
+  <h2>Patterns</h2>
+  <a href="#intro">Introduction</a>
+  <a href="#hash-map">1. Hash Map / Set</a>
+  <a href="#two-pointers">2. Two Pointers</a>
+  <a href="#sliding-window">3. Sliding Window</a>
+  <a href="#prefix-sum">4. Prefix Sum</a>
+  <a href="#binary-search">5. Binary Search</a>
+  <a href="#stack">6. Stack</a>
+  <a href="#heap">7. Heap / PQ</a>
+  <a href="#bfs-dfs">8. BFS / DFS</a>
+  <a href="#backtracking">9. Backtracking</a>
+  <a href="#union-find">10. Union-Find</a>
+  <a href="#topo-sort">11. Topological Sort</a>
+  <a href="#trie">12. Trie</a>
+  <a href="#intervals">13. Intervals</a>
+  <a href="#greedy">14. Greedy</a>
+  <a href="#dp">15. Dynamic Programming</a>
+  <a href="#bit-manipulation">16. Bit Manipulation</a>
+  <a href="#fast-slow">17. Fast & Slow Pointers</a>
+  <a href="#trees-bst">18. Trees & BST</a>
+  <a href="#dijkstra">19. Shortest Path</a>
+  <a href="#design">20. Design / Simulation</a>
+  <a href="#appendix">Appendix</a>
+</nav>
+
+<main>
+  <section id="intro">
+    <h1>LeetCode Pattern Mastery</h1>
+    <p class="subtitle">A professor-style guide to the 20 patterns that cover most medium problems. Memorize templates, understand the DSA, recognize signals.</p>
+    <h3>How to use this guide</h3>
+    <ol>
+      <li><strong>Read the "Recognition Signals"</strong> first — this is what you scan for in an interview.</li>
+      <li><strong>Memorize the templates</strong> by closing the page and rewriting from memory daily.</li>
+      <li><strong>Read "Why This Works"</strong> — understanding beats rote memorization for variations.</li>
+      <li><strong>Do the 4 practice problems</strong> without looking at templates. Only peek after 25+ minutes stuck.</li>
+      <li><strong>Spaced repetition:</strong> revisit each pattern on days 1, 3, 7, 14.</li>
+    </ol>
+    <p>All code is in <strong>Python 3</strong> (LeetCode's most popular language). Templates use clear variable names you can adapt.</p>
+  </section>
+
+
+  <section class="pattern" id="hash-map">
+    <h2><span class="pattern-num">Pattern 1</span><br>Hash Map / Set</h2>
+    <h3>Recognition Signals — "When do I use this?"</h3>
+    <div class="signal-box"><strong>Look for these clues:</strong><ul><li>Need O(1) lookup: "have I seen this value/index before?"</li><li>Count frequencies of elements or characters</li><li>Group or bucket items by a derived key (sorted string, modulo, etc.)</li><li>Find complement: target - current, or pair that satisfies a condition</li><li>Detect duplicates or check membership in O(1) per query</li></ul></div>
+    <h3>Underlying Data Structure & Theory</h3>
+    <p>A <strong>hash map</strong> (dict in Python) stores key→value pairs with average O(1) insert and lookup via a hash function + collision handling (chaining or open addressing). A <strong>hash set</strong> is a map with no meaningful value — pure membership testing.</p>
+    <p><strong>How hashing works:</strong> <code>hash(key) % bucket_count</code> gives a bucket index. Collisions occur when two keys land in the same bucket; Python resolves via open addressing. Average case O(1); worst case O(n) if all keys collide (rare with good hash).</p>
+    <p><strong>Core operations to memorize:</strong> <code>dict.get(k, default)</code>, <code>dict.setdefault(k, default)</code>, <code>collections.Counter</code>, <code>collections.defaultdict</code>.</p>
+    <h3>Why This Approach Works (and Beats Alternatives)</h3>
+    <div class="why-box"><p>The brute force for "find two elements satisfying X" is O(n²) checking all pairs. A hash map reduces this to O(n) by storing what you've already seen and asking "does the complement exist?" in O(1) per step.</p>
+    <p>Compared to sorting first (O(n log n)), hashing wins when you need <em>exact</em> value lookup, not order. Sorting wins when the problem needs two-pointer on sorted data. Choose hash map when the question is about existence, frequency, or grouping — not ordering.</p></div>
+    <h3>Time & Space Complexity</h3>
+    <div class="complexity-box"><p><strong>Typical:</strong> O(n) time, O(n) space for single-pass complement/frequency patterns.</p>
+    <p><strong>Counter:</strong> O(n) to build, O(1) per query.</p>
+    <p><strong>Trade-off:</strong> You pay O(n) extra space to buy O(n) time improvement over brute force.</p></div>
+    <h3>Memorizable Templates</h3>
+    <div class="template-label">Template A — Complement / Two Sum pattern</div><pre><code>def two_sum(nums, target):
+    seen = {}  # value -> index
+    for i, x in enumerate(nums):
+        need = target - x
+        if need in seen:
+            return [seen[need], i]
+        seen[x] = i
+    return []</code></pre><div class="template-label">Template B — Frequency counting</div><pre><code>from collections import Counter
+
+def can_construct(ransomNote, magazine):
+    freq = Counter(magazine)
+    for ch in ransomNote:
+        if freq[ch] <= 0:
+            return False
+        freq[ch] -= 1
+    return True</code></pre><div class="template-label">Template C — Grouping by canonical key</div><pre><code>from collections import defaultdict
+
+def group_anagrams(strs):
+    groups = defaultdict(list)
+    for s in strs:
+        key = tuple(sorted(s))  # or count signature: tuple(Counter(s).values())
+        groups[key].append(s)
+    return list(groups.values())</code></pre><div class="template-label">Template D — Hash set for duplicate / cycle detection in sequence</div><pre><code>def contains_duplicate(nums):
+    seen = set()
+    for x in nums:
+        if x in seen:
+            return True
+        seen.add(x)
+    return False</code></pre><div class="template-label">Template E — Prefix sum + hash map (subarray sum K)</div><pre><code>def subarray_sum(nums, k):
+    count = 0
+    prefix = 0
+    freq = {0: 1}  # prefix_sum -> count
+    for x in nums:
+        prefix += x
+        count += freq.get(prefix - k, 0)
+        freq[prefix] = freq.get(prefix, 0) + 1
+    return count</code></pre>
+    <h3>Common Variations & How to Adapt</h3>
+    <ul>
+    <li><strong>Complement:</strong> Store value→index when you need to return indices; store value→bool when you only need existence.</li>
+    <li><strong>Grouping key:</strong> Anagrams → sorted tuple or 26-char count tuple. Coordinates → (x//k, y//k).</li>
+    <li><strong>Prefix + map:</strong> When subarray sum/product condition → store running aggregate, query (current - k).</li>
+    <li><strong>Two maps:</strong> Compare frequency of two strings char-by-char.</li>
+    </ul>
+    <h3>Pitfalls & Edge Cases</h3>
+    <div class="pitfall-box"><ul><li>Forgetting to initialize <code>{0: 1}</code> in prefix-sum counting problems.</li><li>Using list as dict key (must use tuple).</li><li>Off-by-one: storing index after vs before check matters for "use each element once" problems.</li><li>Negative numbers in prefix sum — hash map still works; don't assume non-negative.</li></ul></div>
+    <h3>Where You'll See This on LeetCode</h3>
+    <p>Tagged <em>Array, String, Hash Table</em>. Appears in ~25% of all LeetCode mediums. Foundation for sliding window + prefix sum hybrids.</p>
+    <h3>Practice Problems — Prove You Internalized This Pattern</h3>
+    <p>Do these <strong>without</strong> looking at templates first. Adapt the memorized skeleton to each twist.</p>
+    <div class="practice-card">
+      <h5>1. Two Sum <span class="difficulty">(Easy)</span></h5>
+      <p>Return indices of two numbers that add to target.</p>
+      <p class="hint"><strong>Hint:</strong> As you scan, ask: have I seen (target - nums[i])?</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template A verbatim.</p></details>
+    </div><div class="practice-card">
+      <h5>49. Group Anagrams <span class="difficulty">(Medium)</span></h5>
+      <p>Group strings that are anagrams.</p>
+      <p class="hint"><strong>Hint:</strong> What canonical key represents an anagram class?</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template C with sorted tuple or char-count key.</p></details>
+    </div><div class="practice-card">
+      <h5>128. Longest Consecutive Sequence <span class="difficulty">(Medium)</span></h5>
+      <p>Longest consecutive elements sequence in unsorted array. O(n) required.</p>
+      <p class="hint"><strong>Hint:</strong> Put all nums in a set. Only start counting from sequence beginnings.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Set for O(1) lookup; start DFS/count only if x-1 not in set.</p></details>
+    </div><div class="practice-card">
+      <h5>560. Subarray Sum Equals K <span class="difficulty">(Medium)</span></h5>
+      <p>Count subarrays with sum exactly k (includes negatives).</p>
+      <p class="hint"><strong>Hint:</strong> Prefix sum + how many earlier prefixes equal (current - k).</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template E — classic prefix+hash map.</p></details>
+    </div>
+  </section>
+
+  <section class="pattern" id="two-pointers">
+    <h2><span class="pattern-num">Pattern 2</span><br>Two Pointers</h2>
+    <h3>Recognition Signals — "When do I use this?"</h3>
+    <div class="signal-box"><strong>Look for these clues:</strong><ul><li>Sorted array — find pair/triplet with sum condition</li><li>Compare elements from both ends (palindrome, max area)</li><li>Merge two sorted arrays/lists in-place or into result</li><li>Remove duplicates in-place from sorted array</li><li>Partition array around a pivot (Dutch flag)</li></ul></div>
+    <h3>Underlying Data Structure & Theory</h3>
+    <p>Two pointers maintain indices <code>left</code> and <code>right</code> (or <code>slow</code> and <code>fast</code>) and move them based on a rule, often eliminating O(n²) nested loops.</p>
+    <p><strong>Types:</strong></p>
+    <ul>
+    <li><strong>Opposite ends (converging):</strong> Start left=0, right=n-1, move inward. Requires sorted order or monotonic structure.</li>
+    <li><strong>Same direction (writer/reader):</strong> Slow tracks write position, fast scans. Used for in-place removal.</li>
+    <li><strong>Fixed offset:</strong> Two pointers separated by k or on two different arrays.</li>
+    </ul>
+    <h3>Why This Approach Works (and Beats Alternatives)</h3>
+    <div class="why-box"><p>On a sorted array, if sum is too small, increment left (need bigger); if too big, decrement right. Each pointer moves at most n times → O(n) total. Without sorting, you'd check O(n²) pairs.</p>
+    <p>Two pointers exploit <strong>monotonicity</strong>: as you move a pointer, something only gets bigger or smaller, so you never need to revisit rejected pairs.</p></div>
+    <h3>Time & Space Complexity</h3>
+    <div class="complexity-box"><p><strong>Opposite ends on sorted array:</strong> O(n) after O(n log n) sort, or O(n) if already sorted. Space O(1) excluding output.</p>
+    <p><strong>Same-direction:</strong> O(n) time, O(1) space.</p></div>
+    <h3>Memorizable Templates</h3>
+    <div class="template-label">Template A — Opposite ends (pair sum on sorted array)</div><pre><code>def two_sum_sorted(nums, target):
+    left, right = 0, len(nums) - 1
+    while left < right:
+        s = nums[left] + nums[right]
+        if s == target:
+            return [left + 1, right + 1]
+        elif s < target:
+            left += 1
+        else:
+            right -= 1
+    return []</code></pre><div class="template-label">Template B — 3Sum (sort + fix one + two pointers)</div><pre><code>def three_sum(nums):
+    nums.sort()
+    res = []
+    for i in range(len(nums) - 2):
+        if i > 0 and nums[i] == nums[i-1]:
+            continue
+        left, right = i + 1, len(nums) - 1
+        while left < right:
+            s = nums[i] + nums[left] + nums[right]
+            if s == 0:
+                res.append([nums[i], nums[left], nums[right]])
+                left += 1
+                right -= 1
+                while left < right and nums[left] == nums[left-1]:
+                    left += 1
+            elif s < 0:
+                left += 1
+            else:
+                right -= 1
+    return res</code></pre><div class="template-label">Template C — In-place duplicate removal (slow/fast)</div><pre><code>def remove_duplicates(nums):
+    if not nums:
+        return 0
+    write = 1
+    for read in range(1, len(nums)):
+        if nums[read] != nums[read - 1]:
+            nums[write] = nums[read]
+            write += 1
+    return write</code></pre><div class="template-label">Template D — Container / max area (move shorter side)</div><pre><code>def max_area(height):
+    left, right = 0, len(height) - 1
+    best = 0
+    while left < right:
+        w = right - left
+        h = min(height[left], height[right])
+        best = max(best, w * h)
+        if height[left] < height[right]:
+            left += 1
+        else:
+            right -= 1
+    return best</code></pre><div class="template-label">Template E — Valid palindrome (skip non-alnum)</div><pre><code>def is_palindrome(s):
+    left, right = 0, len(s) - 1
+    while left < right:
+        while left < right and not s[left].isalnum():
+            left += 1
+        while left < right and not s[right].isalnum():
+            right -= 1
+        if s[left].lower() != s[right].lower():
+            return False
+        left += 1
+        right -= 1
+    return True</code></pre>
+    <h3>Common Variations & How to Adapt</h3>
+    <ul>
+    <li><strong>3Sum/4Sum:</strong> Fix outer index(es), two-pointer inner. Always skip duplicates after finding answer.</li>
+    <li><strong>Merge sorted arrays:</strong> Pointer per array, compare and advance smaller.</li>
+    <li><strong>Trapping rain water:</strong> Two pointers with left_max/right_max — move shorter side.</li>
+    </ul>
+    <h3>Pitfalls & Edge Cases</h3>
+    <div class="pitfall-box"><ul><li>Forgetting to sort before opposite-end technique.</li><li>Not skipping duplicate values in k-sum problems.</li><li>Moving wrong pointer in container problem — always move the shorter height.</li><li>Infinite loop: ensure left/right always advance.</li></ul></div>
+    <h3>Where You'll See This on LeetCode</h3>
+    <p>Array, Two Pointers tag. Classic interview pattern for sorted-array pair problems and in-place modification.</p>
+    <h3>Practice Problems — Prove You Internalized This Pattern</h3>
+    <p>Do these <strong>without</strong> looking at templates first. Adapt the memorized skeleton to each twist.</p>
+    <div class="practice-card">
+      <h5>125. Valid Palindrome <span class="difficulty">(Easy)</span></h5>
+      <p>Check if string is palindrome after removing non-alphanumeric.</p>
+      <p class="hint"><strong>Hint:</strong> Opposite ends, skip junk chars.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template E.</p></details>
+    </div><div class="practice-card">
+      <h5>15. 3Sum <span class="difficulty">(Medium)</span></h5>
+      <p>All unique triplets summing to zero.</p>
+      <p class="hint"><strong>Hint:</strong> Sort, fix i, two-pointer for complement.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template B with duplicate skip.</p></details>
+    </div><div class="practice-card">
+      <h5>11. Container With Most Water <span class="difficulty">(Medium)</span></h5>
+      <p>Max area between two vertical lines.</p>
+      <p class="hint"><strong>Hint:</strong> Greedy: moving shorter line is the only move that can improve.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template D.</p></details>
+    </div><div class="practice-card">
+      <h5>42. Trapping Rain Water <span class="difficulty">(Hard)</span></h5>
+      <p>Total water trapped between bars.</p>
+      <p class="hint"><strong>Hint:</strong> Two pointers + track max from each side; process shorter side.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Variant of converging pointers with running maxes.</p></details>
+    </div>
+  </section>
+
+  <section class="pattern" id="sliding-window">
+    <h2><span class="pattern-num">Pattern 3</span><br>Sliding Window</h2>
+    <h3>Recognition Signals — "When do I use this?"</h3>
+    <div class="signal-box"><strong>Look for these clues:</strong><ul><li>Contiguous subarray/substring optimization or validity</li><li>"Longest/shortest subarray where condition holds"</li><li>At most K distinct / exactly K distinct / all unique characters</li><li>Fixed-size window of size K</li><li>Problem mentions "consecutive" elements or substring</li></ul></div>
+    <h3>Underlying Data Structure & Theory</h3>
+    <p>Sliding window maintains a <strong>[left, right]</strong> range representing a contiguous segment. Expand <code>right</code> to grow, shrink <code>left</code> when invalid. Each element enters and leaves at most once → O(n).</p>
+    <p><strong>Fixed window:</strong> Size k always; slide by incrementing both pointers together.</p>
+    <p><strong>Variable window:</strong> Expand until invalid, then shrink until valid again. Track best during valid states.</p>
+    <p><strong>State tracking:</strong> Use dict/Counter for char frequencies, or integer counters for "number of violations."</p>
+    <h3>Why This Approach Works (and Beats Alternatives)</h3>
+    <div class="why-box"><p>Brute force checks all O(n²) subarrays. Sliding window amortizes work because when you move left forward, you don't recompute the whole window — you update incrementally.</p>
+    <p>This requires the validity condition to be <strong>monotonic</strong>: if window [l,r] is invalid, [l,r+1] might become valid but [l-1,r] won't help — so you never move left backward. That's what makes the technique O(n).</p></div>
+    <h3>Time & Space Complexity</h3>
+    <div class="complexity-box"><p><strong>Variable/fixed window:</strong> O(n) time — each index visited at most twice. O(k) or O(alphabet) space for frequency map.</p></div>
+    <h3>Memorizable Templates</h3>
+    <div class="template-label">Template A — Variable window (longest valid substring)</div><pre><code>def length_of_longest_substring(s):
+    last = {}  # char -> index
+    left = 0
+    best = 0
+    for right, ch in enumerate(s):
+        if ch in last and last[ch] >= left:
+            left = last[ch] + 1
+        last[ch] = right
+        best = max(best, right - left + 1)
+    return best</code></pre><div class="template-label">Template B — Shrink while invalid (at most K distinct)</div><pre><code>def longest_k_distinct(s, k):
+    freq = {}
+    left = 0
+    best = 0
+    for right, ch in enumerate(s):
+        freq[ch] = freq.get(ch, 0) + 1
+        while len(freq) > k:
+            freq[s[left]] -= 1
+            if freq[s[left]] == 0:
+                del freq[s[left]]
+            left += 1
+        best = max(best, right - left + 1)
+    return best</code></pre><div class="template-label">Template C — Fixed window size k</div><pre><code>def max_sum_subarray_k(nums, k):
+    window_sum = sum(nums[:k])
+    best = window_sum
+    for right in range(k, len(nums)):
+        window_sum += nums[right] - nums[right - k]
+        best = max(best, window_sum)
+    return best</code></pre><div class="template-label">Template D — Minimum window substring</div><pre><code>from collections import Counter
+
+def min_window(s, t):
+    need = Counter(t)
+    missing = len(t)
+    left = 0
+    best = (0, float('inf'))
+    for right, ch in enumerate(s):
+        if ch in need:
+            if need[ch] > 0:
+                missing -= 1
+            need[ch] -= 1
+        while missing == 0:
+            if right - left + 1 < best[1] - best[0] + 1:
+                best = (left, right)
+            if s[left] in need:
+                need[s[left]] += 1
+                if need[s[left]] > 0:
+                    missing += 1
+            left += 1
+    l, r = best
+    return "" if r == float('inf') else s[l:r+1]</code></pre><div class="template-label">Template E — Sliding window on counts (permutation in string)</div><pre><code>def check_inclusion(s1, s2):
+    if len(s1) > len(s2):
+        return False
+    need = [0] * 26
+    have = [0] * 26
+    for c in s1:
+        need[ord(c) - ord('a')] += 1
+    k = len(s1)
+    for i, c in enumerate(s2):
+        have[ord(c) - ord('a')] += 1
+        if i >= k:
+            have[ord(s2[i - k]) - ord('a')] -= 1
+        if have == need:
+            return True
+    return False</code></pre>
+    <h3>Common Variations & How to Adapt</h3>
+    <ul><li><strong>Longest vs shortest:</strong> Update best on valid (longest) or when becoming invalid after valid (shortest).</li>
+    <li><strong>Exactly K:</strong> atMost(K) - atMost(K-1).</li>
+    <li><strong>Numeric window:</strong> Same templates on arrays (max sum, binary subarrays).</li></ul>
+    <h3>Pitfalls & Edge Cases</h3>
+    <div class="pitfall-box"><ul><li>Using sliding window when elements aren't contiguous.</li><li>Forgetting to shrink — infinite expand.</li><li>Off-by-one on window size.</li><li>Not resetting state when left moves.</li></ul></div>
+    <h3>Where You'll See This on LeetCode</h3>
+    <p>String/Array — substring/subarray problems. Often combined with hash map for character counts.</p>
+    <h3>Practice Problems — Prove You Internalized This Pattern</h3>
+    <p>Do these <strong>without</strong> looking at templates first. Adapt the memorized skeleton to each twist.</p>
+    <div class="practice-card">
+      <h5>3. Longest Substring Without Repeating Characters <span class="difficulty">(Medium)</span></h5>
+      <p>Length of longest substring with all unique chars.</p>
+      <p class="hint"><strong>Hint:</strong> Jump left past last occurrence of current char.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template A.</p></details>
+    </div><div class="practice-card">
+      <h5>76. Minimum Window Substring <span class="difficulty">(Hard)</span></h5>
+      <p>Smallest substring of s containing all chars of t.</p>
+      <p class="hint"><strong>Hint:</strong> Expand until valid, shrink to minimize.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template D.</p></details>
+    </div><div class="practice-card">
+      <h5>567. Permutation in String <span class="difficulty">(Medium)</span></h5>
+      <p>Does s2 contain a permutation of s1?</p>
+      <p class="hint"><strong>Hint:</strong> Fixed window of len(s1), compare frequency arrays.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template E.</p></details>
+    </div><div class="practice-card">
+      <h5>904. Fruit Into Baskets <span class="difficulty">(Medium)</span></h5>
+      <p>Longest subarray with at most 2 distinct values.</p>
+      <p class="hint"><strong>Hint:</strong> At-most-K distinct with K=2.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template B.</p></details>
+    </div>
+  </section>
+
+  <section class="pattern" id="prefix-sum">
+    <h2><span class="pattern-num">Pattern 4</span><br>Prefix Sum</h2>
+    <h3>Recognition Signals — "When do I use this?"</h3>
+    <div class="signal-box"><strong>Look for these clues:</strong><ul><li>Range sum query: sum(i, j) many times</li><li>Subarray sum equals K (count or existence)</li><li>Equilibrium index / split point</li><li>2D matrix region sum</li><li>Transform subarray condition into prefix difference</li></ul></div>
+    <h3>Underlying Data Structure & Theory</h3>
+    <p><strong>Prefix sum</strong> array <code>P</code> where <code>P[i] = nums[0] + ... + nums[i]</code>. Range sum <code>sum(l, r) = P[r] - P[l-1]</code> in O(1).</p>
+    <p><strong>Key insight:</strong> Sum of subarray (i, j] = prefix[j] - prefix[i]. If prefix[j] - prefix[i] = k, then prefix[i] = prefix[j] - k.</p>
+    <p><strong>2D prefix:</strong> <code>P[r][c] = sum of rectangle (0,0) to (r,c)</code>. Rectangle query in O(1) using inclusion-exclusion.</p>
+    <h3>Why This Approach Works (and Beats Alternatives)</h3>
+    <div class="why-box"><p>Naive range sum is O(n) per query. Prefix sum preprocesses in O(n) for O(1) queries — essential when queries are many.</p>
+    <p>Combined with hash map, converts "count subarrays with sum k" from O(n²) to O(n) because each prefix has one value and you count matching earlier prefixes.</p></div>
+    <h3>Time & Space Complexity</h3>
+    <div class="complexity-box"><p><strong>Build prefix:</strong> O(n) time, O(n) space.</p>
+    <p><strong>Query:</strong> O(1).</p>
+    <p><strong>Subarray sum K with hash map:</strong> O(n) time, O(n) space.</p></div>
+    <h3>Memorizable Templates</h3>
+    <div class="template-label">Template A — 1D prefix sum build + range query</div><pre><code>def build_prefix(nums):
+    P = [0]
+    for x in nums:
+        P.append(P[-1] + x)
+    return P
+
+def range_sum(P, l, r):  # inclusive l, r — nums indices
+    return P[r + 1] - P[l]</code></pre><div class="template-label">Template B — Subarray sum equals K (count)</div><pre><code>def subarray_sum(nums, k):
+    count = 0
+    prefix = 0
+    freq = {0: 1}
+    for x in nums:
+        prefix += x
+        count += freq.get(prefix - k, 0)
+        freq[prefix] = freq.get(prefix, 0) + 1
+    return count</code></pre><div class="template-label">Template C — Product except self (prefix + suffix)</div><pre><code>def product_except_self(nums):
+    n = len(nums)
+    out = [1] * n
+    prefix = 1
+    for i in range(n):
+        out[i] = prefix
+        prefix *= nums[i]
+    suffix = 1
+    for i in range(n - 1, -1, -1):
+        out[i] *= suffix
+        suffix *= nums[i]
+    return out</code></pre><div class="template-label">Template D — 2D prefix sum</div><pre><code>def build_2d_prefix(matrix):
+    if not matrix:
+        return [[]]
+    R, C = len(matrix), len(matrix[0])
+    P = [[0] * (C + 1) for _ in range(R + 1)]
+    for r in range(R):
+        for c in range(C):
+            P[r+1][c+1] = matrix[r][c] + P[r][c+1] + P[r+1][c] - P[r][c]
+    return P
+
+def rect_sum(P, r1, c1, r2, c2):  # inclusive corners
+    return P[r2+1][c2+1] - P[r1][c2+1] - P[r2+1][c1] + P[r1][c1]</code></pre>
+    <h3>Common Variations & How to Adapt</h3>
+    <ul><li><strong>Prefix XOR:</strong> Same logic for subarray XOR — use hash map with prefix XOR.</li>
+    <li><strong>Modulo prefix:</strong> (prefix[j] - prefix[i]) % k == 0 ↔ same remainder mod k.</li>
+    <li><strong>Difference array:</strong> Inverse of prefix sum for range updates.</li></ul>
+    <h3>Pitfalls & Edge Cases</h3>
+    <div class="pitfall-box"><ul><li>Forgetting P[0]=0 or {0:1} initialization.</li><li>Confusing inclusive/exclusive index in P[r+1]-P[l].</li><li>2D inclusion-exclusion sign errors.</li></ul></div>
+    <h3>Where You'll See This on LeetCode</h3>
+    <p>Range queries, subarray sum problems, matrix region sums. Often paired with hash map.</p>
+    <h3>Practice Problems — Prove You Internalized This Pattern</h3>
+    <p>Do these <strong>without</strong> looking at templates first. Adapt the memorized skeleton to each twist.</p>
+    <div class="practice-card">
+      <h5>303. Range Sum Query - Immutable <span class="difficulty">(Easy)</span></h5>
+      <p>Multiple range sum queries on static array.</p>
+      <p class="hint"><strong>Hint:</strong> Precompute prefix once.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template A.</p></details>
+    </div><div class="practice-card">
+      <h5>560. Subarray Sum Equals K <span class="difficulty">(Medium)</span></h5>
+      <p>Count subarrays summing to k.</p>
+      <p class="hint"><strong>Hint:</strong> prefix - k lookup in hash map.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template B.</p></details>
+    </div><div class="practice-card">
+      <h5>238. Product of Array Except Self <span class="difficulty">(Medium)</span></h5>
+      <p>Output[i] = product of all except nums[i]. No division.</p>
+      <p class="hint"><strong>Hint:</strong> Prefix products from left, suffix from right.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template C.</p></details>
+    </div><div class="practice-card">
+      <h5>304. Range Sum Query 2D <span class="difficulty">(Medium)</span></h5>
+      <p>Sum of elements inside rectangle queries.</p>
+      <p class="hint"><strong>Hint:</strong> 2D prefix + inclusion-exclusion.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template D.</p></details>
+    </div>
+  </section>
+
+  <section class="pattern" id="binary-search">
+    <h2><span class="pattern-num">Pattern 5</span><br>Binary Search (Including "Binary Search on Answer")</h2>
+    <h3>Recognition Signals — "When do I use this?"</h3>
+    <div class="signal-box"><strong>Look for these clues:</strong><ul><li>Sorted array — find target or insertion point</li><li>"Minimize the maximum" / "maximize the minimum"</li><li>Can you verify an answer in O(n) and monotonic feasibility?</li><li>Search space is numeric range or index range</li><li>Rotated sorted array, first/last occurrence</li></ul></div>
+    <h3>Underlying Data Structure & Theory</h3>
+    <p><strong>Classic BS:</strong> Halve search space using compare with mid. Requires monotonic ordering.</p>
+    <p><strong>Binary search on answer:</strong> Don't search indices — search the <em>answer space</em> (e.g., speed, capacity). If <code>feasible(x)</code> is monotonic (false...false,true...true), BS finds minimum x where feasible is true.</p>
+    <p><strong>Loop invariant:</strong> Maintain [lo, hi] such that answer is always inside. Use <code>while lo &lt; hi</code> with <code>mid = lo + (hi-lo)//2</code> to avoid overflow.</p>
+    <h3>Why This Approach Works (and Beats Alternatives)</h3>
+    <div class="why-box"><p>Linear scan O(n) vs BS O(log n) on sorted data. For answer-space BS, if checking feasibility is O(n), total is O(n log R) where R is answer range — beats trying all answers O(n·R).</p>
+    <p>The professor's rule: <strong>if you can write check(x) and feasibility is monotonic, BS the answer.</strong></p></div>
+    <h3>Time & Space Complexity</h3>
+    <div class="complexity-box"><p><strong>Classic:</strong> O(log n) time, O(1) space.</p>
+    <p><strong>On answer:</strong> O(n log R) where R = hi - lo.</p></div>
+    <h3>Memorizable Templates</h3>
+    <div class="template-label">Template A — Classic binary search (find target)</div><pre><code>def binary_search(nums, target):
+    lo, hi = 0, len(nums) - 1
+    while lo <= hi:
+        mid = (lo + hi) // 2
+        if nums[mid] == target:
+            return mid
+        elif nums[mid] < target:
+            lo = mid + 1
+        else:
+            hi = mid - 1
+    return -1</code></pre><div class="template-label">Template B — Lower bound (first index >= target)</div><pre><code>def lower_bound(nums, target):
+    lo, hi = 0, len(nums)
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if nums[mid] < target:
+            lo = mid + 1
+        else:
+            hi = mid
+    return lo</code></pre><div class="template-label">Template C — Binary search on answer</div><pre><code>def min_feasible(lo, hi):
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if feasible(mid):
+            hi = mid
+        else:
+            lo = mid + 1
+    return lo
+
+# Example: Koko eating bananas
+def min_eating_speed(piles, h):
+    def feasible(speed):
+        hours = sum((p + speed - 1) // speed for p in piles)
+        return hours <= h
+    lo, hi = 1, max(piles)
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if feasible(mid):
+            hi = mid
+        else:
+            lo = mid + 1
+    return lo</code></pre><div class="template-label">Template D — Rotated sorted array</div><pre><code>def search_rotated(nums, target):
+    lo, hi = 0, len(nums) - 1
+    while lo <= hi:
+        mid = (lo + hi) // 2
+        if nums[mid] == target:
+            return mid
+        if nums[lo] <= nums[mid]:  # left half sorted
+            if nums[lo] <= target < nums[mid]:
+                hi = mid - 1
+            else:
+                lo = mid + 1
+        else:  # right half sorted
+            if nums[mid] < target <= nums[hi]:
+                lo = mid + 1
+            else:
+                hi = mid - 1
+    return -1</code></pre>
+    <h3>Common Variations & How to Adapt</h3>
+    <ul><li><strong>Min vs max:</strong> Min feasible → BS left; max feasible → BS right variant.</li>
+    <li><strong>On index:</strong> Peak finding, split array where condition changes.</li>
+    <li><strong>Floating BS:</strong> while hi-lo > eps for precision problems.</li></ul>
+    <h3>Pitfalls & Edge Cases</h3>
+    <div class="pitfall-box"><ul><li>Using BS on unsorted data without monotonic check(x).</li><li>Off-by-one with lo<hi vs lo<=hi.</li><li>Integer overflow in mid (use lo+(hi-lo)//2).</li><li>Confusing min-answer vs max-answer BS direction.</li></ul></div>
+    <h3>Where You'll See This on LeetCode</h3>
+    <p>Binary Search tag, also hidden in greedy-feasibility problems (Koko, ship capacity, split array).</p>
+    <h3>Practice Problems — Prove You Internalized This Pattern</h3>
+    <p>Do these <strong>without</strong> looking at templates first. Adapt the memorized skeleton to each twist.</p>
+    <div class="practice-card">
+      <h5>704. Binary Search <span class="difficulty">(Easy)</span></h5>
+      <p>Standard search in sorted array.</p>
+      <p class="hint"><strong>Hint:</strong> Classic template.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template A.</p></details>
+    </div><div class="practice-card">
+      <h5>875. Koko Eating Bananas <span class="difficulty">(Medium)</span></h5>
+      <p>Min eating speed to finish in h hours.</p>
+      <p class="hint"><strong>Hint:</strong> BS on speed; check total hours.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template C.</p></details>
+    </div><div class="practice-card">
+      <h5>1011. Capacity To Ship Packages Within D Days <span class="difficulty">(Medium)</span></h5>
+      <p>Min ship capacity for d days.</p>
+      <p class="hint"><strong>Hint:</strong> BS on capacity; greedy check if load fits.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template C with greedy feasible.</p></details>
+    </div><div class="practice-card">
+      <h5>33. Search in Rotated Sorted Array <span class="difficulty">(Medium)</span></h5>
+      <p>Find target in rotated array O(log n).</p>
+      <p class="hint"><strong>Hint:</strong> Identify sorted half each step.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template D.</p></details>
+    </div>
+  </section>
+
+  <section class="pattern" id="stack">
+    <h2><span class="pattern-num">Pattern 6</span><br>Stack (Including Monotonic Stack)</h2>
+    <h3>Recognition Signals — "When do I use this?"</h3>
+    <div class="signal-box"><strong>Look for these clues:</strong><ul><li>Matching brackets / nested structure</li><li>Next greater / next smaller element</li><li>Process elements in LIFO order</li><li>Histogram / rectangle area problems</li><li>Evaluate expressions (RPN)</li></ul></div>
+    <h3>Underlying Data Structure & Theory</h3>
+    <p>Stack: LIFO. Push/pop O(1). Used when <strong>most recent unmatched element</strong> matters.</p>
+    <p><strong>Monotonic stack:</strong> Maintains increasing or decreasing order. When a new element violates order, pop until restored — each element pushed/popped once → O(n).</p>
+    <p><strong>Classic use:</strong> For each index, find next greater element to the right in O(n) total.</p>
+    <h3>Why This Approach Works (and Beats Alternatives)</h3>
+    <div class="why-box"><p>Brute force next-greater is O(n²). Monotonic stack processes each element once — O(n). Stack beats recursion when you need explicit control over DFS-like backtracking on arrays.</p></div>
+    <h3>Time & Space Complexity</h3>
+    <div class="complexity-box"><p><strong>Stack operations:</strong> O(n) time, O(n) space worst case.</p>
+    <p><strong>Monotonic stack:</strong> O(n) — amortized one push/pop per element.</p></div>
+    <h3>Memorizable Templates</h3>
+    <div class="template-label">Template A — Valid parentheses</div><pre><code>def is_valid(s):
+    stack = []
+    match = {')': '(', ']': '[', '}': '{'}
+    for ch in s:
+        if ch in '([{':
+            stack.append(ch)
+        else:
+            if not stack or stack[-1] != match[ch]:
+                return False
+            stack.pop()
+    return not stack</code></pre><div class="template-label">Template B — Monotonic stack (next greater element)</div><pre><code>def next_greater(nums):
+    res = [-1] * len(nums)
+    stack = []  # indices, decreasing values
+    for i, x in enumerate(nums):
+        while stack and nums[stack[-1]] < x:
+            j = stack.pop()
+            res[j] = x
+        stack.append(i)
+    return res</code></pre><div class="template-label">Template C — Daily temperatures style</div><pre><code>def daily_temperatures(temps):
+    res = [0] * len(temps)
+    stack = []
+    for i, t in enumerate(temps):
+        while stack and temps[stack[-1]] < t:
+            j = stack.pop()
+            res[j] = i - j
+        stack.append(i)
+    return res</code></pre><div class="template-label">Template D — Largest rectangle in histogram</div><pre><code>def largest_rectangle(heights):
+    stack = []
+    best = 0
+    heights = heights + [0]  # sentinel
+    for i, h in enumerate(heights):
+        while stack and heights[stack[-1]] > h:
+            idx = stack.pop()
+            w = i if not stack else i - stack[-1] - 1
+            best = max(best, heights[idx] * w)
+        stack.append(i)
+    return best</code></pre><div class="template-label">Template E — Evaluate RPN</div><pre><code>def eval_rpn(tokens):
+    stack = []
+    ops = {'+', '-', '*', '/'}
+    for t in tokens:
+        if t not in ops:
+            stack.append(int(t))
+        else:
+            b, a = stack.pop(), stack.pop()
+            if t == '+': stack.append(a + b)
+            elif t == '-': stack.append(a - b)
+            elif t == '*': stack.append(a * b)
+            else: stack.append(int(a / b))
+    return stack[0]</code></pre>
+    <h3>Common Variations & How to Adapt</h3>
+    <ul><li><strong>Monotonic increasing vs decreasing:</strong> Next greater → decreasing stack; next smaller → increasing.</li>
+    <li><strong>Store indices not values</strong> when width matters.</li></ul>
+    <h3>Pitfalls & Edge Cases</h3>
+    <div class="pitfall-box"><ul><li>Empty stack pop.</li><li>Forgetting sentinel in histogram.</li><li>Wrong monotonic direction.</li></ul></div>
+    <h3>Where You'll See This on LeetCode</h3>
+    <p>Stack tag, monotonic stack for array-neighbor problems.</p>
+    <h3>Practice Problems — Prove You Internalized This Pattern</h3>
+    <p>Do these <strong>without</strong> looking at templates first. Adapt the memorized skeleton to each twist.</p>
+    <div class="practice-card">
+      <h5>20. Valid Parentheses <span class="difficulty">(Easy)</span></h5>
+      <p>Match brackets correctly.</p>
+      <p class="hint"><strong>Hint:</strong> Push opens, pop on close.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template A.</p></details>
+    </div><div class="practice-card">
+      <h5>739. Daily Temperatures <span class="difficulty">(Medium)</span></h5>
+      <p>Days until warmer temperature.</p>
+      <p class="hint"><strong>Hint:</strong> Monotonic decreasing stack of indices.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template C.</p></details>
+    </div><div class="practice-card">
+      <h5>84. Largest Rectangle in Histogram <span class="difficulty">(Hard)</span></h5>
+      <p>Max rectangle area in histogram.</p>
+      <p class="hint"><strong>Hint:</strong> Monotonic stack + sentinel.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template D.</p></details>
+    </div><div class="practice-card">
+      <h5>150. Evaluate Reverse Polish Notation <span class="difficulty">(Medium)</span></h5>
+      <p>Evaluate postfix expression.</p>
+      <p class="hint"><strong>Hint:</strong> Stack for operands.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template E.</p></details>
+    </div>
+  </section>
+
+  <section class="pattern" id="heap">
+    <h2><span class="pattern-num">Pattern 7</span><br>Heap / Priority Queue</h2>
+    <h3>Recognition Signals — "When do I use this?"</h3>
+    <div class="signal-box"><strong>Look for these clues:</strong><ul><li>Top K / Kth largest / Kth smallest</li><li>Merge K sorted lists/streams</li><li>Continuous median</li><li>Schedule tasks by priority or deadline</li><li>Dijkstra (min-heap on distance)</li></ul></div>
+    <h3>Underlying Data Structure & Theory</h3>
+    <p><strong>Binary heap:</strong> Complete binary tree with heap property. Min-heap: parent ≤ children. Insert/extract O(log n), peek O(1). Python: <code>heapq</code> is min-heap only.</p>
+    <p><strong>Max-heap trick:</strong> Push negated values. <strong>K largest:</strong> maintain min-heap of size K.</p>
+    <h3>Why This Approach Works (and Beats Alternatives)</h3>
+    <div class="why-box"><p>Sorting entire array O(n log n) to get Kth element is wasteful. Min-heap of size K is O(n log K). For merging K sorted lists, heap always picks smallest among K heads — O(N log K).</p></div>
+    <h3>Time & Space Complexity</h3>
+    <div class="complexity-box"><p><strong>Heap ops:</strong> O(log n) insert/extract.</p>
+    <p><strong>Top K:</strong> O(n log k) time, O(k) space.</p>
+    <p><strong>Merge K lists:</strong> O(N log K).</p></div>
+    <h3>Memorizable Templates</h3>
+    <div class="template-label">Template A — Kth largest (min-heap size k)</div><pre><code>import heapq
+
+def find_kth_largest(nums, k):
+    heap = []
+    for x in nums:
+        heapq.heappush(heap, x)
+        if len(heap) > k:
+            heapq.heappop(heap)
+    return heap[0]</code></pre><div class="template-label">Template B — Top K frequent</div><pre><code>import heapq
+from collections import Counter
+
+def top_k_frequent(nums, k):
+    freq = Counter(nums)
+    return [x for x, _ in heapq.nlargest(k, freq.items(), key=lambda p: p[1])]</code></pre><div class="template-label">Template C — Merge K sorted lists</div><pre><code>import heapq
+
+def merge_k_lists(lists):
+    heap = []
+    for i, node in enumerate(lists):
+        if node:
+            heapq.heappush(heap, (node.val, i, node))
+    dummy = tail = ListNode(0)
+    while heap:
+        val, i, node = heapq.heappop(heap)
+        tail.next = node
+        tail = tail.next
+        if node.next:
+            heapq.heappush(heap, (node.next.val, i, node.next))
+    return dummy.next</code></pre><div class="template-label">Template D — Two heaps for median</div><pre><code>import heapq
+
+class MedianFinder:
+    def __init__(self):
+        self.lo = []  # max-heap via negation
+        self.hi = []  # min-heap
+    def addNum(self, num):
+        heapq.heappush(self.lo, -num)
+        heapq.heappush(self.hi, -heapq.heappop(self.lo))
+        if len(self.hi) > len(self.lo):
+            heapq.heappush(self.lo, -heapq.heappop(self.hi))
+    def findMedian(self):
+        if len(self.lo) > len(self.hi):
+            return -self.lo[0]
+        return (-self.lo[0] + self.hi[0]) / 2</code></pre><div class="template-label">Template E — Task scheduler / greedy with heap</div><pre><code>import heapq
+from collections import Counter
+
+def least_interval(tasks, n):
+    freq = Counter(tasks)
+    heap = [-cnt for cnt in freq.values()]
+    heapq.heapify(heap)
+    time = 0
+    while heap:
+        cycle = []
+        for _ in range(n + 1):
+            if heap:
+                cycle.append(heapq.heappop(heap))
+        for cnt in cycle:
+            if cnt + 1 < 0:
+                heapq.heappush(heap, cnt + 1)
+        time += n + 1 if heap else len(cycle)
+    return time</code></pre>
+    <h3>Common Variations & How to Adapt</h3>
+    <ul><li><strong>K closest points:</strong> heap of (-dist, point) or nlargest.</li>
+    <li><strong>Custom comparator:</strong> push tuples (priority, item).</li></ul>
+    <h3>Pitfalls & Edge Cases</h3>
+    <div class="pitfall-box"><ul><li>Forgetting heapq is min-heap.</li><li>Not re-heapifying after building list.</li><li>Pushing None nodes in merge K lists.</li></ul></div>
+    <h3>Where You'll See This on LeetCode</h3>
+    <p>Heap tag, Top K problems, streaming median, scheduling.</p>
+    <h3>Practice Problems — Prove You Internalized This Pattern</h3>
+    <p>Do these <strong>without</strong> looking at templates first. Adapt the memorized skeleton to each twist.</p>
+    <div class="practice-card">
+      <h5>215. Kth Largest Element in an Array <span class="difficulty">(Medium)</span></h5>
+      <p>Find kth largest.</p>
+      <p class="hint"><strong>Hint:</strong> Min-heap size k.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template A.</p></details>
+    </div><div class="practice-card">
+      <h5>347. Top K Frequent Elements <span class="difficulty">(Medium)</span></h5>
+      <p>K most frequent numbers.</p>
+      <p class="hint"><strong>Hint:</strong> Counter + nlargest or heap.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template B.</p></details>
+    </div><div class="practice-card">
+      <h5>23. Merge k Sorted Lists <span class="difficulty">(Hard)</span></h5>
+      <p>Merge K linked lists.</p>
+      <p class="hint"><strong>Hint:</strong> Heap of list heads.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template C.</p></details>
+    </div><div class="practice-card">
+      <h5>295. Find Median from Data Stream <span class="difficulty">(Hard)</span></h5>
+      <p>Median after each insert.</p>
+      <p class="hint"><strong>Hint:</strong> Two heaps balanced.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template D.</p></details>
+    </div>
+  </section>
+
+  <section class="pattern" id="bfs-dfs">
+    <h2><span class="pattern-num">Pattern 8</span><br>BFS / DFS (Trees + Graphs)</h2>
+    <h3>Recognition Signals — "When do I use this?"</h3>
+    <div class="signal-box"><strong>Look for these clues:</strong><ul><li>Grid/graph traversal — islands, connected components</li><li>Shortest path in unweighted graph → BFS</li><li>Explore all paths / exhaust possibilities → DFS</li><li>Tree problems — recursive structure</li><li>Clone/copy graph or tree</li></ul></div>
+    <h3>Underlying Data Structure & Theory</h3>
+    <p><strong>DFS:</strong> Go deep first (stack or recursion). Explores all reachable nodes. O(V+E).</p>
+    <p><strong>BFS:</strong> Level-by-level (queue). Finds shortest path in unweighted graphs. O(V+E).</p>
+    <p><strong>Tree DFS:</strong> Preorder/inorder/postorder — often returns info from subtrees upward.</p>
+    <p><strong>Visited set:</strong> Prevent cycles in graphs. Mark on push (BFS) or on entry (DFS).</p>
+    <h3>Why This Approach Works (and Beats Alternatives)</h3>
+    <div class="why-box"><p>DFS uses less memory on deep sparse graphs; BFS guarantees shortest steps in unweighted setting. Both beat naive "try every path" exponential search.</p>
+    <p>Professor tip: <strong>shortest path unweighted = BFS; explore all / backtrack = DFS; tree recursion = DFS with base case on null node.</strong></p></div>
+    <h3>Time & Space Complexity</h3>
+    <div class="complexity-box"><p><strong>Both:</strong> O(V + E) time, O(V) space for visited + queue/stack.</p>
+    <p><strong>Grid as graph:</strong> V = R×C, E ≈ 4V.</p></div>
+    <h3>Memorizable Templates</h3>
+    <div class="template-label">Template A — Grid DFS (count islands)</div><pre><code>def num_islands(grid):
+    if not grid:
+        return 0
+    R, C = len(grid), len(grid[0])
+    def dfs(r, c):
+        if r < 0 or r >= R or c < 0 or c >= C or grid[r][c] != '1':
+            return
+        grid[r][c] = '0'
+        dfs(r+1,c); dfs(r-1,c); dfs(r,c+1); dfs(r,c-1)
+    count = 0
+    for r in range(R):
+        for c in range(C):
+            if grid[r][c] == '1':
+                dfs(r, c)
+                count += 1
+    return count</code></pre><div class="template-label">Template B — Grid BFS (shortest path)</div><pre><code>from collections import deque
+
+def shortest_path_grid(grid):
+    if not grid:
+        return -1
+    R, C = len(grid), len(grid[0])
+    q = deque([(0, 0, 0)])
+    seen = {(0, 0)}
+    while q:
+        r, c, d = q.popleft()
+        if r == R-1 and c == C-1:
+            return d
+        for dr, dc in ((1,0),(-1,0),(0,1),(0,-1)):
+            nr, nc = r+dr, c+dc
+            if 0 <= nr < R and 0 <= nc < C and grid[nr][nc] == 0 and (nr,nc) not in seen:
+                seen.add((nr, nc))
+                q.append((nr, nc, d+1))
+    return -1</code></pre><div class="template-label">Template C — Graph DFS (adjacency list)</div><pre><code>def dfs_graph(node, visited):
+    visited.add(node)
+    for nei in node.neighbors:
+        if nei not in visited:
+            dfs_graph(nei, visited)</code></pre><div class="template-label">Template D — Tree recursion (max depth)</div><pre><code>def max_depth(root):
+    if not root:
+        return 0
+    return 1 + max(max_depth(root.left), max_depth(root.right))</code></pre><div class="template-label">Template E — Multi-source BFS</div><pre><code>from collections import deque
+
+def oranges_rotting(grid):
+    q = deque()
+    fresh = 0
+    for r in range(len(grid)):
+        for c in range(len(grid[0])):
+            if grid[r][c] == 2:
+                q.append((r, c, 0))
+            elif grid[r][c] == 1:
+                fresh += 1
+    minutes = 0
+    while q:
+        r, c, t = q.popleft()
+        minutes = max(minutes, t)
+        for dr, dc in ((1,0),(-1,0),(0,1),(0,-1)):
+            nr, nc = r+dr, c+dc
+            if 0 <= nr < len(grid) and 0 <= nc < len(grid[0]) and grid[nr][nc] == 1:
+                grid[nr][nc] = 2
+                fresh -= 1
+                q.append((nr, nc, t+1))
+    return minutes if fresh == 0 else -1</code></pre>
+    <h3>Common Variations & How to Adapt</h3>
+    <ul><li><strong>Iterative DFS:</strong> explicit stack.</li>
+    <li><strong>0-1 BFS:</strong> deque for weights 0/1.</li>
+    <li><strong>Tree return values:</strong> combine left/right subtree answers.</li></ul>
+    <h3>Pitfalls & Edge Cases</h3>
+    <div class="pitfall-box"><ul><li>Mutating grid without restoring (OK if counting only).</li><li>Not marking visited before enqueue (BFS duplicates).</li><li>Recursion depth on huge grids — use iterative.</li></ul></div>
+    <h3>Where You'll See This on LeetCode</h3>
+    <p>Graph, Tree, Matrix tags — most common medium/hard category.</p>
+    <h3>Practice Problems — Prove You Internalized This Pattern</h3>
+    <p>Do these <strong>without</strong> looking at templates first. Adapt the memorized skeleton to each twist.</p>
+    <div class="practice-card">
+      <h5>200. Number of Islands <span class="difficulty">(Medium)</span></h5>
+      <p>Count connected '1' regions.</p>
+      <p class="hint"><strong>Hint:</strong> DFS/BFS flood fill.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template A.</p></details>
+    </div><div class="practice-card">
+      <h5>695. Max Area of Island <span class="difficulty">(Medium)</span></h5>
+      <p>Largest island area.</p>
+      <p class="hint"><strong>Hint:</strong> DFS return cell count.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template A variant returning size.</p></details>
+    </div><div class="practice-card">
+      <h5>133. Clone Graph <span class="difficulty">(Medium)</span></h5>
+      <p>Deep copy undirected graph.</p>
+      <p class="hint"><strong>Hint:</strong> DFS/BFS + hash old→new node.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template C with memo dict.</p></details>
+    </div><div class="practice-card">
+      <h5>127. Word Ladder <span class="difficulty">(Hard)</span></h5>
+      <p>Shortest transformation sequence.</p>
+      <p class="hint"><strong>Hint:</strong> BFS on word graph.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template B on implicit graph.</p></details>
+    </div>
+  </section>
+
+  <section class="pattern" id="backtracking">
+    <h2><span class="pattern-num">Pattern 9</span><br>Backtracking / Subsets / Permutations</h2>
+    <h3>Recognition Signals — "When do I use this?"</h3>
+    <div class="signal-box"><strong>Look for these clues:</strong><ul><li>Generate all subsets, permutations, combinations</li><li>"Find all solutions" with constraints</li><li>Place queens / sudoku / board search</li><li>Can include/skip each element (decision tree)</li><li>Prune branches that violate constraints early</li></ul></div>
+    <h3>Underlying Data Structure & Theory</h3>
+    <p>Backtracking = DFS on a <strong>decision tree</strong>. At each step, make a choice, recurse, then <strong>undo</strong> (backtrack) to try other choices.</p>
+    <p><strong>Structure:</strong> base case (save solution) → loop choices → apply choice → recurse → remove choice.</p>
+    <p>Same as exhaustive search but with pruning when partial state can't lead to valid solution.</p>
+    <h3>Why This Approach Works (and Beats Alternatives)</h3>
+    <div class="why-box"><p>Brute force generates all then filters — backtracking prunes early. For subsets of n elements, still O(2^n) but with much smaller constant and less memory waste.</p></div>
+    <h3>Time & Space Complexity</h3>
+    <div class="complexity-box"><p><strong>Subsets:</strong> O(2^n) time and output space.</p>
+    <p><strong>Permutations:</strong> O(n!)</p>
+    <p><strong>With pruning:</strong> reduces practical runtime significantly.</p></div>
+    <h3>Memorizable Templates</h3>
+    <div class="template-label">Template A — Subsets</div><pre><code>def subsets(nums):
+    res = []
+    path = []
+    def dfs(i):
+        if i == len(nums):
+            res.append(path[:])
+            return
+        dfs(i + 1)  # skip
+        path.append(nums[i])
+        dfs(i + 1)  # take
+        path.pop()
+    dfs(0)
+    return res</code></pre><div class="template-label">Template B — Permutations</div><pre><code>def permute(nums):
+    res = []
+    used = [False] * len(nums)
+    path = []
+    def dfs():
+        if len(path) == len(nums):
+            res.append(path[:])
+            return
+        for i in range(len(nums)):
+            if used[i]:
+                continue
+            used[i] = True
+            path.append(nums[i])
+            dfs()
+            path.pop()
+            used[i] = False
+    dfs()
+    return res</code></pre><div class="template-label">Template C — Combination sum (reuse allowed)</div><pre><code>def combination_sum(candidates, target):
+    res = []
+    path = []
+    def dfs(start, remaining):
+        if remaining == 0:
+            res.append(path[:])
+            return
+        if remaining < 0:
+            return
+        for i in range(start, len(candidates)):
+            path.append(candidates[i])
+            dfs(i, remaining - candidates[i])  # i not i+1 if reuse
+            path.pop()
+    dfs(0, target)
+    return res</code></pre><div class="template-label">Template D — N-Queens</div><pre><code>def solve_n_queens(n):
+    res = []
+    cols = set(); diag1 = set(); diag2 = set()
+    board = [['.'] * n for _ in range(n)]
+    def dfs(r):
+        if r == n:
+            res.append([''.join(row) for row in board])
+            return
+        for c in range(n):
+            if c in cols or (r-c) in diag1 or (r+c) in diag2:
+                continue
+            cols.add(c); diag1.add(r-c); diag2.add(r+c)
+            board[r][c] = 'Q'
+            dfs(r + 1)
+            board[r][c] = '.'
+            cols.remove(c); diag1.remove(r-c); diag2.remove(r+c)
+    dfs(0)
+    return res</code></pre>
+    <h3>Common Variations & How to Adapt</h3>
+    <ul><li><strong>Combinations C(n,k):</strong> dfs(i) only forward to avoid duplicates.</li>
+    <li><strong>Duplicates in input:</strong> sort + skip same value at same depth.</li></ul>
+    <h3>Pitfalls & Edge Cases</h3>
+    <div class="pitfall-box"><ul><li>Forgetting path[:] when appending.</li><li>Not undoing state after recurse.</li><li>Duplicate combinations — use start index.</li></ul></div>
+    <h3>Where You'll See This on LeetCode</h3>
+    <p>Backtracking tag — subsets, permutations, combinatorial search.</p>
+    <h3>Practice Problems — Prove You Internalized This Pattern</h3>
+    <p>Do these <strong>without</strong> looking at templates first. Adapt the memorized skeleton to each twist.</p>
+    <div class="practice-card">
+      <h5>78. Subsets <span class="difficulty">(Medium)</span></h5>
+      <p>All subsets.</p>
+      <p class="hint"><strong>Hint:</strong> Include/exclude DFS.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template A.</p></details>
+    </div><div class="practice-card">
+      <h5>46. Permutations <span class="difficulty">(Medium)</span></h5>
+      <p>All permutations.</p>
+      <p class="hint"><strong>Hint:</strong> used[] array.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template B.</p></details>
+    </div><div class="practice-card">
+      <h5>39. Combination Sum <span class="difficulty">(Medium)</span></h5>
+      <p>Combinations summing to target, reuse ok.</p>
+      <p class="hint"><strong>Hint:</strong> Start index, reuse same i.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template C.</p></details>
+    </div><div class="practice-card">
+      <h5>51. N-Queens <span class="difficulty">(Hard)</span></h5>
+      <p>Place n queens safely.</p>
+      <p class="hint"><strong>Hint:</strong> Track cols and diagonals.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template D.</p></details>
+    </div>
+  </section>
+
+  <section class="pattern" id="union-find">
+    <h2><span class="pattern-num">Pattern 10</span><br>Union-Find (Disjoint Set Union)</h2>
+    <h3>Recognition Signals — "When do I use this?"</h3>
+    <div class="signal-box"><strong>Look for these clues:</strong><ul><li>Dynamic connectivity — are A and B connected?</li><li>Count connected components as edges arrive</li><li>Detect cycle in undirected graph</li><li>Group items that should merge (accounts, redundant connections)</li><li>Offline connectivity queries</li></ul></div>
+    <h3>Underlying Data Structure & Theory</h3>
+    <p><strong>Union-Find</strong> maintains disjoint sets with:</p>
+    <ul><li><code>find(x)</code> — representative of x's set (with path compression)</li>
+    <li><code>union(a,b)</code> — merge sets (with union by rank/size)</li></ul>
+    <p>Amortized nearly O(1) per operation (inverse Ackermann α(n)).</p>
+    <h3>Why This Approach Works (and Beats Alternatives)</h3>
+    <div class="why-box"><p>DFS/BFS recomputes components each query O(V+E). Union-Find handles incremental merges efficiently — ideal for Kruskal MST, connectivity streams, detecting redundant edges.</p></div>
+    <h3>Time & Space Complexity</h3>
+    <div class="complexity-box"><p><strong>With path compression + union by rank:</strong> O(α(n)) ≈ O(1) amortized per op.</p>
+    <p><strong>Space:</strong> O(n) parent array.</p></div>
+    <h3>Memorizable Templates</h3>
+    <div class="template-label">Template A — Union-Find class</div><pre><code>class UnionFind:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.rank = [0] * n
+        self.components = n
+    def find(self, x):
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+    def union(self, a, b):
+        ra, rb = self.find(a), self.find(b)
+        if ra == rb:
+            return False
+        if self.rank[ra] < self.rank[rb]:
+            ra, rb = rb, ra
+        self.parent[rb] = ra
+        if self.rank[ra] == self.rank[rb]:
+            self.rank[ra] += 1
+        self.components -= 1
+        return True</code></pre><div class="template-label">Template B — Count components</div><pre><code>def count_components(n, edges):
+    uf = UnionFind(n)
+    for u, v in edges:
+        uf.union(u, v)
+    return uf.components</code></pre><div class="template-label">Template C — Detect cycle (undirected)</div><pre><code>def has_cycle(n, edges):
+    uf = UnionFind(n)
+    for u, v in edges:
+        if not uf.union(u, v):  # already connected
+            return True
+    return False</code></pre><div class="template-label">Template D — Graph valid tree</div><pre><code>def valid_tree(n, edges):
+    if len(edges) != n - 1:
+        return False
+    uf = UnionFind(n)
+    for u, v in edges:
+        if not uf.union(u, v):
+            return False
+    return True</code></pre>
+    <h3>Common Variations & How to Adapt</h3>
+    <ul><li><strong>Map node labels:</strong> str→int hash before UF.</li>
+    <li><strong>Track set sizes:</strong> for largest component problems.</li></ul>
+    <h3>Pitfalls & Edge Cases</h3>
+    <div class="pitfall-box"><ul><li>Forgetting path compression.</li><li>Off-by-one on node count.</li><li>Using UF on directed graphs without adaptation.</li></ul></div>
+    <h3>Where You'll See This on LeetCode</h3>
+    <p>Graph connectivity, redundant connection, accounts merge.</p>
+    <h3>Practice Problems — Prove You Internalized This Pattern</h3>
+    <p>Do these <strong>without</strong> looking at templates first. Adapt the memorized skeleton to each twist.</p>
+    <div class="practice-card">
+      <h5>323. Number of Connected Components in an Undirected Graph <span class="difficulty">(Medium)</span></h5>
+      <p>Count components.</p>
+      <p class="hint"><strong>Hint:</strong> Union each edge.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template B.</p></details>
+    </div><div class="practice-card">
+      <h5>261. Graph Valid Tree <span class="difficulty">(Medium)</span></h5>
+      <p>n nodes, n-1 edges, no cycle.</p>
+      <p class="hint"><strong>Hint:</strong> UF + edge count check.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template D.</p></details>
+    </div><div class="practice-card">
+      <h5>684. Redundant Connection <span class="difficulty">(Medium)</span></h5>
+      <p>First edge that creates cycle.</p>
+      <p class="hint"><strong>Hint:</strong> Return edge where union fails.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template C.</p></details>
+    </div><div class="practice-card">
+      <h5>721. Accounts Merge <span class="difficulty">(Medium)</span></h5>
+      <p>Merge accounts sharing emails.</p>
+      <p class="hint"><strong>Hint:</strong> UF on email indices.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template A with label mapping.</p></details>
+    </div>
+  </section>
+
+  <section class="pattern" id="topo-sort">
+    <h2><span class="pattern-num">Pattern 11</span><br>Topological Sort</h2>
+    <h3>Recognition Signals — "When do I use this?"</h3>
+    <div class="signal-box"><strong>Look for these clues:</strong><ul><li>Directed graph with prerequisites / dependencies</li><li>Course schedule — can you finish?</li><li>Ordering tasks with constraints</li><li>Detect cycle in directed graph</li><li>Build order from dependencies</li></ul></div>
+    <h3>Underlying Data Structure & Theory</h3>
+    <p><strong>Topological order:</strong> Linear ordering of DAG vertices so all edges go forward. Impossible if cycle exists.</p>
+    <p><strong>Kahn's (BFS):</strong> Start with nodes of in-degree 0, remove, decrease neighbors' in-degree.</p>
+    <p><strong>DFS:</strong> Post-order stack — add node after visiting all descendants; reverse for topo order.</p>
+    <h3>Why This Approach Works (and Beats Alternatives)</h3>
+    <div class="why-box"><p>Topo sort answers "is there a valid order?" and "give me one order" in O(V+E). BFS Kahn's is intuitive for course schedule; DFS detects cycles via recursion stack.</p></div>
+    <h3>Time & Space Complexity</h3>
+    <div class="complexity-box"><p><strong>Kahn/DFS:</strong> O(V + E) time, O(V) space.</p></div>
+    <h3>Memorizable Templates</h3>
+    <div class="template-label">Template A — Kahn's algorithm</div><pre><code>from collections import deque, defaultdict
+
+def topo_sort_kahn(n, edges):
+    graph = defaultdict(list)
+    indeg = [0] * n
+    for u, v in edges:
+        graph[u].append(v)
+        indeg[v] += 1
+    q = deque(i for i in range(n) if indeg[i] == 0)
+    order = []
+    while q:
+        u = q.popleft()
+        order.append(u)
+        for v in graph[u]:
+            indeg[v] -= 1
+            if indeg[v] == 0:
+                q.append(v)
+    return order if len(order) == n else []  # empty if cycle</code></pre><div class="template-label">Template B — Course schedule (can finish?)</div><pre><code>def can_finish(numCourses, prerequisites):
+    return len(topo_sort_kahn(numCourses, prerequisites)) == numCourses</code></pre><div class="template-label">Template C — DFS cycle detection + topo</div><pre><code>def topo_sort_dfs(n, edges):
+    graph = [[] for _ in range(n)]
+    for u, v in edges:
+        graph[u].append(v)
+    state = [0] * n  # 0=unvisited, 1=visiting, 2=done
+    order = []
+    def dfs(u):
+        state[u] = 1
+        for v in graph[u]:
+            if state[v] == 1:
+                return False
+            if state[v] == 0 and not dfs(v):
+                return False
+        state[u] = 2
+        order.append(u)
+        return True
+    for i in range(n):
+        if state[i] == 0 and not dfs(i):
+            return []
+    return order[::-1]</code></pre>
+    <h3>Common Variations & How to Adapt</h3>
+    <ul><li><strong>Course schedule II:</strong> return order or [].</li>
+    <li><strong>Alien dictionary:</strong> build graph from adjacent word pairs.</li></ul>
+    <h3>Pitfalls & Edge Cases</h3>
+    <div class="pitfall-box"><ul><li>Not detecting cycle — partial order returned.</li><li>Wrong indegree initialization.</li><li>Multiple components — handle all nodes.</li></ul></div>
+    <h3>Where You'll See This on LeetCode</h3>
+    <p>Graph, topo sort tag — scheduling, prerequisites.</p>
+    <h3>Practice Problems — Prove You Internalized This Pattern</h3>
+    <p>Do these <strong>without</strong> looking at templates first. Adapt the memorized skeleton to each twist.</p>
+    <div class="practice-card">
+      <h5>207. Course Schedule <span class="difficulty">(Medium)</span></h5>
+      <p>Can finish all courses?</p>
+      <p class="hint"><strong>Hint:</strong> Kahn's — cycle if order length < n.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template B.</p></details>
+    </div><div class="practice-card">
+      <h5>210. Course Schedule II <span class="difficulty">(Medium)</span></h5>
+      <p>Return valid order.</p>
+      <p class="hint"><strong>Hint:</strong> Kahn's return order.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template A.</p></details>
+    </div><div class="practice-card">
+      <h5>269. Alien Dictionary <span class="difficulty">(Hard)</span></h5>
+      <p>Derive char order from sorted dictionary.</p>
+      <p class="hint"><strong>Hint:</strong> Build edges from adjacent words.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template A on char graph.</p></details>
+    </div><div class="practice-card">
+      <h5>802. Find Eventual Safe States <span class="difficulty">(Medium)</span></h5>
+      <p>Nodes that lead to terminal nodes.</p>
+      <p class="hint"><strong>Hint:</strong> Reverse graph or DFS three-color.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Variant of cycle detection.</p></details>
+    </div>
+  </section>
+
+  <section class="pattern" id="trie">
+    <h2><span class="pattern-num">Pattern 12</span><br>Trie (Prefix Tree)</h2>
+    <h3>Recognition Signals — "When do I use this?"</h3>
+    <div class="signal-box"><strong>Look for these clues:</strong><ul><li>Prefix search / autocomplete</li><li>Dictionary of words — search, prefix match</li><li>Word search on board with many words</li><li>XOR maximum with binary trie</li><li>Store strings for efficient prefix queries</li></ul></div>
+    <h3>Underlying Data Structure & Theory</h3>
+    <p><strong>Trie:</strong> Tree where each edge is a character. Path from root spells prefix. Search/insert O(L) where L = word length.</p>
+    <p>Beats hash set when you need <strong>prefix queries</strong> or shared prefix compression.</p>
+    <h3>Why This Approach Works (and Beats Alternatives)</h3>
+    <div class="why-box"><p>Hash set lookup O(L) but can't answer "all words starting with 'app'". Trie gives O(L + num_results). For word search II with many dictionary words, trie prunes dead paths early.</p></div>
+    <h3>Time & Space Complexity</h3>
+    <div class="complexity-box"><p><strong>Insert/search:</strong> O(L) time, O(total chars) space.</p></div>
+    <h3>Memorizable Templates</h3>
+    <div class="template-label">Template A — Trie node + insert/search/startsWith</div><pre><code>class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.end = False
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+    def insert(self, word):
+        node = self.root
+        for ch in word:
+            node = node.children.setdefault(ch, TrieNode())
+        node.end = True
+    def search(self, word):
+        node = self._walk(word)
+        return node is not None and node.end
+    def startsWith(self, prefix):
+        return self._walk(prefix) is not None
+    def _walk(self, s):
+        node = self.root
+        for ch in s:
+            if ch not in node.children:
+                return None
+            node = node.children[ch]
+        return node</code></pre><div class="template-label">Template B — Word search II (board + trie)</div><pre><code>def find_words(board, words):
+    trie = Trie()
+    for w in words:
+        trie.insert(w)
+    res = []
+    R, C = len(board), len(board[0])
+    def dfs(r, c, node, path):
+        ch = board[r][c]
+        if ch not in node.children:
+            return
+        node = node.children[ch]
+        path += ch
+        if node.end:
+            res.append(path)
+            node.end = False  # avoid duplicates
+        board[r][c] = '#'
+        for dr, dc in ((1,0),(-1,0),(0,1),(0,-1)):
+            nr, nc = r+dr, c+dc
+            if 0 <= nr < R and 0 <= nc < C and board[nr][nc] != '#':
+                dfs(nr, nc, node, path)
+        board[r][c] = ch
+    for r in range(R):
+        for c in range(C):
+            dfs(r, c, trie.root, "")
+    return res</code></pre>
+    <h3>Common Variations & How to Adapt</h3>
+    <ul><li><strong>Array children[26]:</strong> faster than dict for lowercase letters.</li>
+    <li><strong>Bit trie:</strong> for max XOR pair problems.</li></ul>
+    <h3>Pitfalls & Edge Cases</h3>
+    <div class="pitfall-box"><ul><li>Not marking end of word.</li><li>Not restoring board in backtrack.</li><li>Duplicate words in result.</li></ul></div>
+    <h3>Where You'll See This on LeetCode</h3>
+    <p>Trie tag — design, word search, prefix problems.</p>
+    <h3>Practice Problems — Prove You Internalized This Pattern</h3>
+    <p>Do these <strong>without</strong> looking at templates first. Adapt the memorized skeleton to each twist.</p>
+    <div class="practice-card">
+      <h5>208. Implement Trie <span class="difficulty">(Medium)</span></h5>
+      <p>Standard trie operations.</p>
+      <p class="hint"><strong>Hint:</strong> Node dict + end flag.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template A.</p></details>
+    </div><div class="practice-card">
+      <h5>212. Word Search II <span class="difficulty">(Hard)</span></h5>
+      <p>Find all dictionary words on board.</p>
+      <p class="hint"><strong>Hint:</strong> Trie + DFS backtrack.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template B.</p></details>
+    </div><div class="practice-card">
+      <h5>648. Replace Words <span class="difficulty">(Medium)</span></h5>
+      <p>Replace with shortest root prefix.</p>
+      <p class="hint"><strong>Hint:</strong> Trie insert roots, search prefix.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template A search.</p></details>
+    </div><div class="practice-card">
+      <h5>211. Design Add and Search Words Data Structure <span class="difficulty">(Medium)</span></h5>
+      <p>Search with '.' wildcard.</p>
+      <p class="hint"><strong>Hint:</strong> DFS on trie for wildcard.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template A + DFS on '.' branches.</p></details>
+    </div>
+  </section>
+
+  <section class="pattern" id="intervals">
+    <h2><span class="pattern-num">Pattern 13</span><br>Intervals (Merge, Sweep)</h2>
+    <h3>Recognition Signals — "When do I use this?"</h3>
+    <div class="signal-box"><strong>Look for these clues:</strong><ul><li>Overlapping intervals — merge, insert, remove</li><li>Meeting rooms / scheduling conflicts</li><li>Sweep line — process start/end events</li><li>Interval partitioning / minimum resources</li><li>Sort by start or end time first</li></ul></div>
+    <h3>Underlying Data Structure & Theory</h3>
+    <p>Intervals [start, end] model time ranges, meetings, etc. <strong>Sort by start</strong> for merging; <strong>sort by end</strong> for greedy scheduling (activity selection).</p>
+    <p><strong>Sweep line:</strong> Convert to events (start, +1), (end, -1), sort, track active count.</p>
+    <h3>Why This Approach Works (and Beats Alternatives)</h3>
+    <div class="why-box"><p>Sorting O(n log n) then linear scan beats pairwise overlap check O(n²). Greedy on sorted end times is optimal for maximum non-overlapping intervals (proof: exchange argument).</p></div>
+    <h3>Time & Space Complexity</h3>
+    <div class="complexity-box"><p><strong>Merge/insert:</strong> O(n log n) from sort.</p>
+    <p><strong>Sweep line:</strong> O(n log n).</p></div>
+    <h3>Memorizable Templates</h3>
+    <div class="template-label">Template A — Merge intervals</div><pre><code>def merge(intervals):
+    intervals.sort(key=lambda x: x[0])
+    merged = []
+    for s, e in intervals:
+        if not merged or s > merged[-1][1]:
+            merged.append([s, e])
+        else:
+            merged[-1][1] = max(merged[-1][1], e)
+    return merged</code></pre><div class="template-label">Template B — Insert interval</div><pre><code>def insert(intervals, new):
+    res = []
+    i = 0
+    while i < len(intervals) and intervals[i][1] < new[0]:
+        res.append(intervals[i]); i += 1
+    while i < len(intervals) and intervals[i][0] <= new[1]:
+        new = [min(new[0], intervals[i][0]), max(new[1], intervals[i][1])]
+        i += 1
+    res.append(new)
+    res.extend(intervals[i:])
+    return res</code></pre><div class="template-label">Template C — Non-overlapping intervals (min removals)</div><pre><code>def erase_overlap(intervals):
+    intervals.sort(key=lambda x: x[1])
+    removals = 0
+    end = float('-inf')
+    for s, e in intervals:
+        if s >= end:
+            end = e
+        else:
+            removals += 1
+    return removals</code></pre><div class="template-label">Template D — Meeting rooms II (min rooms)</div><pre><code>import heapq
+
+def min_meeting_rooms(intervals):
+    intervals.sort(key=lambda x: x[0])
+    heap = []  # end times
+    for s, e in intervals:
+        if heap and heap[0] <= s:
+            heapq.heappop(heap)
+        heapq.heappush(heap, e)
+    return len(heap)</code></pre>
+    <h3>Common Variations & How to Adapt</h3>
+    <ul><li><strong>252 meeting rooms:</strong> check overlap after sort by start.</li>
+    <li><strong>435:</strong> greedy keep earliest ending.</li></ul>
+    <h3>Pitfalls & Edge Cases</h3>
+    <div class="pitfall-box"><ul><li>Confusing open vs closed intervals.</li><li>Not sorting before merge.</li><li>Wrong greedy sort key.</li></ul></div>
+    <h3>Where You'll See This on LeetCode</h3>
+    <p>Array, intervals tag — scheduling classics.</p>
+    <h3>Practice Problems — Prove You Internalized This Pattern</h3>
+    <p>Do these <strong>without</strong> looking at templates first. Adapt the memorized skeleton to each twist.</p>
+    <div class="practice-card">
+      <h5>56. Merge Intervals <span class="difficulty">(Medium)</span></h5>
+      <p>Merge all overlapping.</p>
+      <p class="hint"><strong>Hint:</strong> Sort by start, extend last.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template A.</p></details>
+    </div><div class="practice-card">
+      <h5>57. Insert Interval <span class="difficulty">(Medium)</span></h5>
+      <p>Insert and merge.</p>
+      <p class="hint"><strong>Hint:</strong> Three-phase linear scan.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template B.</p></details>
+    </div><div class="practice-card">
+      <h5>435. Non-overlapping Intervals <span class="difficulty">(Medium)</span></h5>
+      <p>Min intervals to remove.</p>
+      <p class="hint"><strong>Hint:</strong> Greedy by earliest end.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template C.</p></details>
+    </div><div class="practice-card">
+      <h5>253. Meeting Rooms II <span class="difficulty">(Medium)</span></h5>
+      <p>Min conference rooms needed.</p>
+      <p class="hint"><strong>Hint:</strong> Sort + min-heap of end times.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template D.</p></details>
+    </div>
+  </section>
+
+  <section class="pattern" id="greedy">
+    <h2><span class="pattern-num">Pattern 14</span><br>Greedy</h2>
+    <h3>Recognition Signals — "When do I use this?"</h3>
+    <div class="signal-box"><strong>Look for these clues:</strong><ul><li>Local optimal choice leads to global optimum (often provable)</li><li>Activity selection / scheduling</li><li>Jump game — can you reach end?</li><li>Assign tasks / minimize lateness</li><li>Proof often uses exchange argument or stays ahead</li></ul></div>
+    <h3>Underlying Data Structure & Theory</h3>
+    <p><strong>Greedy:</strong> At each step, pick the best-looking local option without backtracking. Works when problem has <strong>greedy choice property</strong> and <strong>optimal substructure</strong>.</p>
+    <p>Unlike DP, no table — one pass or sort + pass.</p>
+    <h3>Why This Approach Works (and Beats Alternatives)</h3>
+    <div class="why-box"><p>DP explores many subproblems; greedy commits early when you can prove you won't need alternatives. O(n) or O(n log n) vs exponential or O(n²) DP states.</p>
+    <p>Professor warning: <strong>greedy fails unless you can prove it</strong>. Test counterexamples mentally.</p></div>
+    <h3>Time & Space Complexity</h3>
+    <div class="complexity-box"><p>Usually O(n log n) from sorting, or O(n) single pass.</p></div>
+    <h3>Memorizable Templates</h3>
+    <div class="template-label">Template A — Jump game</div><pre><code>def can_jump(nums):
+    reach = 0
+    for i, jump in enumerate(nums):
+        if i > reach:
+            return False
+        reach = max(reach, i + jump)
+    return True</code></pre><div class="template-label">Template B — Jump game II (min jumps)</div><pre><code>def jump(nums):
+    jumps = 0
+    cur_end = 0
+    farthest = 0
+    for i in range(len(nums) - 1):
+        farthest = max(farthest, i + nums[i])
+        if i == cur_end:
+            jumps += 1
+            cur_end = farthest
+    return jumps</code></pre><div class="template-label">Template C — Gas station circuit</div><pre><code>def can_complete_circuit(gas, cost):
+    if sum(gas) < sum(cost):
+        return -1
+    tank = 0
+    start = 0
+    for i in range(len(gas)):
+        tank += gas[i] - cost[i]
+        if tank < 0:
+            start = i + 1
+            tank = 0
+    return start</code></pre><div class="template-label">Template D — Partition labels</div><pre><code>def partition_labels(s):
+    last = {ch: i for i, ch in enumerate(s)}
+    end = 0
+    size = 0
+    res = []
+    for i, ch in enumerate(s):
+        end = max(end, last[ch])
+        size += 1
+        if i == end:
+            res.append(size)
+            size = 0
+    return res</code></pre>
+    <h3>Common Variations & How to Adapt</h3>
+    <ul><li><strong>Task scheduler:</strong> formula or heap.</li>
+    <li><strong>Assign cookies:</strong> sort both, two pointers.</li></ul>
+    <h3>Pitfalls & Edge Cases</h3>
+    <div class="pitfall-box"><ul><li>Applying greedy without proof — wrong on coin change.</li><li>Confusing jump game I vs II.</li></ul></div>
+    <h3>Where You'll See This on LeetCode</h3>
+    <p>Greedy tag — jump games, intervals, scheduling.</p>
+    <h3>Practice Problems — Prove You Internalized This Pattern</h3>
+    <p>Do these <strong>without</strong> looking at templates first. Adapt the memorized skeleton to each twist.</p>
+    <div class="practice-card">
+      <h5>55. Jump Game <span class="difficulty">(Medium)</span></h5>
+      <p>Can reach last index?</p>
+      <p class="hint"><strong>Hint:</strong> Track farthest reachable.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template A.</p></details>
+    </div><div class="practice-card">
+      <h5>45. Jump Game II <span class="difficulty">(Medium)</span></h5>
+      <p>Minimum jumps to end.</p>
+      <p class="hint"><strong>Hint:</strong> BFS-like greedy layers.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template B.</p></details>
+    </div><div class="practice-card">
+      <h5>134. Gas Station <span class="difficulty">(Medium)</span></h5>
+      <p>Start index for circular route.</p>
+      <p class="hint"><strong>Hint:</strong> Total gas vs cost; reset start when tank negative.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template C.</p></details>
+    </div><div class="practice-card">
+      <h5>763. Partition Labels <span class="difficulty">(Medium)</span></h5>
+      <p>Split string into max parts where letters appear in one part.</p>
+      <p class="hint"><strong>Hint:</strong> Track last index of each char.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template D.</p></details>
+    </div>
+  </section>
+
+  <section class="pattern" id="dp">
+    <h2><span class="pattern-num">Pattern 15</span><br>Dynamic Programming (1D → 2D → Knapsack)</h2>
+    <h3>Recognition Signals — "When do I use this?"</h3>
+    <div class="signal-box"><strong>Look for these clues:</strong><ul><li>Optimal substructure — optimal solution built from subproblems</li><li>Overlapping subproblems — reuse computed results</li><li>Count ways / min cost / max value</li><li>Choice at each step: take or skip</li><li>Grid paths, sequence DP, knapsack</li></ul></div>
+    <h3>Underlying Data Structure & Theory</h3>
+    <p><strong>DP recipe:</strong></p>
+    <ol>
+    <li>Define state (what info do you need?)</li>
+    <li>Recurrence (how states relate)</li>
+    <li>Base cases</li>
+    <li>Order of computation (bottom-up) or memo (top-down)</li>
+    </ol>
+    <p><strong>1D:</strong> dp[i] depends on dp[i-1], dp[i-2]...</p>
+    <p><strong>2D:</strong> dp[i][j] — two sequences or grid.</p>
+    <p><strong>Knapsack:</strong> dp[cap] — iterate items, cap backwards for 0/1 knapsack.</p>
+    <h3>Why This Approach Works (and Beats Alternatives)</h3>
+    <div class="why-box"><p>Naive recursion is exponential from recomputation. Memoization → O(states × transitions). Bottom-up avoids recursion limit and is often faster.</p>
+    <p>DP beats greedy when local choice isn't sufficient (coin change with arbitrary denominations).</p></div>
+    <h3>Time & Space Complexity</h3>
+    <div class="complexity-box"><p><strong>1D DP:</strong> O(n) time, O(n) or O(1) space if rolling.</p>
+    <p><strong>2D:</strong> O(mn) time/space, often optimizable.</p>
+    <p><strong>Knapsack:</strong> O(n × W).</p></div>
+    <h3>Memorizable Templates</h3>
+    <div class="template-label">Template A — 1D (climbing stairs / fib)</div><pre><code>def climb_stairs(n):
+    if n <= 2:
+        return n
+    a, b = 1, 2
+    for _ in range(3, n + 1):
+        a, b = b, a + b
+    return b</code></pre><div class="template-label">Template B — House robber (take/skip)</div><pre><code>def rob(nums):
+    prev2, prev1 = 0, 0
+    for x in nums:
+        prev2, prev1 = prev1, max(prev1, prev2 + x)
+    return prev1</code></pre><div class="template-label">Template C — Coin change (unbounded)</div><pre><code>def coin_change(coins, amount):
+    dp = [float('inf')] * (amount + 1)
+    dp[0] = 0
+    for a in range(1, amount + 1):
+        for c in coins:
+            if c <= a:
+                dp[a] = min(dp[a], dp[a - c] + 1)
+    return dp[amount] if dp[amount] != float('inf') else -1</code></pre><div class="template-label">Template D — 0/1 Knapsack</div><pre><code>def knapsack(weights, values, W):
+    dp = [0] * (W + 1)
+    for w, v in zip(weights, values):
+        for cap in range(W, w - 1, -1):  # backwards!
+            dp[cap] = max(dp[cap], dp[cap - w] + v)
+    return dp[W]</code></pre><div class="template-label">Template E — LCS (2D)</div><pre><code>def longest_common_subsequence(text1, text2):
+    m, n = len(text1), len(text2)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if text1[i-1] == text2[j-1]:
+                dp[i][j] = dp[i-1][j-1] + 1
+            else:
+                dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+    return dp[m][n]</code></pre><div class="template-label">Template F — LIS O(n log n)</div><pre><code>import bisect
+
+def length_of_lis(nums):
+    tails = []
+    for x in nums:
+        i = bisect.bisect_left(tails, x)
+        if i == len(tails):
+            tails.append(x)
+        else:
+            tails[i] = x
+    return len(tails)</code></pre>
+    <h3>Common Variations & How to Adapt</h3>
+    <ul><li><strong>Grid DP:</strong> unique paths, min path sum.</li>
+    <li><strong>String DP:</strong> edit distance, palindrome partitioning.</li>
+    <li><strong>State machine DP:</strong> buy/sell stock with cooldown.</li></ul>
+    <h3>Pitfalls & Edge Cases</h3>
+    <div class="pitfall-box"><ul><li>Wrong loop direction in 0/1 knapsack (must go backwards).</li><li>Off-by-one in indices.</li><li>Not initializing base cases.</li><li>Using O(n²) LIS when O(n log n) needed.</li></ul></div>
+    <h3>Where You'll See This on LeetCode</h3>
+    <p>Dynamic Programming tag — largest category of hard mediums.</p>
+    <h3>Practice Problems — Prove You Internalized This Pattern</h3>
+    <p>Do these <strong>without</strong> looking at templates first. Adapt the memorized skeleton to each twist.</p>
+    <div class="practice-card">
+      <h5>198. House Robber <span class="difficulty">(Medium)</span></h5>
+      <p>Max sum non-adjacent.</p>
+      <p class="hint"><strong>Hint:</strong> Take/skip recurrence.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template B.</p></details>
+    </div><div class="practice-card">
+      <h5>322. Coin Change <span class="difficulty">(Medium)</span></h5>
+      <p>Min coins for amount.</p>
+      <p class="hint"><strong>Hint:</strong> Unbounded knapsack style.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template C.</p></details>
+    </div><div class="practice-card">
+      <h5>1143. Longest Common Subsequence <span class="difficulty">(Medium)</span></h5>
+      <p>LCS length.</p>
+      <p class="hint"><strong>Hint:</strong> 2D match/mismatch.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template E.</p></details>
+    </div><div class="practice-card">
+      <h5>300. Longest Increasing Subsequence <span class="difficulty">(Medium)</span></h5>
+      <p>LIS length.</p>
+      <p class="hint"><strong>Hint:</strong> Patience sorting / bisect.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template F.</p></details>
+    </div>
+  </section>
+
+  <section class="pattern" id="bit-manipulation">
+    <h2><span class="pattern-num">Pattern 16</span><br>Bit Manipulation (Basics)</h2>
+    <h3>Recognition Signals — "When do I use this?"</h3>
+    <div class="signal-box"><strong>Look for these clues:</strong><ul><li>Single number / find unique when others appear twice</li><li>Count set bits / power of two</li><li>XOR properties — a^a=0, a^0=a</li><li>Bitmask DP for small n subsets</li><li>Get/set/clear/toggle bit at position i</li></ul></div>
+    <h3>Underlying Data Structure & Theory</h3>
+    <p><strong>Core ops:</strong> AND (&), OR (|), XOR (^), NOT (~), shift (&lt;&lt;, &gt;&gt;).</p>
+    <p><strong>Tricks:</strong></p>
+    <ul>
+    <li><code>x & (x-1)</code> clears lowest set bit</li>
+    <li><code>x & -x</code> isolates lowest set bit</li>
+    <li>Power of 2: <code>x > 0 and (x & (x-1)) == 0</code></li>
+    </ul>
+    <h3>Why This Approach Works (and Beats Alternatives)</h3>
+    <div class="why-box"><p>XOR cancels pairs in O(n) time O(1) space vs hash map O(n) space. Bit tricks replace loops for bit-level operations.</p></div>
+    <h3>Time & Space Complexity</h3>
+    <div class="complexity-box"><p><strong>Bit ops:</strong> O(1) per operation.</p>
+    <p><strong>Count bits 1..n:</strong> O(n log n) or DP O(n).</p></div>
+    <h3>Memorizable Templates</h3>
+    <div class="template-label">Template A — Single number (XOR all)</div><pre><code>def single_number(nums):
+    ans = 0
+    for x in nums:
+        ans ^= x
+    return ans</code></pre><div class="template-label">Template B — Count set bits</div><pre><code>def hamming_weight(n):
+    count = 0
+    while n:
+        n &= n - 1
+        count += 1
+    return count</code></pre><div class="template-label">Template C — Power of two</div><pre><code>def is_power_of_two(n):
+    return n > 0 and (n & (n - 1)) == 0</code></pre><div class="template-label">Template D — Subsets via bitmask</div><pre><code>def subsets_bitmask(nums):
+    n = len(nums)
+    res = []
+    for mask in range(1 << n):
+        res.append([nums[i] for i in range(n) if mask & (1 << i)])
+    return res</code></pre><div class="template-label">Template E — DP count bits</div><pre><code>def count_bits(n):
+    dp = [0] * (n + 1)
+    for i in range(1, n + 1):
+        dp[i] = dp[i >> 1] + (i & 1)
+    return dp</code></pre>
+    <h3>Common Variations & How to Adapt</h3>
+    <ul><li><strong>Single number II:</strong> count bits mod 3.</li>
+    <li><strong>Divide two integers:</strong> bit shift subtraction.</li></ul>
+    <h3>Pitfalls & Edge Cases</h3>
+    <div class="pitfall-box"><ul><li>Python infinite bits for negative numbers — use <code>n & 0xFFFFFFFF</code> if needed.</li><li>Confusing signed vs unsigned shift.</li></ul></div>
+    <h3>Where You'll See This on LeetCode</h3>
+    <p>Bit manipulation tag — clever math problems.</p>
+    <h3>Practice Problems — Prove You Internalized This Pattern</h3>
+    <p>Do these <strong>without</strong> looking at templates first. Adapt the memorized skeleton to each twist.</p>
+    <div class="practice-card">
+      <h5>136. Single Number <span class="difficulty">(Easy)</span></h5>
+      <p>Every element twice except one.</p>
+      <p class="hint"><strong>Hint:</strong> XOR all elements.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template A.</p></details>
+    </div><div class="practice-card">
+      <h5>191. Number of 1 Bits <span class="difficulty">(Easy)</span></h5>
+      <p>Count set bits.</p>
+      <p class="hint"><strong>Hint:</strong> Brian Kernighan's algorithm.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template B.</p></details>
+    </div><div class="practice-card">
+      <h5>338. Counting Bits <span class="difficulty">(Easy)</span></h5>
+      <p>Count bits for 0..n.</p>
+      <p class="hint"><strong>Hint:</strong> dp[i] = dp[i>>1] + i&1.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template E.</p></details>
+    </div><div class="practice-card">
+      <h5>78. Subsets <span class="difficulty">(Medium)</span></h5>
+      <p>All subsets (bitmask alternative to backtracking).</p>
+      <p class="hint"><strong>Hint:</strong> Iterate mask 0 to 2^n-1.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template D.</p></details>
+    </div>
+  </section>
+
+  <section class="pattern" id="fast-slow">
+    <h2><span class="pattern-num">Pattern 17</span><br>Fast & Slow Pointers (Linked List)</h2>
+    <h3>Recognition Signals — "When do I use this?"</h3>
+    <div class="signal-box"><strong>Look for these clues:</strong><ul><li>Linked list cycle detection</li><li>Find middle of linked list</li><li>Find cycle start (Floyd's algorithm)</li><li>Palindrome linked list</li><li>Reorder list / intersection</li></ul></div>
+    <h3>Underlying Data Structure & Theory</h3>
+    <p><strong>Floyd's cycle detection:</strong> Slow moves 1 step, fast moves 2. If cycle exists, they meet. If fast reaches null, no cycle.</p>
+    <p><strong>Find middle:</strong> When fast at end, slow at middle.</p>
+    <p><strong>Cycle start:</strong> After meeting, reset one pointer to head, move both 1 step — meet at cycle entrance.</p>
+    <h3>Why This Approach Works (and Beats Alternatives)</h3>
+    <div class="why-box"><p>O(n) time, O(1) space vs hash set O(n) space for cycle detection. Two pointers on linked list avoid index access which is O(n) per node.</p></div>
+    <h3>Time & Space Complexity</h3>
+    <div class="complexity-box"><p><strong>All variants:</strong> O(n) time, O(1) extra space.</p></div>
+    <h3>Memorizable Templates</h3>
+    <div class="template-label">Template A — Has cycle</div><pre><code>def has_cycle(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow is fast:
+            return True
+    return False</code></pre><div class="template-label">Template B — Find cycle start</div><pre><code>def detect_cycle(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow is fast:
+            break
+    else:
+        return None
+    slow = head
+    while slow is not fast:
+        slow = slow.next
+        fast = fast.next
+    return slow</code></pre><div class="template-label">Template C — Middle node</div><pre><code>def middle_node(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    return slow</code></pre><div class="template-label">Template D — Palindrome linked list</div><pre><code>def is_palindrome_list(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    prev = None
+    while slow:
+        nxt = slow.next
+        slow.next = prev
+        prev = slow
+        slow = nxt
+    left, right = head, prev
+    while right:
+        if left.val != right.val:
+            return False
+        left = left.next
+        right = right.next
+    return True</code></pre>
+    <h3>Common Variations & How to Adapt</h3>
+    <ul><li><strong>Reorder list:</strong> find mid, reverse second half, merge.</li>
+    <li><strong>Intersection:</strong> align lengths then walk together.</li></ul>
+    <h3>Pitfalls & Edge Cases</h3>
+    <div class="pitfall-box"><ul><li>Not checking fast.next before fast.next.next.</li><li>Losing head when reversing.</li><li>Even vs odd length middle definition.</li></ul></div>
+    <h3>Where You'll See This on LeetCode</h3>
+    <p>Linked list tag — almost always fast/slow or reverse.</p>
+    <h3>Practice Problems — Prove You Internalized This Pattern</h3>
+    <p>Do these <strong>without</strong> looking at templates first. Adapt the memorized skeleton to each twist.</p>
+    <div class="practice-card">
+      <h5>141. Linked List Cycle <span class="difficulty">(Easy)</span></h5>
+      <p>Detect cycle.</p>
+      <p class="hint"><strong>Hint:</strong> Floyd's algorithm.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template A.</p></details>
+    </div><div class="practice-card">
+      <h5>142. Linked List Cycle II <span class="difficulty">(Medium)</span></h5>
+      <p>Return cycle start node.</p>
+      <p class="hint"><strong>Hint:</strong> Phase 2 reset to head.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template B.</p></details>
+    </div><div class="practice-card">
+      <h5>876. Middle of the Linked List <span class="difficulty">(Easy)</span></h5>
+      <p>Return middle node.</p>
+      <p class="hint"><strong>Hint:</strong> Fast reaches end.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template C.</p></details>
+    </div><div class="practice-card">
+      <h5>234. Palindrome Linked List <span class="difficulty">(Easy)</span></h5>
+      <p>Is list palindrome?</p>
+      <p class="hint"><strong>Hint:</strong> Find mid, reverse half, compare.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template D.</p></details>
+    </div>
+  </section>
+
+  <section class="pattern" id="trees-bst">
+    <h2><span class="pattern-num">Pattern 18</span><br>Tree Traversals + BST Properties</h2>
+    <h3>Recognition Signals — "When do I use this?"</h3>
+    <div class="signal-box"><strong>Look for these clues:</strong><ul><li>Binary tree recursion — return value from subtrees</li><li>BST property: left < root < right (inorder sorted)</li><li>LCA in BST vs binary tree</li><li>Validate BST with min/max bounds</li><li>Serialize/deserialize tree structure</li></ul></div>
+    <h3>Underlying Data Structure & Theory</h3>
+    <p><strong>Traversals:</strong></p>
+    <ul>
+    <li><strong>Inorder (LNR):</strong> BST → sorted order</li>
+    <li><strong>Preorder (NLR):</strong> copy/serialize</li>
+    <li><strong>Postorder (LRN):</strong> delete/bottom-up compute</li>
+    <li><strong>Level order:</strong> BFS with queue</li>
+    </ul>
+    <p><strong>BST search:</strong> O(h) compare and go left/right. Balanced h=log n, skewed h=n.</p>
+    <h3>Why This Approach Works (and Beats Alternatives)</h3>
+    <div class="why-box"><p>Tree recursion exploits problem decomposition — answer at node combines subtree answers. BST ordering enables O(h) search vs O(n) scan.</p></div>
+    <h3>Time & Space Complexity</h3>
+    <div class="complexity-box"><p><strong>Traversal:</strong> O(n) time, O(h) stack space.</p>
+    <p><strong>BST ops:</strong> O(h) average.</p></div>
+    <h3>Memorizable Templates</h3>
+    <div class="template-label">Template A — Inorder iterative</div><pre><code>def inorder(root):
+    stack, res = [], []
+    cur = root
+    while cur or stack:
+        while cur:
+            stack.append(cur)
+            cur = cur.left
+        cur = stack.pop()
+        res.append(cur.val)
+        cur = cur.right
+    return res</code></pre><div class="template-label">Template B — Validate BST</div><pre><code>def is_valid_bst(root):
+    def dfs(node, lo, hi):
+        if not node:
+            return True
+        if not (lo < node.val < hi):
+            return False
+        return dfs(node.left, lo, node.val) and dfs(node.right, node.val, hi)
+    return dfs(root, float('-inf'), float('inf'))</code></pre><div class="template-label">Template C — LCA in BST</div><pre><code>def lca_bst(root, p, q):
+    while root:
+        if p.val < root.val and q.val < root.val:
+            root = root.left
+        elif p.val > root.val and q.val > root.val:
+            root = root.right
+        else:
+            return root</code></pre><div class="template-label">Template D — LCA binary tree</div><pre><code>def lca_tree(root, p, q):
+    if not root or root in (p, q):
+        return root
+    left = lca_tree(root.left, p, q)
+    right = lca_tree(root.right, p, q)
+    if left and right:
+        return root
+    return left or right</code></pre><div class="template-label">Template E — Kth smallest in BST</div><pre><code>def kth_smallest(root, k):
+    stack = []
+    cur = root
+    while cur or stack:
+        while cur:
+            stack.append(cur)
+            cur = cur.left
+        cur = stack.pop()
+        k -= 1
+        if k == 0:
+            return cur.val
+        cur = cur.right</code></pre>
+    <h3>Common Variations & How to Adapt</h3>
+    <ul><li><strong>Max depth/diameter:</strong> postorder return heights.</li>
+    <li><strong>Construct from preorder+inorder:</strong> split by root index.</li></ul>
+    <h3>Pitfalls & Edge Cases</h3>
+    <div class="pitfall-box"><ul><li>Validate BST: must use bounds not just immediate children.</li><li>Integer overflow on bounds — use None or object bounds.</li><li>Confusing LCA BST vs general tree.</li></ul></div>
+    <h3>Where You'll See This on LeetCode</h3>
+    <p>Tree, BST tags — very common in FAANG interviews.</p>
+    <h3>Practice Problems — Prove You Internalized This Pattern</h3>
+    <p>Do these <strong>without</strong> looking at templates first. Adapt the memorized skeleton to each twist.</p>
+    <div class="practice-card">
+      <h5>98. Validate Binary Search Tree <span class="difficulty">(Medium)</span></h5>
+      <p>Check valid BST.</p>
+      <p class="hint"><strong>Hint:</strong> Pass min/max bounds.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template B.</p></details>
+    </div><div class="practice-card">
+      <h5>230. Kth Smallest Element in a BST <span class="difficulty">(Medium)</span></h5>
+      <p>Kth inorder element.</p>
+      <p class="hint"><strong>Hint:</strong> Iterative inorder.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template E.</p></details>
+    </div><div class="practice-card">
+      <h5>235. Lowest Common Ancestor of a BST <span class="difficulty">(Medium)</span></h5>
+      <p>LCA using BST property.</p>
+      <p class="hint"><strong>Hint:</strong> Walk from root.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template C.</p></details>
+    </div><div class="practice-card">
+      <h5>236. Lowest Common Ancestor of a Binary Tree <span class="difficulty">(Medium)</span></h5>
+      <p>LCA general tree.</p>
+      <p class="hint"><strong>Hint:</strong> Postorder bubble up.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template D.</p></details>
+    </div>
+  </section>
+
+  <section class="pattern" id="dijkstra">
+    <h2><span class="pattern-num">Pattern 19</span><br>Graph Shortest Path (Dijkstra)</h2>
+    <h3>Recognition Signals — "When do I use this?"</h3>
+    <div class="signal-box"><strong>Look for these clues:</strong><ul><li>Weighted graph — shortest path from source</li><li>Non-negative edge weights</li><li>Grid with cost per cell</li><li>Min effort / min time with varying costs</li><li>NOT for negative edges — use Bellman-Ford</li></ul></div>
+    <h3>Underlying Data Structure & Theory</h3>
+    <p><strong>Dijkstra:</strong> Greedy BFS with min-heap on distance. When you pop node u with smallest dist, that dist is final (non-negative weights).</p>
+    <p><strong>Relaxation:</strong> if dist[u] + w(u,v) &lt; dist[v], update dist[v] and push to heap.</p>
+    <p><strong>Grid variant:</strong> Each cell is node; 4 or 8 neighbors with edge weights.</p>
+    <h3>Why This Approach Works (and Beats Alternatives)</h3>
+    <div class="why-box"><p>BFS works for unit weights. Dijkstra generalizes to weighted graphs. Floyd-Warshall O(V³) is overkill for single-source. Bellman-Ford for negative edges only.</p></div>
+    <h3>Time & Space Complexity</h3>
+    <div class="complexity-box"><p><strong>With binary heap:</strong> O((V + E) log V).</p>
+    <p><strong>Grid R×C:</strong> O(RC log(RC)).</p></div>
+    <h3>Memorizable Templates</h3>
+    <div class="template-label">Template A — Dijkstra adjacency list</div><pre><code>import heapq
+
+def dijkstra(n, graph, src):
+    dist = [float('inf')] * n
+    dist[src] = 0
+    heap = [(0, src)]
+    while heap:
+        d, u = heapq.heappop(heap)
+        if d > dist[u]:
+            continue
+        for v, w in graph[u]:
+            nd = d + w
+            if nd < dist[v]:
+                dist[v] = nd
+                heapq.heappush(heap, (nd, v))
+    return dist</code></pre><div class="template-label">Template B — Grid min effort</div><pre><code>import heapq
+
+def min_effort(heights):
+    R, C = len(heights), len(heights[0])
+    dist = [[float('inf')] * C for _ in range(R)]
+    dist[0][0] = 0
+    heap = [(0, 0, 0)]
+    while heap:
+        effort, r, c = heapq.heappop(heap)
+        if r == R-1 and c == C-1:
+            return effort
+        if effort > dist[r][c]:
+            continue
+        for dr, dc in ((1,0),(-1,0),(0,1),(0,-1)):
+            nr, nc = r+dr, c+dc
+            if 0 <= nr < R and 0 <= nc < C:
+                ne = max(effort, abs(heights[r][c] - heights[nr][nc]))
+                if ne < dist[nr][nc]:
+                    dist[nr][nc] = ne
+                    heapq.heappush(heap, (ne, nr, nc))
+    return -1</code></pre><div class="template-label">Template C — Network delay (classic)</div><pre><code>import heapq
+from collections import defaultdict
+
+def network_delay(times, n, k):
+    graph = defaultdict(list)
+    for u, v, w in times:
+        graph[u].append((v, w))
+    dist = {}
+    heap = [(0, k)]
+    while heap:
+        d, u = heapq.heappop(heap)
+        if u in dist:
+            continue
+        dist[u] = d
+        for v, w in graph[u]:
+            heapq.heappush(heap, (d + w, v))
+    return max(dist.values()) if len(dist) == n else -1</code></pre>
+    <h3>Common Variations & How to Adapt</h3>
+    <ul><li><strong>0-1 BFS:</strong> deque when weights only 0 or 1.</li>
+    <li><strong>K stops:</strong> Bellman-Ford or modified Dijkstra with (node, stops) state.</li></ul>
+    <h3>Pitfalls & Edge Cases</h3>
+    <div class="pitfall-box"><ul><li>Using Dijkstra with negative edges.</li><li>Not skipping stale heap entries.</li><li>Forgetting disconnected nodes.</li></ul></div>
+    <h3>Where You'll See This on LeetCode</h3>
+    <p>Shortest path, heap + graph combo problems.</p>
+    <h3>Practice Problems — Prove You Internalized This Pattern</h3>
+    <p>Do these <strong>without</strong> looking at templates first. Adapt the memorized skeleton to each twist.</p>
+    <div class="practice-card">
+      <h5>743. Network Delay Time <span class="difficulty">(Medium)</span></h5>
+      <p>Time for all nodes to receive signal.</p>
+      <p class="hint"><strong>Hint:</strong> Dijkstra from source k.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template C.</p></details>
+    </div><div class="practice-card">
+      <h5>1631. Path With Minimum Effort <span class="difficulty">(Medium)</span></h5>
+      <p>Min max-height-diff on path.</p>
+      <p class="hint"><strong>Hint:</strong> Dijkstra on grid with effort metric.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template B.</p></details>
+    </div><div class="practice-card">
+      <h5>787. Cheapest Flights Within K Stops <span class="difficulty">(Medium)</span></h5>
+      <p>Cheapest path with ≤ k edges.</p>
+      <p class="hint"><strong>Hint:</strong> Bellman-Ford k rounds or BFS on (node, stops).</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Modified shortest path — not pure Dijkstra.</p></details>
+    </div><div class="practice-card">
+      <h5>778. Swim in Rising Water <span class="difficulty">(Hard)</span></h5>
+      <p>Min time to reach bottom-right.</p>
+      <p class="hint"><strong>Hint:</strong> Dijkstra / BS on answer on grid.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template B variant or BS on time.</p></details>
+    </div>
+  </section>
+
+  <section class="pattern" id="design">
+    <h2><span class="pattern-num">Pattern 20</span><br>Design / Simulation</h2>
+    <h3>Recognition Signals — "When do I use this?"</h3>
+    <div class="signal-box"><strong>Look for these clues:</strong><ul><li>Implement data structure with specific operation constraints</li><li>LRU/LFU cache with O(1) ops</li><li>Design Twitter / hit counter / logger</li><li>Parse and simulate step-by-step rules</li><li>Combine multiple known structures (hash + DLL, heap + map)</li></ul></div>
+    <h3>Underlying Data Structure & Theory</h3>
+    <p>Design problems test whether you can <strong>compose</strong> primitives into required API. Common building blocks:</p>
+    <ul>
+    <li><strong>Hash map</strong> for O(1) lookup</li>
+    <li><strong>Doubly linked list</strong> for O(1) removal/insertion order (LRU)</li>
+    <li><strong>Heap</strong> for top-K / scheduling</li>
+    <li><strong>Tree/Trie</strong> for ordered or prefix data</li>
+    </ul>
+    <p><strong>Simulation:</strong> Follow problem rules literally in loops; use deque for queues.</p>
+    <h3>Why This Approach Works (and Beats Alternatives)</h3>
+    <div class="why-box"><p>No single trick — success comes from knowing which DS gives which operation in O(1) or O(log n). LRU = hash + doubly linked list is the classic interview composition.</p></div>
+    <h3>Time & Space Complexity</h3>
+    <div class="complexity-box"><p>Per operation target: O(1) or O(log n). Space usually O(capacity).</p></div>
+    <h3>Memorizable Templates</h3>
+    <div class="template-label">Template A — LRU Cache</div><pre><code>from collections import OrderedDict
+
+class LRUCache:
+    def __init__(self, capacity):
+        self.cap = capacity
+        self.cache = OrderedDict()
+    def get(self, key):
+        if key not in self.cache:
+            return -1
+        self.cache.move_to_end(key)
+        return self.cache[key]
+    def put(self, key, value):
+        if key in self.cache:
+            self.cache.move_to_end(key)
+        self.cache[key] = value
+        if len(self.cache) > self.cap:
+            self.cache.popitem(last=False)</code></pre><div class="template-label">Template B — Min stack</div><pre><code>class MinStack:
+    def __init__(self):
+        self.stack = []
+        self.min_stack = []
+    def push(self, val):
+        self.stack.append(val)
+        m = min(val, self.min_stack[-1] if self.min_stack else val)
+        self.min_stack.append(m)
+    def pop(self):
+        self.stack.pop()
+        self.min_stack.pop()
+    def getMin(self):
+        return self.min_stack[-1]</code></pre><div class="template-label">Template C — Time-based key-value store</div><pre><code>import bisect
+
+class TimeMap:
+    def __init__(self):
+        self.store = {}  # key -> list of (timestamp, value)
+    def set(self, key, value, timestamp):
+        self.store.setdefault(key, []).append((timestamp, value))
+    def get(self, key, timestamp):
+        arr = self.store.get(key, [])
+        i = bisect.bisect_right(arr, (timestamp, chr(127))) - 1
+        return arr[i][1] if i >= 0 else ""</code></pre><div class="template-label">Template D — Moving average from data stream</div><pre><code>from collections import deque
+
+class MovingAverage:
+    def __init__(self, size):
+        self.size = size
+        self.q = deque()
+        self.total = 0
+    def next(self, val):
+        self.q.append(val)
+        self.total += val
+        if len(self.q) > self.size:
+            self.total -= self.q.popleft()
+        return self.total / len(self.q)</code></pre>
+    <h3>Common Variations & How to Adapt</h3>
+    <ul><li><strong>LRU manual:</strong> dict + doubly linked list nodes.</li>
+    <li><strong>Hit counter:</strong> queue of timestamps.</li>
+    <li><strong>File system:</strong> trie or nested dict.</li></ul>
+    <h3>Pitfalls & Edge Cases</h3>
+    <div class="pitfall-box"><ul><li>Race conditions not relevant on LeetCode but think thread-safety in real life.</li><li>OrderedDict move_to_end trick.</li><li>Off-by-one on capacity.</li></ul></div>
+    <h3>Where You'll See This on LeetCode</h3>
+    <p>Design tag — common in onsite rounds.</p>
+    <h3>Practice Problems — Prove You Internalized This Pattern</h3>
+    <p>Do these <strong>without</strong> looking at templates first. Adapt the memorized skeleton to each twist.</p>
+    <div class="practice-card">
+      <h5>146. LRU Cache <span class="difficulty">(Medium)</span></h5>
+      <p>O(1) get/put with eviction.</p>
+      <p class="hint"><strong>Hint:</strong> OrderedDict or hash+DLL.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template A.</p></details>
+    </div><div class="practice-card">
+      <h5>155. Min Stack <span class="difficulty">(Medium)</span></h5>
+      <p>Stack with O(1) getMin.</p>
+      <p class="hint"><strong>Hint:</strong> Auxiliary min stack.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template B.</p></details>
+    </div><div class="practice-card">
+      <h5>981. Time Based Key-Value Store <span class="difficulty">(Medium)</span></h5>
+      <p>Get value at timestamp.</p>
+      <p class="hint"><strong>Hint:</strong> Hash + binary search on timestamps.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template C.</p></details>
+    </div><div class="practice-card">
+      <h5>346. Moving Average from Data Stream <span class="difficulty">(Easy)</span></h5>
+      <p>Rolling average.</p>
+      <p class="hint"><strong>Hint:</strong> Queue + running sum.</p>
+      <details><summary>Expected approach (only after attempting)</summary><p>Template D.</p></details>
+    </div>
+  </section>
+
+  <section class="pattern" id="appendix">
+    <h2>Appendix A — Pattern Decision Tree</h2>
+    <div class="walkthrough">
+      <p>When you read a problem, ask these questions <strong>in order</strong>:</p>
+      <ol>
+        <li><strong>Design problem?</strong> → Pattern 20</li>
+        <li><strong>Linked list?</strong> → Pattern 17</li>
+        <li><strong>Tree/BST?</strong> → Pattern 18</li>
+        <li><strong>Graph/grid connectivity?</strong> → Pattern 8</li>
+        <li><strong>Weighted shortest path?</strong> → Pattern 19</li>
+        <li><strong>Prerequisites/ordering?</strong> → Pattern 11</li>
+        <li><strong>Dynamic connectivity?</strong> → Pattern 10</li>
+        <li><strong>Generate all solutions?</strong> → Pattern 9</li>
+        <li><strong>Dictionary/prefix words?</strong> → Pattern 12</li>
+        <li><strong>Intervals/meetings?</strong> → Pattern 13</li>
+        <li><strong>Contiguous subarray/substring?</strong> → Pattern 3 or 4</li>
+        <li><strong>Sorted array pairs?</strong> → Pattern 2</li>
+        <li><strong>O(1) lookup/frequency?</strong> → Pattern 1</li>
+        <li><strong>Next greater/brackets?</strong> → Pattern 6</li>
+        <li><strong>Top K?</strong> → Pattern 7</li>
+        <li><strong>Min-maximize?</strong> → Pattern 5</li>
+        <li><strong>Overlapping subproblems?</strong> → Pattern 15</li>
+        <li><strong>Obvious local choice?</strong> → Pattern 14</li>
+        <li><strong>Bits/XOR?</strong> → Pattern 16</li>
+      </ol>
+    </div>
+    <h2>Appendix B — Flash Card Summaries</h2>
+    <table>
+      <tr><th>#</th><th>Pattern</th><th>Memory Hook</th><th>Time</th></tr>
+      <tr><td>1</td><td>Hash Map</td><td>Have I seen complement?</td><td>O(n)</td></tr>
+      <tr><td>2</td><td>Two Pointers</td><td>Converge on sorted array</td><td>O(n)</td></tr>
+      <tr><td>3</td><td>Sliding Window</td><td>Expand right, shrink left</td><td>O(n)</td></tr>
+      <tr><td>4</td><td>Prefix Sum</td><td>P[r]-P[l]; map for sum K</td><td>O(n)</td></tr>
+      <tr><td>5</td><td>Binary Search</td><td>BS answer if monotonic check</td><td>O(log R)</td></tr>
+      <tr><td>6</td><td>Stack</td><td>Mono stack = next greater</td><td>O(n)</td></tr>
+      <tr><td>7</td><td>Heap</td><td>Min-heap size K</td><td>O(n log k)</td></tr>
+      <tr><td>8</td><td>BFS/DFS</td><td>BFS shortest; DFS explore</td><td>O(V+E)</td></tr>
+      <tr><td>9</td><td>Backtracking</td><td>Choose, recurse, undo</td><td>O(2^n)</td></tr>
+      <tr><td>10</td><td>Union-Find</td><td>find+union compressed</td><td>O(α(n))</td></tr>
+      <tr><td>11</td><td>Topo Sort</td><td>Kahn indegree queue</td><td>O(V+E)</td></tr>
+      <tr><td>12</td><td>Trie</td><td>Char tree for prefixes</td><td>O(L)</td></tr>
+      <tr><td>13</td><td>Intervals</td><td>Sort start merge</td><td>O(n log n)</td></tr>
+      <tr><td>14</td><td>Greedy</td><td>Sort + local optimal</td><td>O(n log n)</td></tr>
+      <tr><td>15</td><td>DP</td><td>State, recurrence, base</td><td>O(states)</td></tr>
+      <tr><td>16</td><td>Bits</td><td>XOR cancels pairs</td><td>O(1)</td></tr>
+      <tr><td>17</td><td>Fast/Slow</td><td>slow×1 fast×2</td><td>O(n)</td></tr>
+      <tr><td>18</td><td>Tree/BST</td><td>Inorder = sorted</td><td>O(n)</td></tr>
+      <tr><td>19</td><td>Dijkstra</td><td>Min-heap distances</td><td>O(E log V)</td></tr>
+      <tr><td>20</td><td>Design</td><td>Compose DS for O(1)</td><td>O(1) ops</td></tr>
+    </table>
+    <h2>Appendix C — 50-Day Schedule</h2>
+    <table>
+      <tr><th>Days</th><th>Focus</th></tr>
+      <tr><td>1–3</td><td>Patterns 1–3 + 12 problems</td></tr>
+      <tr><td>4–5</td><td>Patterns 4–5 + review</td></tr>
+      <tr><td>6–8</td><td>Patterns 6–7</td></tr>
+      <tr><td>9–12</td><td>Patterns 8–9</td></tr>
+      <tr><td>13–15</td><td>Patterns 10–12</td></tr>
+      <tr><td>16–18</td><td>Patterns 13–14</td></tr>
+      <tr><td>19–25</td><td>Pattern 15 (DP week)</td></tr>
+      <tr><td>26–28</td><td>Patterns 16–18</td></tr>
+      <tr><td>29–31</td><td>Patterns 19–20</td></tr>
+      <tr><td>32–50</td><td>Mixed review + mocks</td></tr>
+    </table>
+    <h2>Appendix D — Nightly Template Recall (15 min)</h2>
+    <div class="memory-box">
+two_sum | sliding_window | prefix+map{0:1} | BS_on_answer | mono_stack | heap_size_k | grid_DFS | backtrack | union_find | Kahn_topo | merge_intervals | knapsack_backwards | Floyd_cycle | validate_BST | Dijkstra_heap
+    </div>
+    <h2>Appendix E — 80 Practice Problems Index</h2>
+    <table>
+      <tr><th>Pattern</th><th>LeetCode #</th></tr>
+      <tr><td>1</td><td>1, 49, 128, 560</td></tr>
+      <tr><td>2</td><td>125, 15, 11, 42</td></tr>
+      <tr><td>3</td><td>3, 76, 567, 904</td></tr>
+      <tr><td>4</td><td>303, 560, 238, 304</td></tr>
+      <tr><td>5</td><td>704, 875, 1011, 33</td></tr>
+      <tr><td>6</td><td>20, 739, 84, 150</td></tr>
+      <tr><td>7</td><td>215, 347, 23, 295</td></tr>
+      <tr><td>8</td><td>200, 695, 133, 127</td></tr>
+      <tr><td>9</td><td>78, 46, 39, 51</td></tr>
+      <tr><td>10</td><td>323, 261, 684, 721</td></tr>
+      <tr><td>11</td><td>207, 210, 269, 802</td></tr>
+      <tr><td>12</td><td>208, 212, 648, 211</td></tr>
+      <tr><td>13</td><td>56, 57, 435, 253</td></tr>
+      <tr><td>14</td><td>55, 45, 134, 763</td></tr>
+      <tr><td>15</td><td>198, 322, 1143, 300</td></tr>
+      <tr><td>16</td><td>136, 191, 338, 78</td></tr>
+      <tr><td>17</td><td>141, 142, 876, 234</td></tr>
+      <tr><td>18</td><td>98, 230, 235, 236</td></tr>
+      <tr><td>19</td><td>743, 1631, 787, 778</td></tr>
+      <tr><td>20</td><td>146, 155, 981, 346</td></tr>
+    </table>
+  </section>
+
+</main>
+<script>
+  document.querySelectorAll('nav a').forEach(a => {
+    a.addEventListener('click', () => {
+      document.querySelectorAll('nav a').forEach(x => x.classList.remove('active'));
+      a.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
